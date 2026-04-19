@@ -1,30 +1,23 @@
-import type { SavedMeal } from '../types/meal'
+import type { AppType, SavedMeal, UpdateMeal } from "@fc/shared";
+import { hc } from "hono/client";
 
-const STORAGE_KEY = 'fiber-calculator-meals'
+const client = hc<AppType>(import.meta.env.VITE_API_URL ?? "http://localhost:3001");
 
-const readStorage = (): SavedMeal[] => {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY)
-        return raw ? (JSON.parse(raw) as SavedMeal[]) : []
-    } catch {
-        return []
-    }
-}
+export const getMeals = async (): Promise<SavedMeal[]> => {
+    const res = await client.meals.$get();
+    return res.json();
+};
 
-const writeStorage = (meals: SavedMeal[]): void => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(meals))
-}
+export const addMeal = async (meal: SavedMeal): Promise<SavedMeal> => {
+    const res = await client.meals.$post({ json: meal });
+    return res.json();
+};
 
-export const getMeals = (): SavedMeal[] => readStorage()
+export const updateMeal = async (id: string, updates: UpdateMeal): Promise<SavedMeal> => {
+    const res = await client.meals[":id"].$put({ param: { id }, json: updates });
+    return res.json();
+};
 
-export const addMeal = (meal: SavedMeal): void => {
-    writeStorage([...readStorage(), meal])
-}
-
-export const removeMeal = (id: string): void => {
-    writeStorage(readStorage().filter((m) => m.id !== id))
-}
-
-export const updateMeal = (id: string, updates: Partial<Omit<SavedMeal, 'id'>>): void => {
-    writeStorage(readStorage().map((m) => (m.id === id ? { ...m, ...updates } : m)))
-}
+export const removeMeal = async (id: string): Promise<void> => {
+    await client.meals[":id"].$delete({ param: { id } });
+};

@@ -1,27 +1,41 @@
-import { useState } from 'react'
-import type { SavedMeal } from '../types/meal'
-import { getMeals, addMeal, removeMeal, updateMeal } from '../services/meal-history'
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { SavedMeal, UpdateMeal } from "@fc/shared";
+import { getMeals, addMeal, removeMeal, updateMeal } from "../services/meal-history";
 
-type SaveMealParams = Omit<SavedMeal, 'id'>
+const MEALS_KEY = ["meals"] as const;
+
+type SaveMealParams = Omit<SavedMeal, "id">;
 
 export const useMealHistory = () => {
-    const [meals, setMeals] = useState<SavedMeal[]>(() => getMeals())
+    const queryClient = useQueryClient();
 
-    const saveMeal = (params: SaveMealParams) => {
-        const meal: SavedMeal = { id: crypto.randomUUID(), ...params }
-        addMeal(meal)
-        setMeals((prev) => [...prev, meal])
-    }
+    const { data: meals = [] } = useQuery({
+        queryKey: MEALS_KEY,
+        queryFn: getMeals,
+    });
 
-    const editMeal = (id: string, updates: Partial<Omit<SavedMeal, 'id'>>) => {
-        updateMeal(id, updates)
-        setMeals((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)))
-    }
+    const invalidate = () => queryClient.invalidateQueries({ queryKey: MEALS_KEY });
 
-    const deleteMeal = (id: string) => {
-        removeMeal(id)
-        setMeals((prev) => prev.filter((m) => m.id !== id))
-    }
+    const { mutate: saveMeal } = useMutation({
+        mutationFn: (params: SaveMealParams) => addMeal({ id: crypto.randomUUID(), ...params }),
+        onSuccess: invalidate,
+    });
 
-    return { meals, saveMeal, editMeal, deleteMeal }
-}
+    const { mutate: editMeal } = useMutation({
+        mutationFn: ({ id, updates }: { id: string; updates: UpdateMeal }) =>
+            updateMeal(id, updates),
+        onSuccess: invalidate,
+    });
+
+    const { mutate: deleteMeal } = useMutation({
+        mutationFn: removeMeal,
+        onSuccess: invalidate,
+    });
+
+    return {
+        meals,
+        saveMeal: (params: SaveMealParams) => saveMeal(params),
+        editMeal: (id: string, updates: UpdateMeal) => editMeal({ id, updates }),
+        deleteMeal,
+    };
+};

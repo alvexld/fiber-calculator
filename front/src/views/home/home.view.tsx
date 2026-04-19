@@ -1,51 +1,58 @@
-import { useState } from 'react'
-import { useMenu } from '../menu-calculator/hooks/use-menu'
-import { useMealHistory } from '../../hooks/use-meal-history'
-import { computeTotalFiber } from '../menu-calculator/utils/compute-total-fiber'
-import { groupMealsByDate } from '../history/utils/group-meals-by-date'
-import { HomeUI } from './home.ui'
-import type { SavedMeal } from '../../types/meal'
+import { useState } from "react";
+import { useMenu } from "../menu-calculator/hooks/use-menu";
+import { useMealHistory } from "../../hooks/use-meal-history";
+import { computeTotalFiber } from "../menu-calculator/utils/compute-total-fiber";
+import { groupMealsByDate } from "../history/utils/group-meals-by-date";
+import { HomeUI } from "./home.ui";
+import type { SavedMeal } from "../../types/meal";
 
-type ActiveView = 'calculator' | 'dashboard'
+type ActiveView = "calculator" | "dashboard";
 
 export const HomeView = () => {
-    const { ingredients, addIngredient, removeIngredient, loadIngredients, resetMenu } = useMenu()
-    const { meals, saveMeal, editMeal, deleteMeal } = useMealHistory()
-    const [selectedMeal, setSelectedMeal] = useState<SavedMeal | null>(null)
-    const [activeView, setActiveView] = useState<ActiveView>('calculator')
+    const {
+        ingredients,
+        addIngredient,
+        removeIngredient,
+        updateIngredient,
+        loadIngredients,
+        resetMenu,
+    } = useMenu();
+    const { meals, saveMeal, editMeal, deleteMeal } = useMealHistory();
+    const [selectedMeal, setSelectedMeal] = useState<SavedMeal | null>(null);
+    const [activeView, setActiveView] = useState<ActiveView>("calculator");
 
-    const totalFiberGrams = computeTotalFiber(ingredients)
-    const groups = groupMealsByDate(meals)
+    const totalFiberGrams = computeTotalFiber(ingredients);
+    const groups = groupMealsByDate(meals);
 
     const handleSelectMeal = (meal: SavedMeal) => {
-        setSelectedMeal(meal)
-        loadIngredients(meal.ingredients)
-    }
+        setSelectedMeal(meal);
+        loadIngredients(meal.ingredients);
+    };
 
     const handleSave = (name: string) => {
         if (selectedMeal) {
-            editMeal(selectedMeal.id, { name, ingredients, totalFiberGrams })
+            editMeal(selectedMeal.id, { name, ingredients, totalFiberGrams });
         } else {
             saveMeal({
                 date: new Date().toISOString().slice(0, 10),
                 name,
                 ingredients,
                 totalFiberGrams,
-            })
+            });
         }
-        resetMenu()
-        setSelectedMeal(null)
-    }
+        resetMenu();
+        setSelectedMeal(null);
+    };
 
     const handleNewMenu = () => {
-        resetMenu()
-        setSelectedMeal(null)
-    }
+        resetMenu();
+        setSelectedMeal(null);
+    };
 
     const handleDeleteMeal = (id: string) => {
-        deleteMeal(id)
-        if (selectedMeal?.id === id) handleNewMenu()
-    }
+        deleteMeal(id);
+        if (selectedMeal?.id === id) handleNewMenu();
+    };
 
     return (
         <HomeUI
@@ -62,8 +69,9 @@ export const HomeView = () => {
             editingMealName={selectedMeal?.name}
             onAdd={addIngredient}
             onRemove={removeIngredient}
+            onUpdate={updateIngredient}
             onSave={handleSave}
             onNewMenu={handleNewMenu}
         />
-    )
-}
+    );
+};

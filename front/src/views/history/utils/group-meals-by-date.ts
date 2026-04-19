@@ -1,24 +1,17 @@
-import type { SavedMeal } from '../../../types/meal'
+import { groupBy, sumBy } from "es-toolkit";
+import type { SavedMeal } from "../../../types/meal";
 
 export type DayGroup = {
-    date: string
-    meals: SavedMeal[]
-    dailyFiberGrams: number
-}
+    date: string;
+    meals: SavedMeal[];
+    dailyFiberGrams: number;
+};
 
-export const groupMealsByDate = (meals: SavedMeal[]): DayGroup[] => {
-    const map = new Map<string, SavedMeal[]>()
-
-    meals.forEach((meal) => {
-        const existing = map.get(meal.date) ?? []
-        map.set(meal.date, [...existing, meal])
-    })
-
-    return Array.from(map.entries())
+export const groupMealsByDate = (meals: SavedMeal[]): DayGroup[] =>
+    Object.entries(groupBy(meals, (m) => m.date))
         .map(([date, dayMeals]) => ({
             date,
             meals: dayMeals,
-            dailyFiberGrams: dayMeals.reduce((sum, m) => sum + m.totalFiberGrams, 0),
+            dailyFiberGrams: sumBy(dayMeals, (m) => m.totalFiberGrams),
         }))
-        .sort((a, b) => b.date.localeCompare(a.date))
-}
+        .sort((a, b) => b.date.localeCompare(a.date));

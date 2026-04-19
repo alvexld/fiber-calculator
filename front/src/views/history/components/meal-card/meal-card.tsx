@@ -1,12 +1,12 @@
-import { Trash2 } from 'lucide-react'
-import { Button } from '@heroui/react/button'
-import { Card } from '@heroui/react/card'
-import type { SavedMeal } from '../../../../types/meal'
+import { Trash2 } from "lucide-react";
+import { Button } from "@heroui/react/button";
+import { Card } from "@heroui/react/card";
+import type { SavedMeal } from "../../../../types/meal";
 
 type MealCardProps = {
-    meal: SavedMeal
-    onDelete: (id: string) => void
-}
+    meal: SavedMeal;
+    onDelete: (id: string) => void;
+};
 
 export const MealCard = ({ meal, onDelete }: MealCardProps) => (
     <Card className="group">
@@ -40,4 +40,4 @@ export const MealCard = ({ meal, onDelete }: MealCardProps) => (
             </ul>
         </Card.Content>
     </Card>
-)
+);

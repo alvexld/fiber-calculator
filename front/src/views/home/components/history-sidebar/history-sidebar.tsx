@@ -1,26 +1,26 @@
-import { LayoutDashboard, Trash2 } from 'lucide-react'
-import { Button } from '@heroui/react/button'
-import { ScrollShadow } from '@heroui/react/scroll-shadow'
-import type { DayGroup } from '../../../history/utils/group-meals-by-date'
-import type { SavedMeal } from '../../../../types/meal'
+import { LayoutDashboard, Trash2 } from "lucide-react";
+import { Button } from "@heroui/react/button";
+import { ScrollShadow } from "@heroui/react/scroll-shadow";
+import type { DayGroup } from "../../../history/utils/group-meals-by-date";
+import type { SavedMeal } from "../../../../types/meal";
 
-type ActiveView = 'calculator' | 'dashboard'
+type ActiveView = "calculator" | "dashboard";
 
 type HistorySidebarProps = {
-    groups: DayGroup[]
-    selectedMealId: string | null
-    activeView: ActiveView
-    onViewChange: (view: ActiveView) => void
-    onSelect: (meal: SavedMeal) => void
-    onDelete: (id: string) => void
-}
+    groups: DayGroup[];
+    selectedMealId: string | null;
+    activeView: ActiveView;
+    onViewChange: (view: ActiveView) => void;
+    onSelect: (meal: SavedMeal) => void;
+    onDelete: (id: string) => void;
+};
 
 const formatDate = (dateStr: string): string =>
-    new Date(`${dateStr}T12:00:00`).toLocaleDateString('fr-FR', {
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-    })
+    new Date(`${dateStr}T12:00:00`).toLocaleDateString("fr-FR", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+    });
 
 export const HistorySidebar = ({
     groups,
@@ -33,8 +33,8 @@ export const HistorySidebar = ({
     <aside className="flex h-full w-64 shrink-0 flex-col border-r">
         <div className="border-b px-3 py-3">
             <button
-                onClick={() => onViewChange('dashboard')}
-                className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100 ${activeView === 'dashboard' ? 'bg-gray-100 font-semibold' : 'text-gray-600'}`}
+                onClick={() => onViewChange("dashboard")}
+                className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100 ${activeView === "dashboard" ? "bg-gray-100 font-semibold" : "text-gray-600"}`}
             >
                 <LayoutDashboard className="h-4 w-4 shrink-0" />
                 Tableau de bord
@@ -67,10 +67,10 @@ export const HistorySidebar = ({
                             {group.meals.map((meal) => (
                                 <div
                                     key={meal.id}
-                                    className={`group flex cursor-pointer items-center justify-between px-4 py-2 transition-colors hover:bg-gray-50 ${activeView === 'calculator' && selectedMealId === meal.id ? 'bg-gray-100 font-medium' : ''}`}
+                                    className={`group flex cursor-pointer items-center justify-between px-4 py-2 transition-colors hover:bg-gray-50 ${activeView === "calculator" && selectedMealId === meal.id ? "bg-gray-100 font-medium" : ""}`}
                                     onClick={() => {
-                                        onViewChange('calculator')
-                                        onSelect(meal)
+                                        onViewChange("calculator");
+                                        onSelect(meal);
                                     }}
                                 >
                                     <div className="flex min-w-0 flex-col">
@@ -84,8 +84,8 @@ export const HistorySidebar = ({
                                         size="sm"
                                         aria-label="Supprimer"
                                         onPress={(e) => {
-                                            e.continuePropagation()
-                                            onDelete(meal.id)
+                                            e.continuePropagation();
+                                            onDelete(meal.id);
                                         }}
                                         className="ml-1 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
                                     >
@@ -99,4 +99,4 @@ export const HistorySidebar = ({
             )}
         </ScrollShadow>
     </aside>
-)
+);

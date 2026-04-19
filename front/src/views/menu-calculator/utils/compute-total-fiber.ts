@@ -1,4 +1,4 @@
-import type { MenuIngredient } from '../menu-calculator.types'
+import type { MenuIngredient } from "../menu-calculator.types";
 
 export const computeTotalFiber = (ingredients: MenuIngredient[]): number =>
-    ingredients.reduce((total, item) => total + item.fiberGrams, 0)
+    ingredients.reduce((total, item) => total + item.fiberGrams, 0);

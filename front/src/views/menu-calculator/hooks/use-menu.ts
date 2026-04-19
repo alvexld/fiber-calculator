@@ -1,22 +1,39 @@
-import { useState } from 'react'
-import type { MenuIngredient } from '../menu-calculator.types'
+import { useState } from "react";
+import type { MenuIngredient } from "../menu-calculator.types";
 
-type AddIngredientParams = Omit<MenuIngredient, 'id'>
+type AddIngredientParams = Omit<MenuIngredient, "id">;
 
 export const useMenu = () => {
-    const [ingredients, setIngredients] = useState<MenuIngredient[]>([])
+    const [ingredients, setIngredients] = useState<MenuIngredient[]>([]);
 
     const addIngredient = (params: AddIngredientParams) => {
-        setIngredients((prev) => [...prev, { id: crypto.randomUUID(), ...params }])
-    }
+        setIngredients((prev) => [...prev, { id: crypto.randomUUID(), ...params }]);
+    };
 
     const removeIngredient = (id: string) => {
-        setIngredients((prev) => prev.filter((item) => item.id !== id))
-    }
+        setIngredients((prev) => prev.filter((item) => item.id !== id));
+    };
 
-    const loadIngredients = (items: MenuIngredient[]) => setIngredients(items)
+    const updateIngredient = (id: string, quantity: number) => {
+        setIngredients((prev) =>
+            prev.map((item) =>
+                item.id === id
+                    ? { ...item, quantity, fiberGrams: quantity * item.fiberPerUnit }
+                    : item,
+            ),
+        );
+    };
 
-    const resetMenu = () => setIngredients([])
+    const loadIngredients = (items: MenuIngredient[]) => setIngredients(items);
 
-    return { ingredients, addIngredient, removeIngredient, loadIngredients, resetMenu }
-}
+    const resetMenu = () => setIngredients([]);
+
+    return {
+        ingredients,
+        addIngredient,
+        removeIngredient,
+        updateIngredient,
+        loadIngredients,
+        resetMenu,
+    };
+};

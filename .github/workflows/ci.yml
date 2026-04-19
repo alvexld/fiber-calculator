@@ -7,12 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  check:
-    name: Typecheck · Lint · Knip · Prettier
+  check-front:
+    name: Front · Typecheck · Lint · Knip · Prettier
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: front
 
     steps:
       - uses: actions/checkout@v4
@@ -25,19 +22,51 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: front/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck
         run: pnpm tsc -b --noEmit
+        working-directory: front
 
       - name: Lint
         run: pnpm lint
+        working-directory: front
 
       - name: Knip
         run: pnpm knip
+        working-directory: front
 
       - name: Prettier
         run: pnpm format:check
+        working-directory: front
+
+  check-back:
+    name: Back · Typecheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm db:generate
+        working-directory: back
+
+      - name: Typecheck
+        run: pnpm tsc --noEmit
+        working-directory: back

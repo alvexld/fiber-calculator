@@ -1,8 +1,8 @@
-import { Card } from '@heroui/react/card'
+import { Card } from "@heroui/react/card";
 
 type FiberKpiProps = {
-    totalFiberGrams: number
-}
+    totalFiberGrams: number;
+};
 
 export const FiberKpi = ({ totalFiberGrams }: FiberKpiProps) => (
     <Card>
@@ -17,4 +17,4 @@ export const FiberKpi = ({ totalFiberGrams }: FiberKpiProps) => (
             </p>
         </Card.Content>
     </Card>
-)
+);

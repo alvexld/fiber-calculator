@@ -1,16 +1,16 @@
-import { Card } from '@heroui/react/card'
-import { FiberChart } from './components/fiber-chart'
-import { FiberCalendar } from './components/fiber-calendar'
-import type { DailyFiberPoint } from './utils/build-chart-data'
-import type { SavedMeal } from '../../types/meal'
+import { Card } from "@heroui/react/card";
+import { FiberChart } from "./components/fiber-chart/fiber-chart";
+import { FiberCalendar } from "./components/fiber-calendar/fiber-calendar";
+import type { DailyFiberPoint } from "./utils/build-chart-data";
+import type { SavedMeal } from "../../types/meal";
 
 type DashboardUIProps = {
-    meals: SavedMeal[]
-    chartData: DailyFiberPoint[]
-    averageDailyFiber: number
-    totalMeals: number
-    daysTracked: number
-}
+    meals: SavedMeal[];
+    chartData: DailyFiberPoint[];
+    averageDailyFiber: number;
+    totalMeals: number;
+    daysTracked: number;
+};
 
 export const DashboardUI = ({
     meals,
@@ -79,4 +79,4 @@ export const DashboardUI = ({
             </Card.Content>
         </Card>
     </div>
-)
+);

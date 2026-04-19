@@ -1,19 +1,19 @@
-import { MealCard } from '../meal-card'
-import type { DayGroup as DayGroupType } from '../../utils/group-meals-by-date'
-import type { SavedMeal } from '../../../../types/meal'
+import { MealCard } from "../meal-card/meal-card";
+import type { DayGroup as DayGroupType } from "../../utils/group-meals-by-date";
+import type { SavedMeal } from "../../../../types/meal";
 
 type DayGroupProps = {
-    group: DayGroupType
-    onDelete: (id: string) => void
-}
+    group: DayGroupType;
+    onDelete: (id: string) => void;
+};
 
 const formatDate = (dateStr: string): string =>
-    new Date(`${dateStr}T12:00:00`).toLocaleDateString('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    })
+    new Date(`${dateStr}T12:00:00`).toLocaleDateString("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
 
 export const DayGroup = ({ group, onDelete }: DayGroupProps) => (
     <section className="flex flex-col gap-3">
@@ -27,4 +27,4 @@ export const DayGroup = ({ group, onDelete }: DayGroupProps) => (
             <MealCard key={meal.id} meal={meal} onDelete={onDelete} />
         ))}
     </section>
-)
+);

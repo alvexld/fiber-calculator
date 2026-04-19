@@ -1,31 +1,31 @@
-import { buildCalendarData, getMonthLabels, DAILY_GOAL } from '../../utils/build-calendar-data'
-import type { SavedMeal } from '../../../../types/meal'
+import { buildCalendarData, getMonthLabels, DAILY_GOAL } from "../../utils/build-calendar-data";
+import type { SavedMeal } from "../../../../types/meal";
 
 type FiberCalendarProps = {
-    meals: SavedMeal[]
-}
+    meals: SavedMeal[];
+};
 
 const LEVEL_CLASSES: Record<0 | 1 | 2 | 3 | 4, string> = {
-    0: 'bg-gray-100',
-    1: 'bg-purple-100',
-    2: 'bg-purple-200',
-    3: 'bg-purple-400',
-    4: 'bg-purple-600',
-}
+    0: "bg-gray-100",
+    1: "bg-purple-100",
+    2: "bg-purple-200",
+    3: "bg-purple-400",
+    4: "bg-purple-600",
+};
 
-const DAY_LABELS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
-const SHOWN_DAY_ROWS = [1, 3, 5] // Mon, Wed, Fri rows only (avoid clutter)
+const DAY_LABELS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+const SHOWN_DAY_ROWS = [1, 3, 5]; // Mon, Wed, Fri rows only (avoid clutter)
 
 export const FiberCalendar = ({ meals }: FiberCalendarProps) => {
-    const weeks = buildCalendarData(meals)
-    const monthLabels = getMonthLabels(weeks)
+    const weeks = buildCalendarData(meals);
+    const monthLabels = getMonthLabels(weeks);
 
     return (
         <div className="flex flex-col gap-2 overflow-x-auto">
             {/* Month labels */}
             <div className="flex pl-8">
                 {weeks.map((_, wi) => {
-                    const label = monthLabels.find((m) => m.weekIndex === wi)
+                    const label = monthLabels.find((m) => m.weekIndex === wi);
                     return (
                         <div key={wi} className="w-4 shrink-0 pr-1">
                             {label && (
@@ -34,7 +34,7 @@ export const FiberCalendar = ({ meals }: FiberCalendarProps) => {
                                 </span>
                             )}
                         </div>
-                    )
+                    );
                 })}
             </div>
 
@@ -56,19 +56,19 @@ export const FiberCalendar = ({ meals }: FiberCalendarProps) => {
                     <div key={wi} className="flex flex-col gap-1">
                         {week.map((day, di) => {
                             const tooltip =
-                                day.date === ''
+                                day.date === ""
                                     ? undefined
                                     : day.fibers === null
                                       ? day.date
-                                      : `${day.date} — ${day.fibers.toFixed(1)}g de fibres${day.goalMet ? ' ✓' : ` (objectif: ${DAILY_GOAL}g)`}`
+                                      : `${day.date} — ${day.fibers.toFixed(1)}g de fibres${day.goalMet ? " ✓" : ` (objectif: ${DAILY_GOAL}g)`}`;
 
                             return (
                                 <div
                                     key={di}
                                     title={tooltip}
-                                    className={`h-3 w-3 rounded-sm transition-opacity hover:opacity-70 ${day.date === '' ? 'opacity-0' : LEVEL_CLASSES[day.level]}`}
+                                    className={`h-3 w-3 rounded-sm transition-opacity hover:opacity-70 ${day.date === "" ? "opacity-0" : LEVEL_CLASSES[day.level]}`}
                                 />
-                            )
+                            );
                         })}
                     </div>
                 ))}
@@ -84,5 +84,5 @@ export const FiberCalendar = ({ meals }: FiberCalendarProps) => {
                 <span className="ml-2 text-xs text-gray-400">· Objectif : {DAILY_GOAL}g/jour</span>
             </div>
         </div>
-    )
-}
+    );
+};

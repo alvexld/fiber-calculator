@@ -1,47 +1,48 @@
-import { useState } from 'react'
-import { useForm } from '@tanstack/react-form'
-import { Button } from '@heroui/react/button'
-import { Input } from '@heroui/react/input'
-import { NumberField } from '@heroui/react/number-field'
-import { ComboBox } from '@heroui/react/combo-box'
-import { ListBox } from '@heroui/react/list-box'
-import { ListBoxItem } from '@heroui/react/list-box-item'
-import { INGREDIENTS, type Ingredient } from '../../data/ingredients'
-import type { MenuIngredient } from '../../menu-calculator.types'
+import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { Button } from "@heroui/react/button";
+import { Input } from "@heroui/react/input";
+import { NumberField } from "@heroui/react/number-field";
+import { ComboBox } from "@heroui/react/combo-box";
+import { ListBox } from "@heroui/react/list-box";
+import { ListBoxItem } from "@heroui/react/list-box-item";
+import { INGREDIENTS, type Ingredient } from "../../data/ingredients";
+import type { MenuIngredient } from "../../menu-calculator.types";
 
 type IngredientFormProps = {
-    onAdd: (ingredient: Omit<MenuIngredient, 'id'>) => void
-}
+    onAdd: (ingredient: Omit<MenuIngredient, "id">) => void;
+};
 
 export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState("");
 
     const filteredIngredients = INGREDIENTS.filter((i) =>
         i.name.toLowerCase().includes(search.toLowerCase()),
-    )
+    );
 
     const form = useForm({
-        defaultValues: { ingredientId: '', quantity: 1 },
+        defaultValues: { ingredientId: "", quantity: 1 },
         onSubmit: ({ value }) => {
-            const ingredient = INGREDIENTS.find((i) => i.id === value.ingredientId)
-            if (!ingredient || value.quantity <= 0) return
+            const ingredient = INGREDIENTS.find((i) => i.id === value.ingredientId);
+            if (!ingredient || value.quantity <= 0) return;
             onAdd({
                 ingredientId: ingredient.id,
                 name: ingredient.name,
                 unit: ingredient.unit,
                 quantity: value.quantity,
+                fiberPerUnit: ingredient.fiberPerUnit,
                 fiberGrams: value.quantity * ingredient.fiberPerUnit,
-            })
-            form.reset()
-            setSearch('')
+            });
+            form.reset();
+            setSearch("");
         },
-    })
+    });
 
     return (
         <form
             onSubmit={(e) => {
-                e.preventDefault()
-                form.handleSubmit()
+                e.preventDefault();
+                form.handleSubmit();
             }}
             className="flex flex-col gap-4"
         >
@@ -54,9 +55,9 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         onInputChange={setSearch}
                         selectedKey={field.state.value || null}
                         onSelectionChange={(key) => {
-                            field.handleChange(key as string)
-                            const found = INGREDIENTS.find((i) => i.id === key)
-                            if (found) setSearch(found.name)
+                            field.handleChange(key as string);
+                            const found = INGREDIENTS.find((i) => i.id === key);
+                            if (found) setSearch(found.name);
                         }}
                         menuTrigger="focus"
                     >
@@ -67,7 +68,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         <ComboBox.Popover>
                             <ListBox>
                                 {(item) => {
-                                    const { id, name, unit, fiberPerUnit } = item as Ingredient
+                                    const { id, name, unit, fiberPerUnit } = item as Ingredient;
                                     return (
                                         <ListBoxItem id={id} textValue={name}>
                                             <span>{name}</span>
@@ -75,7 +76,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                                                 par {unit} · {fiberPerUnit}g fibres
                                             </span>
                                         </ListBoxItem>
-                                    )
+                                    );
                                 }}
                             </ListBox>
                         </ComboBox.Popover>
@@ -91,7 +92,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         onChange={(val) => field.handleChange(isNaN(val) ? 1 : val)}
                         minValue={0.1}
                         step={0.5}
-                        formatOptions={{ style: 'decimal', minimumFractionDigits: 1 }}
+                        formatOptions={{ style: "decimal", minimumFractionDigits: 1 }}
                     >
                         <NumberField.Group>
                             <NumberField.DecrementButton>−</NumberField.DecrementButton>
@@ -109,18 +110,18 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                 })}
             >
                 {({ ingredientId, quantity }) => {
-                    const ingredient = INGREDIENTS.find((i) => i.id === ingredientId)
-                    if (!ingredient) return null
-                    const fiber = (quantity * ingredient.fiberPerUnit).toFixed(1)
+                    const ingredient = INGREDIENTS.find((i) => i.id === ingredientId);
+                    if (!ingredient) return null;
+                    const fiber = (quantity * ingredient.fiberPerUnit).toFixed(1);
                     return (
                         <p className="text-sm text-gray-600">
                             {quantity} × {ingredient.unit} → <strong>{fiber}g</strong> de fibres
                         </p>
-                    )
+                    );
                 }}
             </form.Subscribe>
 
             <Button type="submit">Ajouter au menu</Button>
         </form>
-    )
-}
+    );
+};
