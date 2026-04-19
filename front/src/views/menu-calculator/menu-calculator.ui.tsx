@@ -2,6 +2,7 @@ import { Card } from '@heroui/react/card'
 import { FiberKpi } from './components/fiber-kpi'
 import { IngredientForm } from './components/ingredient-form'
 import { IngredientList } from './components/ingredient-list'
+import { SaveMeal } from './components/save-meal'
 import type { MenuIngredient } from './menu-calculator.types'
 
 type MenuCalculatorUIProps = {
@@ -9,6 +10,7 @@ type MenuCalculatorUIProps = {
     totalFiberGrams: number
     onAdd: (ingredient: Omit<MenuIngredient, 'id'>) => void
     onRemove: (id: string) => void
+    onSave: (name: string) => void
 }
 
 export const MenuCalculatorUI = ({
@@ -16,6 +18,7 @@ export const MenuCalculatorUI = ({
     totalFiberGrams,
     onAdd,
     onRemove,
+    onSave,
 }: MenuCalculatorUIProps) => (
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-10">
         <h1 className="text-2xl font-semibold">Calculateur de fibres</h1>
@@ -39,6 +42,11 @@ export const MenuCalculatorUI = ({
             <Card.Content>
                 <IngredientList ingredients={ingredients} onRemove={onRemove} />
             </Card.Content>
+            {ingredients.length > 0 && (
+                <Card.Footer>
+                    <SaveMeal isDisabled={ingredients.length === 0} onSave={onSave} />
+                </Card.Footer>
+            )}
         </Card>
     </main>
 )

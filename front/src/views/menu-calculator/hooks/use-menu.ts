@@ -14,5 +14,7 @@ export const useMenu = () => {
         setIngredients((prev) => prev.filter((item) => item.id !== id))
     }
 
-    return { ingredients, addIngredient, removeIngredient }
+    const resetMenu = () => setIngredients([])
+
+    return { ingredients, addIngredient, removeIngredient, resetMenu }
 }

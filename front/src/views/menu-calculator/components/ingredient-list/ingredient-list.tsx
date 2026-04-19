@@ -1,5 +1,7 @@
 import { Trash2 } from 'lucide-react'
 import { Button } from '@heroui/react/button'
+import { ListBox } from '@heroui/react/list-box'
+import { ListBoxItem } from '@heroui/react/list-box-item'
 import type { MenuIngredient } from '../../menu-calculator.types'
 
 type IngredientListProps = {
@@ -17,11 +19,12 @@ export const IngredientList = ({ ingredients, onRemove }: IngredientListProps) =
     }
 
     return (
-        <ul className="flex flex-col gap-2">
-            {ingredients.map((ingredient) => (
-                <li
-                    key={ingredient.id}
-                    className="group flex items-center justify-between rounded-lg border px-4 py-3"
+        <ListBox aria-label="Ingrédients du menu" items={ingredients} selectionMode="none">
+            {(ingredient) => (
+                <ListBoxItem
+                    id={ingredient.id}
+                    textValue={ingredient.name}
+                    className="group flex items-center justify-between rounded-lg px-4 py-3"
                 >
                     <div className="flex flex-col">
                         <span className="font-medium">{ingredient.name}</span>
@@ -43,8 +46,8 @@ export const IngredientList = ({ ingredients, onRemove }: IngredientListProps) =
                             <Trash2 className="h-4 w-4 text-gray-400 transition-colors hover:text-red-500" />
                         </Button>
                     </span>
-                </li>
-            ))}
-        </ul>
+                </ListBoxItem>
+            )}
+        </ListBox>
     )
 }
