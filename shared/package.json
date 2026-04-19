@@ -2,12 +2,22 @@
     "name": "@fc/shared",
     "version": "0.0.0",
     "private": true,
-    "type": "module",
-    "main": "./src/index.ts",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
     "exports": {
-        ".": "./src/index.ts"
+        ".": {
+            "import": "./src/index.ts",
+            "require": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsc"
     },
     "dependencies": {
         "zod": "^3.25.71"
+    },
+    "devDependencies": {
+        "typescript": "~5.8.3"
     }
 }

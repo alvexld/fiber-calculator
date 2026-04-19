@@ -1,4 +1,5 @@
 import { ScrollShadow } from "@heroui/react/scroll-shadow";
+import type { Ingredient } from "@fc/shared";
 import { HistorySidebar } from "./components/history-sidebar/history-sidebar";
 import { MenuCalculatorUI } from "../menu-calculator/menu-calculator.ui";
 import { DashboardView } from "../dashboard/dashboard.view";
@@ -8,6 +9,7 @@ import type { MenuIngredient, SavedMeal } from "../../types/meal";
 type ActiveView = "calculator" | "dashboard";
 
 type HomeUIProps = {
+    availableIngredients: Ingredient[];
     activeView: ActiveView;
     onViewChange: (view: ActiveView) => void;
     groups: DayGroup[];
@@ -27,6 +29,7 @@ type HomeUIProps = {
 };
 
 export const HomeUI = ({
+    availableIngredients,
     activeView,
     onViewChange,
     groups,
@@ -59,6 +62,7 @@ export const HomeUI = ({
                     <DashboardView meals={meals} />
                 ) : (
                     <MenuCalculatorUI
+                        availableIngredients={availableIngredients}
                         ingredients={ingredients}
                         totalFiberGrams={totalFiberGrams}
                         isEditing={isEditing}

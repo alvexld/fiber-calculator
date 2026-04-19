@@ -1,14 +1,21 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useMenu } from "../menu-calculator/hooks/use-menu";
 import { useMealHistory } from "../../hooks/use-meal-history";
 import { computeTotalFiber } from "../menu-calculator/utils/compute-total-fiber";
 import { groupMealsByDate } from "../history/utils/group-meals-by-date";
+import { getIngredients } from "../../services/ingredients";
 import { HomeUI } from "./home.ui";
 import type { SavedMeal } from "../../types/meal";
 
 type ActiveView = "calculator" | "dashboard";
 
 export const HomeView = () => {
+    const { data: availableIngredients = [] } = useQuery({
+        queryKey: ["ingredients"],
+        queryFn: getIngredients,
+    });
+
     const {
         ingredients,
         addIngredient,
@@ -56,6 +63,7 @@ export const HomeView = () => {
 
     return (
         <HomeUI
+            availableIngredients={availableIngredients}
             activeView={activeView}
             onViewChange={setActiveView}
             groups={groups}

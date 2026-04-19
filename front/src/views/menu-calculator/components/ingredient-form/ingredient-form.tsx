@@ -6,29 +6,31 @@ import { NumberField } from "@heroui/react/number-field";
 import { ComboBox } from "@heroui/react/combo-box";
 import { ListBox } from "@heroui/react/list-box";
 import { ListBoxItem } from "@heroui/react/list-box-item";
-import { INGREDIENTS, type Ingredient } from "../../data/ingredients";
+import type { Ingredient } from "@fc/shared";
+import { formatUnit } from "../../utils/format-unit";
 import type { MenuIngredient } from "../../menu-calculator.types";
 
 type IngredientFormProps = {
+    availableIngredients: Ingredient[];
     onAdd: (ingredient: Omit<MenuIngredient, "id">) => void;
 };
 
-export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
+export const IngredientForm = ({ availableIngredients, onAdd }: IngredientFormProps) => {
     const [search, setSearch] = useState("");
 
-    const filteredIngredients = INGREDIENTS.filter((i) =>
+    const filtered = availableIngredients.filter((i) =>
         i.name.toLowerCase().includes(search.toLowerCase()),
     );
 
     const form = useForm({
         defaultValues: { ingredientId: "", quantity: 1 },
         onSubmit: ({ value }) => {
-            const ingredient = INGREDIENTS.find((i) => i.id === value.ingredientId);
+            const ingredient = availableIngredients.find((i) => i.id === value.ingredientId);
             if (!ingredient || value.quantity <= 0) return;
             onAdd({
                 ingredientId: ingredient.id,
                 name: ingredient.name,
-                unit: ingredient.unit,
+                unit: formatUnit(ingredient),
                 quantity: value.quantity,
                 fiberPerUnit: ingredient.fiberPerUnit,
                 fiberGrams: value.quantity * ingredient.fiberPerUnit,
@@ -50,13 +52,13 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                 {(field) => (
                     <ComboBox
                         aria-label="Ingrédient"
-                        items={filteredIngredients}
+                        items={filtered}
                         inputValue={search}
                         onInputChange={setSearch}
                         selectedKey={field.state.value || null}
                         onSelectionChange={(key) => {
                             field.handleChange(key as string);
-                            const found = INGREDIENTS.find((i) => i.id === key);
+                            const found = availableIngredients.find((i) => i.id === key);
                             if (found) setSearch(found.name);
                         }}
                         menuTrigger="focus"
@@ -68,12 +70,13 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         <ComboBox.Popover>
                             <ListBox>
                                 {(item) => {
-                                    const { id, name, unit, fiberPerUnit } = item as Ingredient;
+                                    const ingredient = item as Ingredient;
                                     return (
-                                        <ListBoxItem id={id} textValue={name}>
-                                            <span>{name}</span>
+                                        <ListBoxItem id={ingredient.id} textValue={ingredient.name}>
+                                            <span>{ingredient.name}</span>
                                             <span className="ml-auto text-sm text-gray-500">
-                                                par {unit} · {fiberPerUnit}g fibres
+                                                par {formatUnit(ingredient)} ·{" "}
+                                                {ingredient.fiberPerUnit}g fibres
                                             </span>
                                         </ListBoxItem>
                                     );
@@ -109,12 +112,13 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                 })}
             >
                 {({ ingredientId, quantity }) => {
-                    const ingredient = INGREDIENTS.find((i) => i.id === ingredientId);
+                    const ingredient = availableIngredients.find((i) => i.id === ingredientId);
                     if (!ingredient) return null;
                     const fiber = (quantity * ingredient.fiberPerUnit).toFixed(1);
                     return (
                         <p className="text-sm text-gray-600">
-                            {quantity} × {ingredient.unit} → <strong>{fiber}g</strong> de fibres
+                            {quantity} × {formatUnit(ingredient)} → <strong>{fiber}g</strong> de
+                            fibres
                         </p>
                     );
                 }}

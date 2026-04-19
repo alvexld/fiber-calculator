@@ -7,6 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Unit {
+  PIECE
+  HUNDRED_G
+}
+
+model Ingredient {
+  id           String  @id @default(cuid())
+  name         String
+  unit         Unit
+  unitDisplay  String?
+  fiberPerUnit Float
+}
+
 model Meal {
   id              String           @id
   date            String
