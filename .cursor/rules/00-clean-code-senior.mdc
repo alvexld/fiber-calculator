@@ -1,0 +1,28 @@
+---
+description: Strict senior-level clean code standards
+alwaysApply: true
+---
+
+# Clean Code Standards (Strict)
+
+- use arrow function only
+- Prefer readability over cleverness; optimize only with measured evidence.
+- Keep functions small and focused; one responsibility per function.
+- Use explicit, domain-meaningful names; avoid abbreviations and generic names.
+- Eliminate duplication by extracting shared logic, hooks, or utilities.
+- Favor immutability and pure functions where possible.
+- Handle errors intentionally: fail fast, return actionable messages, no silent catches.
+- Avoid `any`, implicit coercion, and hidden side effects.
+- Keep components lean: move business logic to hooks/services.
+- Write code that is easy to test; isolate side effects and I/O boundaries.
+- Remove dead code, commented-out code, and stale TODOs before finishing.
+- avoir for loop, use forEach instead
+- use object input parameter for function instead of many parameters
+
+## Enforced Review Checks
+
+- No function should require comments to explain obvious flow.
+- No boolean prop names that are ambiguous (`flag`, `enabled` without context).
+- No magic strings/numbers; extract constants with intent-revealing names.
+- No deep nesting when guard clauses can flatten control flow.
+- No broad exports from feature internals unless intentionally public.

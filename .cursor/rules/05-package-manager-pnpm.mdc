@@ -1,0 +1,11 @@
+---
+description: Enforce pnpm as the package manager
+alwaysApply: true
+---
+
+# Package Manager
+
+- Use `pnpm` for dependency management and scripts in this repository.
+- Prefer `pnpm add` and `pnpm add -D` for dependencies.
+- Prefer `pnpm install` for lockfile updates.
+- Do not create or commit `package-lock.json`; use `pnpm-lock.yaml`.

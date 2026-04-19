@@ -1,0 +1,16 @@
+---
+description: TailwindCSS standards for scalable UI styling
+alwaysApply: true
+---
+
+# Tailwind Best Practices
+
+- Prefer utility composition in markup; avoid ad-hoc CSS unless necessary.
+- Use design tokens from `tailwind.config` (spacing, colors, typography), not arbitrary values.
+- Group classes consistently: layout, spacing, typography, visual, state.
+- Avoid long unreadable class chains; extract reusable UI primitives/components.
+- Use `@apply` sparingly and only in shared semantic component layers.
+- Keep responsive behavior mobile-first and explicit by breakpoint.
+- Ensure color contrast and focus states meet accessibility expectations.
+- Avoid conflicting utilities that hide intent (`p-2 p-4`, multiple text sizes).
+- Keep dark mode strategy consistent (`class` or `media`) across the app.

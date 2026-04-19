@@ -1,0 +1,231 @@
+---
+description: React architecture and component quality standards
+alwaysApply: true
+---
+
+# React Best Practices
+
+- Use functional components and hooks only; no class components in new code.
+- Keep components single-purpose; extract subcomponents before complexity grows.
+- Derive state when possible; avoid duplicating source-of-truth data.
+- Use controlled side effects: each `useEffect` has a clear external sync purpose.
+- Include complete dependency arrays; do not disable hook lint rules casually.
+- Memoize only when profiling or clear render pressure justifies it.
+- Keep props typed explicitly; avoid massive prop bags and hidden contracts.
+- Lift state only as high as needed; prefer local state by default.
+- Co-locate feature logic with components, then extract reusable hooks intentionally.
+- Ensure accessible semantics: labels, keyboard behavior, focus states, and ARIA.
+
+# Layered structure
+
+## Naming Conventions
+
+- All file and folder names must be `kebab-case` (lowercase only). Never use PascalCase or camelCase for filenames.
+- Component symbols: PascalCase → `UserProfile`
+- Hook files: `use-<name>.ts` — Hook symbols: `use<Name>`
+- Service files: `<name>.ts` — Service functions: camelCase → `fetchUsers`
+- Util files: `<name>.ts` — Util functions: camelCase → `formatDate`
+- Story files: `<name>.stories.ts` or `<name>.stories.tsx`
+
+Rationale: Linux filesystems (CI/CD) are case-sensitive. kebab-case prevents file resolution bugs between Linux and macOS/Windows environments.
+
+---
+
+## Smart vs Dumb Components
+
+### Dumb components (`src/components/`, `views/*/components/`, `*.ui.tsx`)
+
+Dumb components are purely presentational. They receive props and render JSX.
+
+ALLOWED:
+
+- Local UI state (open/closed menus, accordions, tooltips, etc.)
+- Handlers that update local UI state only
+- Other dumb components
+- Presentational-only contexts: i18n, theme, UI feature flags
+
+FORBIDDEN:
+
+- Calling services or making network requests
+- Reading application contexts (user data, global business state)
+- Including smart components
+- Accepting data structures tightly coupled to the parent's implementation
+
+```tsx
+// ❌ DO NOT couple to parent state structure
+const ToggleDisplay = ({
+  displayInfo,
+}: {
+  displayInfo: [boolean, Dispatch<SetStateAction<boolean>>];
+}) => {};
+
+// ✅ Expose a clean, decoupled interface
+const ToggleDisplay = ({
+  open,
+  onToggle,
+}: {
+  open: boolean;
+  onToggle: () => void;
+}) => {};
+```
+
+```tsx
+// ❌ DO NOT include a smart component inside a dumb component
+const UserListItem = ({ user }) => {
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  return <>{isEditOpen && <EditUserDialog user={user} />}</>; // EditUserDialog is smart
+};
+
+// ✅ Lift state to the smart parent, pass a callback down
+const UserListItem = ({ user, onEditClick }) => {
+  return <button onClick={onEditClick}>Edit</button>;
+};
+```
+
+### Smart components (`*.view.tsx`)
+
+Smart components handle business logic: data fetching, side effects, error/loading states.
+
+ALLOWED:
+
+- Data fetching hooks (useQuery, useSWR, etc.)
+- Application contexts
+- Loading/error state management
+- Passing data and callbacks to dumb components
+
+FORBIDDEN:
+
+- HTML markup (no JSX elements other than dumb component calls)
+- Styles — no inline styles, no className
+
+```tsx
+// ❌ DO NOT put markup or styles in a smart component
+const App = () => {
+  return <div style={{ minHeight: "100vh" }}>{/* ... */}</div>;
+};
+
+// ✅ Delegate all presentation to a dumb component
+const App = () => {
+  return <Layout>{/* ... */}</Layout>;
+};
+```
+
+---
+
+## Views
+
+Each view folder contains exactly two main components:
+
+- `<view>.view.tsx` — smart component: fetches data, handles errors, passes everything down
+- `<view>.ui.tsx` — dumb component: renders the full layout of the view
+
+```tsx
+// ✅ homescreen.view.tsx
+export Homescreen = () => {
+    const { data, isLoading, error } = useQuery({
+        queryKey: ["users"],
+        queryFn: fetchUsers,
+    });
+    if (isLoading) return <LoadingIndicator />;
+    if (error) return <ErrorScreen error={error} />;
+    return <HomescreenUI users={data} />;
+}
+
+// ✅ homescreen.ui.tsx
+export HomescreenUI = ({ users }: HomescreenUIProps) => {
+    return (
+        <main className="main">
+            <UserList users={users} />
+        </main>
+    );
+}
+```
+
+---
+
+## Services vs Utils
+
+|              | Services             | Utils                 |
+| ------------ | -------------------- | --------------------- |
+| Nature       | Async (I/O, network) | Sync (pure functions) |
+| Side effects | Yes                  | None                  |
+| Folder       | `services/`          | `utils/`              |
+
+Services are always `async` or return a `Promise`.
+
+```ts
+// ✅ services/users.ts
+export const fetchUsersUrl = '/api/users';
+export async fetchUsers = (): Promise<User[]> => { ... }
+```
+
+Utils are always synchronous and pure. No API calls, no side effects.
+
+```ts
+// ✅ utils/format.ts
+export truncate = (str: string, maxLength: number): string => { ... }
+```
+
+---
+
+## Hooks
+
+`hooks/` contains reusable React logic that is not UI.
+
+- Hooks may call services
+- Hooks must NOT return JSX
+- View-specific hooks go in `views/<view>/hooks/`
+
+---
+
+## Code Scoping: Shared vs View-local
+
+A file belongs in the **root** `src/` folders (`components/`, `utils/`, `services/`, etc.) only if it is used by **two or more views**.
+
+If it is specific to a single view, it lives inside that view's folder.
+
+```
+src/
+├── components/button/       ← used in multiple views → root
+└── views/homescreen/
+    ├── components/homescreen-hero/  ← only used here → view-local
+    ├── utils/compute-stats.ts       ← only used here → view-local
+    └── services/homescreen-data.ts  ← only used here → view-local
+```
+
+---
+
+## Storybook
+
+Every shared component in `src/components/` must have a `.stories.ts(x)` file documenting all its meaningful variants. We use `src/lrs-migration` as temporary folder for clean architecture files
+
+```ts
+// ✅ button.stories.ts
+const meta: Meta<typeof Button> = { component: Button };
+export default meta;
+
+export const Primary: Story = {
+  args: { variant: "primary", children: "Save" },
+};
+export const Danger: Story = {
+  args: { variant: "danger", children: "Delete" },
+};
+export const Disabled: Story = {
+  args: { variant: "primary", disabled: true, children: "Save" },
+};
+```
+
+---
+
+## Component Folder Structure
+
+Every component (shared or view-local) lives in its own folder:
+
+```
+button/
+├── button.stories.ts
+├── button.tsx
+└── index.ts              # public exports only
+```
+
+The `index.ts` exposes only the public API of the component. Internal sub-components are not re-exported.

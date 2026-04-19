@@ -1,0 +1,16 @@
+---
+description: HeroUI usage patterns for consistency and maintainability
+alwaysApply: true
+---
+
+# HeroUI Best Practices
+
+- Use HeroUI as the default component layer; avoid mixing overlapping UI systems.
+- Wrap repeated HeroUI compositions in local design-system components.
+- Keep variant usage consistent with documented product design decisions.
+- Prefer controlled components for form/state-heavy flows; avoid mixed control modes.
+- Preserve accessibility defaults; do not remove labels, roles, or focus indicators.
+- Use `className` overrides minimally; prefer theme tokens and supported variants first.
+- Avoid deep one-off style overrides that make upgrades fragile.
+- Centralize theme and provider configuration; keep it out of leaf components.
+- Validate behavior across keyboard navigation, disabled states, loading, and errors.

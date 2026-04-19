@@ -1,0 +1,35 @@
+{
+  "name": "front",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "knip": "knip",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@heroui/react": "^3.0.3",
+    "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-form": "^1.29.0",
+    "@tanstack/react-router": "^1.168.23",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.8.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@tanstack/router-plugin": "^1.167.22",
+    "@types/node": "^24.12.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "knip": "^6.4.1",
+    "oxlint": "^1.60.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.4"
+  }
+}

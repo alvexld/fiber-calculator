@@ -1,0 +1,8 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "plugins": ["react", "react-hooks", "typescript"],
+  "env": {
+    "browser": true
+  },
+  "ignore": ["dist", "node_modules"]
+}

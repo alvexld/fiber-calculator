@@ -1,0 +1,16 @@
+---
+description: Vite best practices for maintainable builds
+alwaysApply: true
+---
+
+# Vite Best Practices
+
+- Use ESM imports consistently; avoid CommonJS patterns in app code.
+- Keep alias paths clear and consistent (e.g., `@/` for `src`).
+- Keep environment usage strict: only `VITE_` prefixed variables in client code.
+- Never hardcode secrets or backend-only values in frontend env files.
+- Split large routes/features with dynamic imports for better startup performance.
+- Keep plugin list minimal; justify each plugin by a concrete need.
+- Use `import.meta.env.MODE` and `DEV/PROD` flags instead of custom mode checks.
+- Prefer static asset imports over brittle public-path string concatenation.
+- Keep build config deterministic; avoid env-dependent behavior without documentation.
