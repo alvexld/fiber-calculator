@@ -90,9 +90,8 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         aria-label="Quantité"
                         value={field.state.value}
                         onChange={(val) => field.handleChange(isNaN(val) ? 1 : val)}
-                        minValue={0.1}
-                        step={0.5}
-                        formatOptions={{ style: "decimal", minimumFractionDigits: 1 }}
+                        minValue={1}
+                        step={1}
                     >
                         <NumberField.Group>
                             <NumberField.DecrementButton>−</NumberField.DecrementButton>
