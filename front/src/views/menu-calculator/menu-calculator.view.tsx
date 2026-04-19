@@ -3,15 +3,15 @@ import { computeTotalFiber } from './utils/compute-total-fiber'
 import { MenuCalculatorUI } from './menu-calculator.ui'
 
 export const MenuCalculatorView = () => {
-  const { ingredients, addIngredient, removeIngredient } = useMenu()
-  const totalFiberGrams = computeTotalFiber(ingredients)
+    const { ingredients, addIngredient, removeIngredient } = useMenu()
+    const totalFiberGrams = computeTotalFiber(ingredients)
 
-  return (
-    <MenuCalculatorUI
-      ingredients={ingredients}
-      totalFiberGrams={totalFiberGrams}
-      onAdd={addIngredient}
-      onRemove={removeIngredient}
-    />
-  )
+    return (
+        <MenuCalculatorUI
+            ingredients={ingredients}
+            totalFiberGrams={totalFiberGrams}
+            onAdd={addIngredient}
+            onRemove={removeIngredient}
+        />
+    )
 }
