@@ -3,12 +3,11 @@
     "version": "0.0.0",
     "private": true,
     "type": "module",
+    "main": "./src/index.ts",
     "exports": {
         ".": "./src/index.ts"
     },
     "dependencies": {
-        "@hono/zod-validator": "^0.4.3",
-        "hono": "^4.7.11",
         "zod": "^3.25.71"
     }
 }

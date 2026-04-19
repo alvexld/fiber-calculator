@@ -1,23 +1,27 @@
-import type { AppType, SavedMeal, UpdateMeal } from "@fc/shared";
-import { hc } from "hono/client";
+import type { SavedMeal, UpdateMeal } from "@fc/shared";
 
-const client = hc<AppType>(import.meta.env.VITE_API_URL ?? "http://localhost:3001");
+const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
 
-export const getMeals = async (): Promise<SavedMeal[]> => {
-    const res = await client.meals.$get();
-    return res.json();
+const request = async <T>(url: string, init?: RequestInit): Promise<T> => {
+    const res = await fetch(url, init);
+    if (res.status === 204) return undefined as T;
+    if (!res.ok) throw new Error(`API error ${res.status}`);
+    return res.json() as Promise<T>;
 };
 
-export const addMeal = async (meal: SavedMeal): Promise<SavedMeal> => {
-    const res = await client.meals.$post({ json: meal });
-    return res.json();
-};
+const jsonBody = (method: string, body: unknown): RequestInit => ({
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+});
 
-export const updateMeal = async (id: string, updates: UpdateMeal): Promise<SavedMeal> => {
-    const res = await client.meals[":id"].$put({ param: { id }, json: updates });
-    return res.json();
-};
+export const getMeals = (): Promise<SavedMeal[]> => request(`${BASE}/meals`);
 
-export const removeMeal = async (id: string): Promise<void> => {
-    await client.meals[":id"].$delete({ param: { id } });
-};
+export const addMeal = (meal: SavedMeal): Promise<SavedMeal> =>
+    request(`${BASE}/meals`, jsonBody("POST", meal));
+
+export const updateMeal = (id: string, updates: UpdateMeal): Promise<SavedMeal> =>
+    request(`${BASE}/meals/${id}`, jsonBody("PUT", updates));
+
+export const removeMeal = (id: string): Promise<void> =>
+    request(`${BASE}/meals/${id}`, { method: "DELETE" });

@@ -1,5 +1,3 @@
-import { Hono } from 'hono'
-import { zValidator } from '@hono/zod-validator'
 import { z } from 'zod'
 
 export const MenuIngredientSchema = z.object({
@@ -25,12 +23,3 @@ export const UpdateMealSchema = SavedMealSchema.omit({ id: true, date: true })
 export type MenuIngredient = z.infer<typeof MenuIngredientSchema>
 export type SavedMeal = z.infer<typeof SavedMealSchema>
 export type UpdateMeal = z.infer<typeof UpdateMealSchema>
-
-const _meals = new Hono()
-    .get('/', (c) => c.json<SavedMeal[]>(null!))
-    .post('/', zValidator('json', SavedMealSchema), (c) => c.json<SavedMeal>(null!, 201))
-    .put('/:id', zValidator('json', UpdateMealSchema), (c) => c.json<SavedMeal>(null!))
-    .delete('/:id', (c) => c.body(null, 204))
-
-const _app = new Hono().route('/meals', _meals)
-export type AppType = typeof _app
