@@ -1,5 +1,4 @@
 import { Card } from "@heroui/react/card";
-import type { Ingredient } from "@fc/shared";
 import { FiberKpi } from "./components/fiber-kpi/fiber-kpi";
 import { IngredientForm } from "./components/ingredient-form/ingredient-form";
 import { IngredientList } from "./components/ingredient-list/ingredient-list";
@@ -7,7 +6,6 @@ import { SaveMeal } from "./components/save-meal/save-meal";
 import type { MenuIngredient } from "./menu-calculator.types";
 
 type MenuCalculatorUIProps = {
-    availableIngredients: Ingredient[];
     ingredients: MenuIngredient[];
     totalFiberGrams: number;
     isEditing: boolean;
@@ -20,7 +18,6 @@ type MenuCalculatorUIProps = {
 };
 
 export const MenuCalculatorUI = ({
-    availableIngredients,
     ingredients,
     totalFiberGrams,
     isEditing,
@@ -41,7 +38,7 @@ export const MenuCalculatorUI = ({
                 <Card.Title>Ajouter un ingrédient</Card.Title>
             </Card.Header>
             <Card.Content>
-                <IngredientForm availableIngredients={availableIngredients} onAdd={onAdd} />
+                <IngredientForm onAdd={onAdd} />
             </Card.Content>
         </Card>
 

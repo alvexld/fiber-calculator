@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query } from '@nestjs/common'
 import { createZodDto } from 'nestjs-zod'
 import { CreateIngredientSchema } from '@fc/shared'
 import { IngredientsService } from './ingredients.service'
@@ -10,8 +10,8 @@ export class IngredientsController {
     constructor(private readonly ingredients: IngredientsService) {}
 
     @Get()
-    findAll() {
-        return this.ingredients.findAll()
+    findAll(@Query('search') search?: string) {
+        return this.ingredients.findAll(search)
     }
 
     @Post()

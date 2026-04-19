@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@heroui/react/button";
 import { Input } from "@heroui/react/input";
@@ -7,25 +8,28 @@ import { ComboBox } from "@heroui/react/combo-box";
 import { ListBox } from "@heroui/react/list-box";
 import { ListBoxItem } from "@heroui/react/list-box-item";
 import type { Ingredient } from "@fc/shared";
+import { useDebounce } from "../../../../hooks/use-debounce";
+import { getIngredients } from "../../../../services/ingredients";
 import { formatUnit } from "../../utils/format-unit";
 import type { MenuIngredient } from "../../menu-calculator.types";
 
 type IngredientFormProps = {
-    availableIngredients: Ingredient[];
     onAdd: (ingredient: Omit<MenuIngredient, "id">) => void;
 };
 
-export const IngredientForm = ({ availableIngredients, onAdd }: IngredientFormProps) => {
+export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
     const [search, setSearch] = useState("");
+    const debouncedSearch = useDebounce(search, 300);
 
-    const filtered = availableIngredients.filter((i) =>
-        i.name.toLowerCase().includes(search.toLowerCase()),
-    );
+    const { data: ingredients = [] } = useQuery({
+        queryKey: ["ingredients", debouncedSearch],
+        queryFn: () => getIngredients(debouncedSearch || undefined),
+    });
 
     const form = useForm({
         defaultValues: { ingredientId: "", quantity: 1 },
         onSubmit: ({ value }) => {
-            const ingredient = availableIngredients.find((i) => i.id === value.ingredientId);
+            const ingredient = ingredients.find((i) => i.id === value.ingredientId);
             if (!ingredient || value.quantity <= 0) return;
             onAdd({
                 ingredientId: ingredient.id,
@@ -52,13 +56,13 @@ export const IngredientForm = ({ availableIngredients, onAdd }: IngredientFormPr
                 {(field) => (
                     <ComboBox
                         aria-label="Ingrédient"
-                        items={filtered}
+                        items={ingredients}
                         inputValue={search}
                         onInputChange={setSearch}
                         selectedKey={field.state.value || null}
                         onSelectionChange={(key) => {
                             field.handleChange(key as string);
-                            const found = availableIngredients.find((i) => i.id === key);
+                            const found = ingredients.find((i) => i.id === key);
                             if (found) setSearch(found.name);
                         }}
                         menuTrigger="focus"
@@ -112,7 +116,7 @@ export const IngredientForm = ({ availableIngredients, onAdd }: IngredientFormPr
                 })}
             >
                 {({ ingredientId, quantity }) => {
-                    const ingredient = availableIngredients.find((i) => i.id === ingredientId);
+                    const ingredient = ingredients.find((i) => i.id === ingredientId);
                     if (!ingredient) return null;
                     const fiber = (quantity * ingredient.fiberPerUnit).toFixed(1);
                     return (

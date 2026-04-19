@@ -6,8 +6,11 @@ import { PrismaService } from '../prisma.service'
 export class IngredientsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    findAll() {
-        return this.prisma.ingredient.findMany({ orderBy: { name: 'asc' } })
+    findAll(search?: string) {
+        return this.prisma.ingredient.findMany({
+            where: search ? { name: { contains: search } } : undefined,
+            orderBy: { name: 'asc' },
+        })
     }
 
     create(data: CreateIngredient) {
