@@ -8,20 +8,26 @@ import type { MenuIngredient } from './menu-calculator.types'
 type MenuCalculatorUIProps = {
     ingredients: MenuIngredient[]
     totalFiberGrams: number
+    isEditing: boolean
+    editingMealName?: string
     onAdd: (ingredient: Omit<MenuIngredient, 'id'>) => void
     onRemove: (id: string) => void
     onSave: (name: string) => void
+    onNewMenu: () => void
 }
 
 export const MenuCalculatorUI = ({
     ingredients,
     totalFiberGrams,
+    isEditing,
+    editingMealName,
     onAdd,
     onRemove,
     onSave,
+    onNewMenu,
 }: MenuCalculatorUIProps) => (
-    <main className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-10">
-        <h1 className="text-2xl font-semibold">Calculateur de fibres</h1>
+    <div className="flex flex-col gap-6 px-6 py-8">
+        <h1 className="text-2xl font-semibold">{isEditing ? editingMealName : 'Nouveau menu'}</h1>
 
         <FiberKpi totalFiberGrams={totalFiberGrams} />
 
@@ -44,9 +50,15 @@ export const MenuCalculatorUI = ({
             </Card.Content>
             {ingredients.length > 0 && (
                 <Card.Footer>
-                    <SaveMeal isDisabled={ingredients.length === 0} onSave={onSave} />
+                    <SaveMeal
+                        isDisabled={ingredients.length === 0}
+                        isEditing={isEditing}
+                        initialName={isEditing ? editingMealName : ''}
+                        onSave={onSave}
+                        onNewMenu={onNewMenu}
+                    />
                 </Card.Footer>
             )}
         </Card>
-    </main>
+    </div>
 )

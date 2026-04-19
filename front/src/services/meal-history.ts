@@ -24,3 +24,7 @@ export const addMeal = (meal: SavedMeal): void => {
 export const removeMeal = (id: string): void => {
     writeStorage(readStorage().filter((m) => m.id !== id))
 }
+
+export const updateMeal = (id: string, updates: Partial<Omit<SavedMeal, 'id'>>): void => {
+    writeStorage(readStorage().map((m) => (m.id === id ? { ...m, ...updates } : m)))
+}

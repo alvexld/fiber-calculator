@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { SavedMeal } from '../types/meal'
-import { getMeals, addMeal, removeMeal } from '../services/meal-history'
+import { getMeals, addMeal, removeMeal, updateMeal } from '../services/meal-history'
 
 type SaveMealParams = Omit<SavedMeal, 'id'>
 
@@ -13,10 +13,15 @@ export const useMealHistory = () => {
         setMeals((prev) => [...prev, meal])
     }
 
+    const editMeal = (id: string, updates: Partial<Omit<SavedMeal, 'id'>>) => {
+        updateMeal(id, updates)
+        setMeals((prev) => prev.map((m) => (m.id === id ? { ...m, ...updates } : m)))
+    }
+
     const deleteMeal = (id: string) => {
         removeMeal(id)
         setMeals((prev) => prev.filter((m) => m.id !== id))
     }
 
-    return { meals, saveMeal, deleteMeal }
+    return { meals, saveMeal, editMeal, deleteMeal }
 }

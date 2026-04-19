@@ -1,14 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@heroui/react/button'
 import { Input } from '@heroui/react/input'
 
 type SaveMealProps = {
     isDisabled: boolean
+    initialName?: string
+    isEditing?: boolean
     onSave: (name: string) => void
+    onNewMenu?: () => void
 }
 
-export const SaveMeal = ({ isDisabled, onSave }: SaveMealProps) => {
-    const [name, setName] = useState('')
+export const SaveMeal = ({
+    isDisabled,
+    initialName = '',
+    isEditing,
+    onSave,
+    onNewMenu,
+}: SaveMealProps) => {
+    const [name, setName] = useState(initialName)
+
+    useEffect(() => {
+        setName(initialName)
+    }, [initialName])
 
     const handleSave = () => {
         if (!name.trim() || isDisabled) return
@@ -17,17 +30,24 @@ export const SaveMeal = ({ isDisabled, onSave }: SaveMealProps) => {
     }
 
     return (
-        <div className="flex gap-2">
-            <Input
-                placeholder="Nom du repas (ex : Déjeuner)…"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={isDisabled}
-                onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-            />
-            <Button onPress={handleSave} isDisabled={isDisabled || !name.trim()}>
-                Sauvegarder
-            </Button>
+        <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+                <Input
+                    placeholder="Nom du repas (ex : Déjeuner)…"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    disabled={isDisabled}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSave()}
+                />
+                <Button onPress={handleSave} isDisabled={isDisabled || !name.trim()}>
+                    {isEditing ? 'Mettre à jour' : 'Sauvegarder'}
+                </Button>
+                {isEditing && onNewMenu && (
+                    <Button variant="ghost" onPress={onNewMenu}>
+                        Nouveau menu
+                    </Button>
+                )}
+            </div>
         </div>
     )
 }
