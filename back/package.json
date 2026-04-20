@@ -12,8 +12,13 @@
         "db:generate": "prisma generate",
         "db:migrate": "prisma migrate dev",
         "db:deploy": "dotenv -e .env.prod -- prisma migrate deploy",
+        "db:seed": "prisma db seed",
+        "db:seed:prod": "dotenv -e .env.prod -- prisma db seed",
         "db:studio": "prisma studio",
         "db:studio:prod": "dotenv -e .env.prod -- prisma studio"
+    },
+    "prisma": {
+        "seed": "tsx prisma/seed.ts"
     },
     "dependencies": {
         "@fc/shared": "workspace:*",
@@ -34,6 +39,7 @@
         "@types/node": "^22.15.32",
         "dotenv-cli": "^11.0.0",
         "prisma": "^6.9.0",
+        "tsx": "^4.21.0",
         "typescript": "~5.8.3"
     }
 }

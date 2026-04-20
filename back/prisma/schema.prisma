@@ -13,20 +13,20 @@ enum Unit {
 }
 
 model Ingredient {
-  id           String  @id @default(cuid())
-  name         String
-  unit         Unit
-  unitDisplay  String?
-  fiberPerUnit Float
+  id              String           @id @default(cuid())
+  name            String
+  unit            Unit
+  unitDisplay     String?
+  fiberPerUnit    Float
+  mealIngredients MealIngredient[]
 }
 
 model Meal {
-  id              String           @id
-  date            String
-  name            String
-  totalFiberGrams Float
-  createdAt       DateTime         @default(now())
-  ingredients     MealIngredient[]
+  id          String           @id
+  date        String
+  name        String
+  createdAt   DateTime         @default(now())
+  ingredients MealIngredient[]
 }
 
 model MealIngredient {
@@ -38,5 +38,6 @@ model MealIngredient {
   quantity     Float
   fiberPerUnit Float
   fiberGrams   Float
-  meal         Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  meal         Meal       @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
 }
