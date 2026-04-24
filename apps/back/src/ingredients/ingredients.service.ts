@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import type { CreateIngredient } from "@fc/shared";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 
 const normalizeForSearch = (str: string) =>
     str

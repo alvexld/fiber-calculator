@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import type { SavedMeal, UpdateMeal } from "@fc/shared";
-import { PrismaService } from "../prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class MealsService {
