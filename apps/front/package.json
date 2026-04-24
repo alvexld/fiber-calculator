@@ -11,7 +11,8 @@
         "knip": "knip",
         "format": "oxfmt .",
         "format:check": "oxfmt --check .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "serve": "serve -s dist"
     },
     "dependencies": {
         "@fc/shared": "workspace:*",
@@ -36,6 +37,7 @@
         "knip": "^6.6.3",
         "oxlint": "^1.61.0",
         "oxfmt": "^0.46.0",
+        "serve": "^14.2.4",
         "typescript": "~6.0.3",
         "vite": "^8.0.10"
     }

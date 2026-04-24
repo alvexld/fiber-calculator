@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter @fc/shared build && pnpm --filter @fc/front run build"
+
+[deploy]
+startCommand = "pnpm --filter @fc/front run serve"
+restartPolicyType = "on_failure"
