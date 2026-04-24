@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useForm } from "@tanstack/react-form";
 import { Button } from "@heroui/react/button";
 import { Input } from "@heroui/react/input";
@@ -12,6 +12,7 @@ import { useDebounce } from "../../../../hooks/use-debounce";
 import { getIngredients } from "../../../../services/ingredients";
 import { formatUnit } from "../../utils/format-unit";
 import type { MenuIngredient } from "../../menu-calculator.types";
+import { EmptyState } from "@heroui/react";
 
 type IngredientFormProps = {
     onAdd: (ingredient: Omit<MenuIngredient, "id">) => void;
@@ -24,13 +25,15 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
     const { data: ingredients = [] } = useQuery({
         queryKey: ["ingredients", debouncedSearch],
         queryFn: () => getIngredients(debouncedSearch || undefined),
+        placeholderData: keepPreviousData,
+        staleTime: 30_000,
     });
 
     const form = useForm({
         defaultValues: { ingredientId: "", quantity: 1 },
         onSubmit: ({ value }) => {
             const ingredient = ingredients.find((i) => i.id === value.ingredientId);
-            if (!ingredient || value.quantity <= 0) return;
+            if (!ingredient || value.quantity <= 0 || isNaN(value.quantity)) return;
             onAdd({
                 ingredientId: ingredient.id,
                 name: ingredient.name,
@@ -65,14 +68,13 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                             const found = ingredients.find((i) => i.id === key);
                             if (found) setSearch(found.name);
                         }}
-                        menuTrigger="focus"
                     >
                         <ComboBox.InputGroup>
                             <Input placeholder="Rechercher un ingrédient…" />
-                            <ComboBox.Trigger>▾</ComboBox.Trigger>
+                            <ComboBox.Trigger />
                         </ComboBox.InputGroup>
                         <ComboBox.Popover>
-                            <ListBox>
+                            <ListBox renderEmptyState={() => <EmptyState />}>
                                 {(item) => {
                                     const ingredient = item as Ingredient;
                                     return (
@@ -96,9 +98,9 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                     <NumberField
                         aria-label="Quantité"
                         value={field.state.value}
-                        onChange={(val) => field.handleChange(isNaN(val) ? 1 : val)}
-                        minValue={1}
-                        step={1}
+                        onChange={(val) => field.handleChange(isNaN(val) ? 0.5 : val)}
+                        minValue={0.5}
+                        step={0.5}
                     >
                         <NumberField.Group>
                             <NumberField.DecrementButton>−</NumberField.DecrementButton>
