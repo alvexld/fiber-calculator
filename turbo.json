@@ -17,6 +17,7 @@
         "knip": {
             "dependsOn": ["^build"]
         },
-        "format:check": {}
+        "format:check": {},
+        "format": {}
     }
 }
