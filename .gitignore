@@ -5,3 +5,4 @@ dist/
 *.db
 shared/dist/
 .turbo
+tsconfig.tsbuildinfo
