@@ -1,33 +1,20 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { useMenu } from "../menu-calculator/hooks/use-menu";
 import { useMealHistory } from "../../hooks/use-meal-history";
 import { computeTotalFiber } from "../menu-calculator/utils/compute-total-fiber";
-import { groupMealsByDate } from "../history/utils/group-meals-by-date";
+import { useSelectedMeal } from "./context/selected-meal-context";
 import { HomeUI } from "./home.ui";
-import type { SavedMeal } from "../../types/meal";
-
-type ActiveView = "calculator" | "dashboard";
 
 export const HomeView = () => {
-    const {
-        ingredients,
-        addIngredient,
-        removeIngredient,
-        updateIngredient,
-        loadIngredients,
-        resetMenu,
-    } = useMenu();
-    const { meals, saveMeal, editMeal, deleteMeal } = useMealHistory();
-    const [selectedMeal, setSelectedMeal] = useState<SavedMeal | null>(null);
-    const [activeView, setActiveView] = useState<ActiveView>("calculator");
+    const { ingredients, addIngredient, removeIngredient, updateIngredient, loadIngredients, resetMenu } = useMenu();
+    const { saveMeal, editMeal } = useMealHistory();
+    const { selectedMeal, clearSelectedMeal } = useSelectedMeal();
 
     const totalFiberGrams = computeTotalFiber(ingredients);
-    const groups = groupMealsByDate(meals);
 
-    const handleSelectMeal = (meal: SavedMeal) => {
-        setSelectedMeal(meal);
-        loadIngredients(meal.ingredients);
-    };
+    useEffect(() => {
+        if (selectedMeal) loadIngredients(selectedMeal.ingredients);
+    }, [selectedMeal]);
 
     const handleSave = (name: string) => {
         if (selectedMeal) {
@@ -41,28 +28,16 @@ export const HomeView = () => {
             });
         }
         resetMenu();
-        setSelectedMeal(null);
+        clearSelectedMeal();
     };
 
     const handleNewMenu = () => {
         resetMenu();
-        setSelectedMeal(null);
-    };
-
-    const handleDeleteMeal = (id: string) => {
-        deleteMeal(id);
-        if (selectedMeal?.id === id) handleNewMenu();
+        clearSelectedMeal();
     };
 
     return (
         <HomeUI
-            activeView={activeView}
-            onViewChange={setActiveView}
-            groups={groups}
-            selectedMealId={selectedMeal?.id ?? null}
-            onSelectMeal={handleSelectMeal}
-            onDeleteMeal={handleDeleteMeal}
-            meals={meals}
             ingredients={ingredients}
             totalFiberGrams={totalFiberGrams}
             isEditing={selectedMeal !== null}

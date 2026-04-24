@@ -1,19 +1,20 @@
-import { LayoutDashboard, Trash2 } from "lucide-react";
+import { LayoutDashboard, Calculator, Salad, Trash2 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@heroui/react/button";
 import { ScrollShadow } from "@heroui/react/scroll-shadow";
 import type { DayGroup } from "../../../history/utils/group-meals-by-date";
 import type { SavedMeal } from "../../../../types/meal";
 
-type ActiveView = "calculator" | "dashboard";
-
 type HistorySidebarProps = {
     groups: DayGroup[];
     selectedMealId: string | null;
-    activeView: ActiveView;
-    onViewChange: (view: ActiveView) => void;
     onSelect: (meal: SavedMeal) => void;
     onDelete: (id: string) => void;
 };
+
+const NAV_BASE = "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100";
+const NAV_INACTIVE = `${NAV_BASE} text-gray-600`;
+const NAV_ACTIVE = `${NAV_BASE} bg-gray-100 font-semibold`;
 
 const formatDate = (dateStr: string): string =>
     new Date(`${dateStr}T12:00:00`).toLocaleDateString("fr-FR", {
@@ -25,20 +26,23 @@ const formatDate = (dateStr: string): string =>
 export const HistorySidebar = ({
     groups,
     selectedMealId,
-    activeView,
-    onViewChange,
     onSelect,
     onDelete,
 }: HistorySidebarProps) => (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r">
-        <div className="border-b px-3 py-3">
-            <button
-                onClick={() => onViewChange("dashboard")}
-                className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100 ${activeView === "dashboard" ? "bg-gray-100 font-semibold" : "text-gray-600"}`}
-            >
+        <div className="flex flex-col gap-1 border-b px-3 py-3">
+            <Link to="/" activeOptions={{ exact: true }} className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
+                <Calculator className="h-4 w-4 shrink-0" />
+                Calculateur
+            </Link>
+            <Link to="/dashboard" className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
                 <LayoutDashboard className="h-4 w-4 shrink-0" />
                 Tableau de bord
-            </button>
+            </Link>
+            <Link to="/ingredients" className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
+                <Salad className="h-4 w-4 shrink-0" />
+                Ingrédients
+            </Link>
         </div>
 
         <div className="border-b px-4 py-3">
@@ -67,11 +71,8 @@ export const HistorySidebar = ({
                             {group.meals.map((meal) => (
                                 <div
                                     key={meal.id}
-                                    className={`group flex cursor-pointer items-center justify-between px-4 py-2 transition-colors hover:bg-gray-50 ${activeView === "calculator" && selectedMealId === meal.id ? "bg-gray-100 font-medium" : ""}`}
-                                    onClick={() => {
-                                        onViewChange("calculator");
-                                        onSelect(meal);
-                                    }}
+                                    className={`group flex cursor-pointer items-center justify-between px-4 py-2 transition-colors hover:bg-gray-50 ${selectedMealId === meal.id ? "bg-gray-100 font-medium" : ""}`}
+                                    onClick={() => onSelect(meal)}
                                 >
                                     <div className="flex min-w-0 flex-col">
                                         <span className="truncate text-sm">{meal.name}</span>
