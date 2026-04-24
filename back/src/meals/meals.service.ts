@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common'
-import type { SavedMeal, UpdateMeal } from '@fc/shared'
-import { PrismaService } from '../prisma.service'
+import { Injectable } from "@nestjs/common";
+import type { SavedMeal, UpdateMeal } from "@fc/shared";
+import { PrismaService } from "../prisma.service";
 
 @Injectable()
 export class MealsService {
@@ -9,8 +9,8 @@ export class MealsService {
     findAll() {
         return this.prisma.meal.findMany({
             include: { ingredients: true },
-            orderBy: { date: 'desc' },
-        })
+            orderBy: { date: "desc" },
+        });
     }
 
     create(data: SavedMeal) {
@@ -33,12 +33,12 @@ export class MealsService {
                 },
             },
             include: { ingredients: true },
-        })
+        });
     }
 
     update(id: string, data: UpdateMeal) {
         return this.prisma.$transaction(async (tx) => {
-            await tx.mealIngredient.deleteMany({ where: { mealId: id } })
+            await tx.mealIngredient.deleteMany({ where: { mealId: id } });
             return tx.meal.update({
                 where: { id },
                 data: {
@@ -57,11 +57,11 @@ export class MealsService {
                     },
                 },
                 include: { ingredients: true },
-            })
-        })
+            });
+        });
     }
 
     async remove(id: string) {
-        await this.prisma.meal.delete({ where: { id } })
+        await this.prisma.meal.delete({ where: { id } });
     }
 }

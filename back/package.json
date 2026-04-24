@@ -5,6 +5,10 @@
     "scripts": {
         "dev": "nest start --watch",
         "typecheck": "prisma generate && tsc --noEmit",
+        "lint": "oxlint .",
+        "knip": "knip",
+        "format": "oxfmt .",
+        "format:check": "oxfmt --check .",
         "dev:prod": "dotenv -e .env.prod -- nest start --watch",
         "build": "nest build",
         "start": "node dist/main",
@@ -16,9 +20,6 @@
         "db:seed:prod": "dotenv -e .env.prod -- prisma db seed",
         "db:studio": "prisma studio",
         "db:studio:prod": "dotenv -e .env.prod -- prisma studio"
-    },
-    "prisma": {
-        "seed": "tsx prisma/seed.ts"
     },
     "dependencies": {
         "@fc/shared": "workspace:*",
@@ -39,11 +40,16 @@
         "@swc/cli": "^0.8.1",
         "@swc/core": "^1.15.30",
         "@types/better-sqlite3": "^7.6.13",
-        "@types/express": "^5.0.6",
         "@types/node": "^22.13.0",
         "dotenv-cli": "^11.0.0",
+        "knip": "^6.6.3",
+        "oxfmt": "^0.46.0",
+        "oxlint": "^1.61.0",
         "prisma": "^7.8.0",
         "tsx": "^4.21.0",
         "typescript": "~5.9.3"
+    },
+    "prisma": {
+        "seed": "tsx prisma/seed.ts"
     }
 }

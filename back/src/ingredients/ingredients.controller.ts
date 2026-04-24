@@ -1,32 +1,32 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query } from '@nestjs/common'
-import { createZodDto } from 'nestjs-zod'
-import { CreateIngredientSchema } from '@fc/shared'
-import { IngredientsService } from './ingredients.service'
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query } from "@nestjs/common";
+import { createZodDto } from "nestjs-zod";
+import { CreateIngredientSchema } from "@fc/shared";
+import { IngredientsService } from "./ingredients.service";
 
 class CreateIngredientDto extends createZodDto(CreateIngredientSchema) {}
 
-@Controller('ingredients')
+@Controller("ingredients")
 export class IngredientsController {
     constructor(private readonly ingredients: IngredientsService) {}
 
     @Get()
-    findAll(@Query('search') search?: string) {
-        return this.ingredients.findAll(search)
+    findAll(@Query("search") search?: string) {
+        return this.ingredients.findAll(search);
     }
 
     @Post()
     create(@Body() body: CreateIngredientDto) {
-        return this.ingredients.create(body)
+        return this.ingredients.create(body);
     }
 
-    @Put(':id')
-    update(@Param('id') id: string, @Body() body: CreateIngredientDto) {
-        return this.ingredients.update(id, body)
+    @Put(":id")
+    update(@Param("id") id: string, @Body() body: CreateIngredientDto) {
+        return this.ingredients.update(id, body);
     }
 
-    @Delete(':id')
+    @Delete(":id")
     @HttpCode(204)
-    remove(@Param('id') id: string) {
-        return this.ingredients.remove(id)
+    remove(@Param("id") id: string) {
+        return this.ingredients.remove(id);
     }
 }
