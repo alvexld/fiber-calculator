@@ -1,4 +1,3 @@
 packages:
-  - 'front'
-  - 'back'
-  - 'shared'
+  - 'apps/*'
+  - 'packages/*'
