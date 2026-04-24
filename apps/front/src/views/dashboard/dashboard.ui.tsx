@@ -5,7 +5,7 @@ import { FiberCalendar } from "./components/fiber-calendar/fiber-calendar";
 import { BristolChart } from "./components/bristol-chart/bristol-chart";
 import { BristolCalendar } from "./components/bristol-calendar/bristol-calendar";
 import type { DailyFiberPoint } from "./utils/build-chart-data";
-import type { DailyBristolPoint } from "../bristol/utils/build-bristol-chart-data";
+import type { DailyBristolPoint } from "./utils/build-bristol-chart-data";
 import type { SavedMeal } from "../../types/meal";
 import type { Bristol } from "@fc/shared";
 

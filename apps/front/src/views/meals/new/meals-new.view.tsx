@@ -1,12 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useMenu } from "../hooks/use-menu";
-import { useMealHistory } from "../../../hooks/use-meal-history";
+import { useMeals } from "../../../hooks/use-meals";
 import { computeTotalFiber } from "../utils/compute-total-fiber";
 import { MealsNewUI } from "./meals-new.ui";
 
 export const MealsNewView = () => {
     const { ingredients, addIngredient, removeIngredient, updateIngredient, resetMenu } = useMenu();
-    const { saveMeal } = useMealHistory();
+    const { saveMeal } = useMeals();
     const navigate = useNavigate();
     const totalFiberGrams = computeTotalFiber(ingredients);
 

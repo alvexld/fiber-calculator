@@ -2,11 +2,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "@heroui/react/toast";
 import type { SavedMeal, UpdateMeal } from "@fc/shared";
-import { addMeal, removeMeal, updateMeal } from "../services/meal-history";
+import { addMeal, removeMeal, updateMeal } from "../services/meals";
 
 type SaveMealParams = Omit<SavedMeal, "id">;
 
-export const useMealHistory = () => {
+export const useMeals = () => {
     const router = useRouter();
     const invalidate = () => router.invalidate();
 

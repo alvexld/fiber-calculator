@@ -8,7 +8,7 @@ import {
     Tooltip,
     ReferenceLine,
 } from "recharts";
-import type { DailyBristolPoint } from "../../../bristol/utils/build-bristol-chart-data";
+import type { DailyBristolPoint } from "../../utils/build-bristol-chart-data";
 
 type BristolChartProps = {
     data: DailyBristolPoint[];

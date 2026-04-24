@@ -1,7 +1,7 @@
 import type { SavedMeal } from "../../types/meal";
 import type { Bristol } from "@fc/shared";
 import { buildChartData } from "./utils/build-chart-data";
-import { buildBristolChartData } from "../bristol/utils/build-bristol-chart-data";
+import { buildBristolChartData } from "./utils/build-bristol-chart-data";
 import { DashboardUI } from "./dashboard.ui";
 
 type DashboardViewProps = {

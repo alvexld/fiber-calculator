@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
 import type { UpdateMeal } from "@fc/shared";
-import { updateMeal } from "../../../../services/meal-history";
+import { updateMeal } from "../../../../services/meals";
 
 export const useMealEdit = (id: string) => {
     const { mutate: saveMeal } = useMutation({

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getMeals } from "../../../services/meal-history";
+import { getMeals } from "../../../services/meals";
 import { MealsListView } from "../../../views/meals/list/meals-list.view";
 
 export const Route = createFileRoute("/_app/meals/")({

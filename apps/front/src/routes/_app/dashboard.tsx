@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getMeals } from "../../services/meal-history";
+import { getMeals } from "../../services/meals";
 import { getBristols } from "../../services/bristol";
 import { DashboardView } from "../../views/dashboard/dashboard.view";
 

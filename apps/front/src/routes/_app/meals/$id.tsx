@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MealsEditView } from "../../../views/meals/edit/meals-edit.view";
-import { getMeal } from "../../../services/meal-history";
+import { getMeal } from "../../../services/meals";
 
 export const Route = createFileRoute("/_app/meals/$id")({
     loader: async ({ params }) => {
