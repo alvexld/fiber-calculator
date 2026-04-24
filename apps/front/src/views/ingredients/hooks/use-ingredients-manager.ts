@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "@heroui/react/toast";
 import type { CreateIngredient } from "@fc/shared";
 import {
     createIngredient,
@@ -18,18 +19,21 @@ export const useIngredientsManager = () => {
 
     const { mutate: addIngredient } = useMutation({
         mutationFn: createIngredient,
-        onSuccess: invalidate,
+        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: editIngredient } = useMutation({
         mutationFn: ({ id, data }: { id: string; data: CreateIngredient }) =>
             updateIngredient(id, data),
-        onSuccess: invalidate,
+        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: removeIngredient } = useMutation({
         mutationFn: deleteIngredient,
-        onSuccess: invalidate,
+        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onError: () => toast.danger("Erreur"),
     });
 
     return { ingredients, isLoading, addIngredient, editIngredient, removeIngredient };

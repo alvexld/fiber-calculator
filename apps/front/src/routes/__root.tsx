@@ -1,5 +1,6 @@
 import { createRootRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { Button } from "@heroui/react/button";
+import { Toast } from "@heroui/react/toast";
 import { logout } from "../services/auth";
 
 function RootComponent() {
@@ -13,6 +14,7 @@ function RootComponent() {
 
     return (
         <>
+            <Toast.Provider placement="bottom end" />
             <header className="flex h-[57px] items-center justify-between border-b px-6">
                 <span className="text-sm font-semibold">Calculateur de fibres</span>
                 {!isLoginPage && (
