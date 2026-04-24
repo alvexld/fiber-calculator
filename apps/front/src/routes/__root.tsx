@@ -15,8 +15,8 @@ function RootComponent() {
     return (
         <>
             <Toast.Provider placement="bottom end" />
-            <header className="flex h-[57px] items-center justify-between border-b px-6">
-                <span className="text-sm font-semibold">Calculateur de fibres</span>
+            <header className="flex h-[57px] items-center justify-between border-b border-slate-200 bg-white px-6">
+                <span className="text-sm font-semibold text-slate-800">Calculateur de fibres</span>
                 {!isLoginPage && (
                     <Button size="sm" variant="ghost" onPress={() => void handleLogout()}>
                         Se déconnecter

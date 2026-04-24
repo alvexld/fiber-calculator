@@ -1,2 +1,16 @@
 @import "tailwindcss";
 @import "@heroui/react/styles";
+
+@layer base {
+    html,
+    body {
+        background-color: #f1f5f9;
+    }
+}
+
+/* Override HeroUI accent → navy blue */
+:root {
+    --accent: oklch(0.42 0.17 264);
+    --accent-foreground: oklch(100% 0 0);
+    --focus: oklch(0.42 0.17 264);
+}
