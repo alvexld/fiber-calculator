@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { ScrollShadow } from "@heroui/react/scroll-shadow";
 import { useMealHistory } from "../hooks/use-meal-history";
+import { getMe } from "../services/auth";
 import { groupMealsByDate } from "../views/history/utils/group-meals-by-date";
 import { HistorySidebar } from "../views/home/components/history-sidebar/history-sidebar";
 import { SelectedMealContext } from "../views/home/context/selected-meal-context";
 import type { SavedMeal } from "../types/meal";
 
 export const Route = createFileRoute("/_app")({
+    loader: async () => {
+        const user = await getMe();
+        if (!user) throw redirect({ to: "/login" });
+        return user;
+    },
+    staleTime: 60_000,
     component: AppLayout,
 });
 

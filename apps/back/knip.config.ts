@@ -3,5 +3,5 @@ import type { KnipConfig } from "knip";
 export default {
     entry: ["src/main.ts"],
     project: ["src/**/*.ts", "prisma/**/*.ts"],
-    ignoreDependencies: ["pg", "@types/pg"],
+    ignoreDependencies: ["pg", "@types/pg", "@types/bcryptjs"],
 } satisfies KnipConfig;
