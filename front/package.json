@@ -1,10 +1,11 @@
 {
-    "name": "front",
+    "name": "@fc/front",
     "private": true,
     "version": "0.0.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
+        "typecheck": "tsc -b --noEmit",
         "build": "tsc -b && vite build",
         "lint": "oxlint",
         "knip": "knip",

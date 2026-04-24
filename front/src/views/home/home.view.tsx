@@ -6,7 +6,14 @@ import { useSelectedMeal } from "./context/selected-meal-context";
 import { HomeUI } from "./home.ui";
 
 export const HomeView = () => {
-    const { ingredients, addIngredient, removeIngredient, updateIngredient, loadIngredients, resetMenu } = useMenu();
+    const {
+        ingredients,
+        addIngredient,
+        removeIngredient,
+        updateIngredient,
+        loadIngredients,
+        resetMenu,
+    } = useMenu();
     const { saveMeal, editMeal } = useMealHistory();
     const { selectedMeal, clearSelectedMeal } = useSelectedMeal();
 

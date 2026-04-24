@@ -12,7 +12,8 @@ type HistorySidebarProps = {
     onDelete: (id: string) => void;
 };
 
-const NAV_BASE = "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100";
+const NAV_BASE =
+    "flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100";
 const NAV_INACTIVE = `${NAV_BASE} text-gray-600`;
 const NAV_ACTIVE = `${NAV_BASE} bg-gray-100 font-semibold`;
 
@@ -31,7 +32,12 @@ export const HistorySidebar = ({
 }: HistorySidebarProps) => (
     <aside className="flex h-full w-64 shrink-0 flex-col border-r">
         <div className="flex flex-col gap-1 border-b px-3 py-3">
-            <Link to="/" activeOptions={{ exact: true }} className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
+            <Link
+                to="/"
+                activeOptions={{ exact: true }}
+                className={NAV_INACTIVE}
+                activeProps={{ className: NAV_ACTIVE }}
+            >
                 <Calculator className="h-4 w-4 shrink-0" />
                 Calculateur
             </Link>
@@ -39,7 +45,11 @@ export const HistorySidebar = ({
                 <LayoutDashboard className="h-4 w-4 shrink-0" />
                 Tableau de bord
             </Link>
-            <Link to="/ingredients" className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
+            <Link
+                to="/ingredients"
+                className={NAV_INACTIVE}
+                activeProps={{ className: NAV_ACTIVE }}
+            >
                 <Salad className="h-4 w-4 shrink-0" />
                 Ingrédients
             </Link>

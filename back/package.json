@@ -3,8 +3,8 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "predev": "pnpm --filter @fc/shared build",
         "dev": "nest start --watch",
+        "typecheck": "prisma generate && tsc --noEmit",
         "dev:prod": "dotenv -e .env.prod -- nest start --watch",
         "build": "nest build",
         "start": "node dist/main",

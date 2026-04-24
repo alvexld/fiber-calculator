@@ -1,5 +1,18 @@
 {
     "name": "fibre-calculator",
     "private": true,
-    "version": "0.0.0"
+    "version": "0.0.0",
+    "packageManager": "pnpm@9.15.4",
+    "scripts": {
+        "dev": "turbo run dev",
+        "build": "turbo run build",
+        "typecheck": "turbo run typecheck",
+        "lint": "turbo run lint",
+        "knip": "turbo run knip",
+        "format:check": "turbo run format:check",
+        "check": "turbo run typecheck lint knip format:check"
+    },
+    "devDependencies": {
+        "turbo": "^2.9.6"
+    }
 }

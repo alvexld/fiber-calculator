@@ -67,8 +67,12 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
                             </Select.Trigger>
                             <Select.Popover>
                                 <ListBox>
-                                    <ListBoxItem id="PIECE" textValue="Pièce">Pièce</ListBoxItem>
-                                    <ListBoxItem id="HUNDRED_G" textValue="100g">100g</ListBoxItem>
+                                    <ListBoxItem id="PIECE" textValue="Pièce">
+                                        Pièce
+                                    </ListBoxItem>
+                                    <ListBoxItem id="HUNDRED_G" textValue="100g">
+                                        100g
+                                    </ListBoxItem>
                                 </ListBox>
                             </Select.Popover>
                         </Select>

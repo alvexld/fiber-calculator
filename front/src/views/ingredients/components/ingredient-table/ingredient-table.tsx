@@ -79,7 +79,9 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                     <Input
                                         value={editValues.name}
                                         onChange={(e) =>
-                                            setEditValues((v) => v && { ...v, name: e.target.value })
+                                            setEditValues(
+                                                (v) => v && { ...v, name: e.target.value },
+                                            )
                                         }
                                     />
                                 </td>
@@ -97,8 +99,12 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                         </Select.Trigger>
                                         <Select.Popover>
                                             <ListBox>
-                                                <ListBoxItem id="PIECE" textValue="Pièce">Pièce</ListBoxItem>
-                                                <ListBoxItem id="HUNDRED_G" textValue="100g">100g</ListBoxItem>
+                                                <ListBoxItem id="PIECE" textValue="Pièce">
+                                                    Pièce
+                                                </ListBoxItem>
+                                                <ListBoxItem id="HUNDRED_G" textValue="100g">
+                                                    100g
+                                                </ListBoxItem>
                                             </ListBox>
                                         </Select.Popover>
                                     </Select>
@@ -120,16 +126,24 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                         value={editValues.fiberPerUnit}
                                         onChange={(val) =>
                                             setEditValues(
-                                                (v) => v && { ...v, fiberPerUnit: isNaN(val) ? 0 : val },
+                                                (v) =>
+                                                    v && {
+                                                        ...v,
+                                                        fiberPerUnit: isNaN(val) ? 0 : val,
+                                                    },
                                             )
                                         }
                                         minValue={0}
                                         step={0.1}
                                     >
                                         <NumberField.Group>
-                                            <NumberField.DecrementButton>−</NumberField.DecrementButton>
+                                            <NumberField.DecrementButton>
+                                                −
+                                            </NumberField.DecrementButton>
                                             <NumberField.Input />
-                                            <NumberField.IncrementButton>+</NumberField.IncrementButton>
+                                            <NumberField.IncrementButton>
+                                                +
+                                            </NumberField.IncrementButton>
                                         </NumberField.Group>
                                     </NumberField>
                                 </td>
