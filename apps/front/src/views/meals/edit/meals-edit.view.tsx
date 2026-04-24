@@ -42,7 +42,7 @@ export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
     if (!meal)
         return (
             <div className="mx-auto max-w-2xl px-6 py-8">
-                <p className="text-gray-500">Repas introuvable.</p>
+                <p className="text-muted">Repas introuvable.</p>
             </div>
         );
 

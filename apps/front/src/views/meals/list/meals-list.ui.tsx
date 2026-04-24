@@ -19,9 +19,9 @@ export const MealsListUI = ({ groups, onDelete, onEdit }: MealsListUIProps) => (
         </div>
 
         {groups.length === 0 ? (
-            <p className="py-12 text-center text-sm text-gray-500">
+            <p className="py-12 text-center text-sm text-muted">
                 Aucun repas sauvegardé.{" "}
-                <Link to="/meals/new" className="text-blue-600 hover:underline">
+                <Link to="/meals/new" className="text-accent hover:underline">
                     Composez votre premier menu.
                 </Link>
             </p>

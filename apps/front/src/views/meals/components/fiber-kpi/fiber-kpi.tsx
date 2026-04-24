@@ -13,7 +13,7 @@ export const FiberKpi = ({ totalFiberGrams }: FiberKpiProps) => (
         <Card.Content>
             <p className="text-4xl font-bold tabular-nums">
                 {totalFiberGrams.toFixed(1)}
-                <span className="ml-2 text-lg font-normal text-gray-500">g de fibres</span>
+                <span className="ml-2 text-lg font-normal text-muted">g de fibres</span>
             </p>
         </Card.Content>
     </Card>

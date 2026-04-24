@@ -25,7 +25,7 @@ const VALUE_COLORS: Record<number, string> = {
 };
 
 const VALUE_UNSELECTED =
-    "border border-gray-200 bg-white text-gray-700 hover:border-gray-400 transition-colors";
+    "border border-border bg-surface text-foreground hover:border-muted transition-colors";
 
 const formatDateTime = (date: string, time: string): string => {
     const d = new Date(`${date}T${time}`);
@@ -64,71 +64,74 @@ export const BristolUI = ({
     <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
         <div>
             <h1 className="text-xl font-semibold">Échelle de Bristol</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted">
                 Enregistrez vos selles selon l'échelle de Bristol (1 = très dure · 7 = liquide).
             </p>
         </div>
 
-        <section className="rounded-xl border bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-gray-700">Nouvelle entrée</h2>
-
-            <div className="flex flex-col gap-5">
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Date</label>
-                        <Input
-                            type="date"
-                            value={date}
-                            onChange={(e) => onDateChange(e.target.value)}
-                        />
+        <Card>
+            <Card.Header>
+                <Card.Title>Nouvelle entrée</Card.Title>
+            </Card.Header>
+            <Card.Content>
+                <div className="flex flex-col gap-5">
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm font-medium text-foreground">Date</label>
+                            <Input
+                                type="date"
+                                value={date}
+                                onChange={(e) => onDateChange(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm font-medium text-foreground">Heure</label>
+                            <Input
+                                type="time"
+                                value={time}
+                                onChange={(e) => onTimeChange(e.target.value)}
+                            />
+                        </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Heure</label>
-                        <Input
-                            type="time"
-                            value={time}
-                            onChange={(e) => onTimeChange(e.target.value)}
-                        />
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-medium text-foreground">Type</label>
+                        <div className="flex gap-2">
+                            {[1, 2, 3, 4, 5, 6, 7].map((v) => (
+                                <button
+                                    key={v}
+                                    type="button"
+                                    onClick={() => onValueChange(v)}
+                                    className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
+                                    title={BRISTOL_LABELS[v]}
+                                >
+                                    {v}
+                                </button>
+                            ))}
+                        </div>
+                        {value !== null && (
+                            <p className="text-sm text-muted">
+                                Type {value} — {BRISTOL_LABELS[value]}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="flex justify-end">
+                        <Button isDisabled={value === null} onPress={onSubmit}>
+                            Enregistrer
+                        </Button>
                     </div>
                 </div>
-
-                <div className="flex flex-col gap-2">
-                    <label className="text-sm font-medium text-gray-700">Type</label>
-                    <div className="flex gap-2">
-                        {[1, 2, 3, 4, 5, 6, 7].map((v) => (
-                            <button
-                                key={v}
-                                type="button"
-                                onClick={() => onValueChange(v)}
-                                className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
-                                title={BRISTOL_LABELS[v]}
-                            >
-                                {v}
-                            </button>
-                        ))}
-                    </div>
-                    {value !== null && (
-                        <p className="text-sm text-gray-500">
-                            Type {value} — {BRISTOL_LABELS[value]}
-                        </p>
-                    )}
-                </div>
-
-                <div className="flex justify-end">
-                    <Button isDisabled={value === null} onPress={onSubmit}>
-                        Enregistrer
-                    </Button>
-                </div>
-            </div>
-        </section>
+            </Card.Content>
+        </Card>
 
         <section>
-            <h2 className="mb-3 text-sm font-semibold text-gray-700">
+            <h2 className="mb-3 text-sm font-semibold text-foreground">
                 {bristols.length} entrée{bristols.length !== 1 ? "s" : ""}
             </h2>
 
             {bristols.length === 0 ? (
-                <p className="py-8 text-center text-sm text-gray-400">
+                <p className="py-8 text-center text-sm text-muted">
                     Aucune entrée. Commencez par enregistrer votre première selle.
                 </p>
             ) : (
@@ -146,7 +149,7 @@ export const BristolUI = ({
                                         <p className="text-sm font-medium">
                                             {BRISTOL_LABELS[b.value]}
                                         </p>
-                                        <p className="text-xs text-gray-400">
+                                        <p className="text-xs text-muted">
                                             {formatDateTime(b.date, b.time)}
                                         </p>
                                     </div>
@@ -157,7 +160,7 @@ export const BristolUI = ({
                                     aria-label="Supprimer"
                                     onPress={() => onDelete(b.id)}
                                 >
-                                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                                    <Trash2 className="h-4 w-4 text-muted hover:text-danger" />
                                 </Button>
                             </Card.Content>
                         </Card>

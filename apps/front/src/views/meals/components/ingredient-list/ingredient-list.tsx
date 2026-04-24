@@ -46,7 +46,7 @@ const IngredientRow = ({
         >
             <div className="flex flex-col">
                 <span className="font-medium">{ingredient.name}</span>
-                <span className="mt-1 flex items-center gap-1.5 text-sm text-gray-500">
+                <span className="mt-1 flex items-center gap-1.5 text-sm text-muted">
                     <input
                         type="number"
                         aria-label="Quantité"
@@ -56,7 +56,7 @@ const IngredientRow = ({
                         onChange={(e) => setInputValue(e.target.value)}
                         onBlur={(e) => commit(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && commit(inputValue)}
-                        className="w-14 rounded border border-gray-200 bg-transparent px-1.5 py-0.5 text-xs focus:border-gray-400 focus:outline-none"
+                        className="w-14 rounded border border-border bg-transparent px-1.5 py-0.5 text-xs focus:border-focus focus:outline-none"
                     />
                     <span>{formatUnit(ingredient.quantity, ingredient.unit)}</span>
                 </span>
@@ -72,7 +72,7 @@ const IngredientRow = ({
                     onPress={() => onRemove(ingredient.id)}
                     className="opacity-0 transition-opacity group-hover:opacity-100"
                 >
-                    <Trash2 className="h-4 w-4 text-gray-400 transition-colors hover:text-red-500" />
+                    <Trash2 className="h-4 w-4 text-muted transition-colors hover:text-danger" />
                 </Button>
             </span>
         </ListBoxItem>
@@ -82,7 +82,7 @@ const IngredientRow = ({
 export const IngredientList = ({ ingredients, onRemove, onUpdate }: IngredientListProps) => {
     if (ingredients.length === 0) {
         return (
-            <p className="py-6 text-center text-sm text-gray-500">
+            <p className="py-6 text-center text-sm text-muted">
                 Aucun ingrédient. Ajoutez-en un ci-dessus.
             </p>
         );

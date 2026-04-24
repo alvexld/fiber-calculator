@@ -20,7 +20,7 @@ export const DayGroup = ({ group, onDelete, onEdit }: DayGroupProps) => (
     <section className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between border-b pb-2">
             <h2 className="text-base font-semibold capitalize">{formatDate(group.date)}</h2>
-            <span className="tabular-nums text-sm text-gray-500">
+            <span className="tabular-nums text-sm text-muted">
                 {group.dailyFiberGrams.toFixed(1)}g de fibres au total
             </span>
         </div>

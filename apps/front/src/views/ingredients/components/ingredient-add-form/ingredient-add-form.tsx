@@ -41,7 +41,7 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
             <form.Field name="name">
                 {(field) => (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Nom</label>
+                        <label className="text-sm font-medium text-foreground">Nom</label>
                         <Input
                             placeholder="Ex: Avocat demi"
                             value={field.state.value}
@@ -55,7 +55,7 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
             <form.Field name="unit">
                 {(field) => (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Unité</label>
+                        <label className="text-sm font-medium text-foreground">Unité</label>
                         <Select
                             aria-label="Unité"
                             selectedKey={field.state.value}
@@ -83,9 +83,9 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
             <form.Field name="unitDisplay">
                 {(field) => (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-medium text-foreground">
                             Affichage unité{" "}
-                            <span className="font-normal text-gray-400">(optionnel)</span>
+                            <span className="font-normal text-muted">(optionnel)</span>
                         </label>
                         <Input
                             placeholder="Ex: demi, tranche…"
@@ -99,7 +99,7 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
             <form.Field name="fiberPerUnit">
                 {(field) => (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">
+                        <label className="text-sm font-medium text-foreground">
                             Fibres / unité (g)
                         </label>
                         <NumberField

@@ -51,7 +51,7 @@ export const ActivityCalendar = ({
                 return (
                     <div key={wi} className="w-4 shrink-0 pr-1">
                         {label && (
-                            <span className="whitespace-nowrap text-xs text-gray-400">
+                            <span className="whitespace-nowrap text-xs text-muted">
                                 {label.label}
                             </span>
                         )}
@@ -65,7 +65,7 @@ export const ActivityCalendar = ({
                 {Array.from({ length: 7 }, (_, d) => (
                     <div key={d} className="flex h-3 items-center">
                         {SHOWN_DAY_ROWS.includes(d) && (
-                            <span className="text-[10px] text-gray-400">{DAY_LABELS[d]}</span>
+                            <span className="text-[10px] text-muted">{DAY_LABELS[d]}</span>
                         )}
                     </div>
                 ))}
@@ -86,12 +86,12 @@ export const ActivityCalendar = ({
 
         {legend && (
             <div className="flex items-center gap-2 pl-8 pt-1">
-                <span className="text-xs text-gray-400">{legend.min}</span>
+                <span className="text-xs text-muted">{legend.min}</span>
                 {([0, 1, 2, 3, 4] as const).map((level) => (
                     <div key={level} className={`h-3 w-3 rounded-sm ${levelColors[level]}`} />
                 ))}
-                <span className="text-xs text-gray-400">{legend.max}</span>
-                {legend.note && <span className="ml-2 text-xs text-gray-400">· {legend.note}</span>}
+                <span className="text-xs text-muted">{legend.max}</span>
+                {legend.note && <span className="ml-2 text-xs text-muted">· {legend.note}</span>}
             </div>
         )}
     </div>

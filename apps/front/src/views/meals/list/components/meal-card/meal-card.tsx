@@ -24,7 +24,7 @@ export const MealCard = ({ meal, onDelete, onEdit }: MealCardProps) => (
                     onPress={() => onEdit(meal.id)}
                     className="opacity-0 transition-opacity group-hover:opacity-100"
                 >
-                    <Pencil className="h-4 w-4 text-gray-400 hover:text-blue-600" />
+                    <Pencil className="h-4 w-4 text-muted hover:text-accent" />
                 </Button>
                 <Button
                     variant="ghost"
@@ -33,14 +33,14 @@ export const MealCard = ({ meal, onDelete, onEdit }: MealCardProps) => (
                     onPress={() => onDelete(meal.id)}
                     className="opacity-0 transition-opacity group-hover:opacity-100"
                 >
-                    <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
+                    <Trash2 className="h-4 w-4 text-muted hover:text-danger" />
                 </Button>
             </span>
         </Card.Header>
         <Card.Content>
             <ul className="flex flex-col gap-1">
                 {meal.ingredients.map((ingredient) => (
-                    <li key={ingredient.id} className="flex justify-between text-sm text-gray-600">
+                    <li key={ingredient.id} className="flex justify-between text-sm text-muted">
                         <span>
                             {ingredient.name} — {ingredient.quantity} {ingredient.unit}
                         </span>

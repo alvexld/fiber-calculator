@@ -70,7 +70,7 @@ export const LoginUi = ({ onSubmit, error, isLoading }: LoginUiProps) => {
                             )}
                         </form.Field>
 
-                        {error && <p className="text-sm text-red-500">{error}</p>}
+                        {error && <p className="text-sm text-danger">{error}</p>}
 
                         <Button type="submit" variant="primary" isDisabled={isLoading} fullWidth>
                             {isLoading ? "Connexion…" : "Se connecter"}

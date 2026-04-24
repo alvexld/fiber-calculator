@@ -80,7 +80,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                                     return (
                                         <ListBoxItem id={ingredient.id} textValue={ingredient.name}>
                                             <span>{ingredient.name}</span>
-                                            <span className="ml-auto text-sm text-gray-500">
+                                            <span className="ml-auto text-sm text-muted">
                                                 par {formatUnit(ingredient)} ·{" "}
                                                 {ingredient.fiberPerUnit}g fibres
                                             </span>
@@ -122,7 +122,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                     if (!ingredient) return null;
                     const fiber = (quantity * ingredient.fiberPerUnit).toFixed(1);
                     return (
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted">
                             {quantity} × {formatUnit(ingredient)} → <strong>{fiber}g</strong> de
                             fibres
                         </p>
