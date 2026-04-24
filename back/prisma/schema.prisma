@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
 }
 
 enum Unit {
@@ -15,6 +14,7 @@ enum Unit {
 model Ingredient {
   id              String           @id @default(cuid())
   name            String
+  nameSearch      String           @default("")
   unit            Unit
   unitDisplay     String?
   fiberPerUnit    Float
