@@ -2,6 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Pre-commit Checklist
+
+Before every commit, run `pnpm check` and fix all errors:
+
+```bash
+pnpm check        # typecheck + lint + knip + format:check across all packages
+pnpm --filter <pkg> format   # auto-fix formatting issues
+```
+
+All 13 tasks must pass before committing. Never commit with a failing `pnpm check`.
+
 ## Package Manager
 
 Always use `pnpm`. Never use `npm` or `yarn`.
