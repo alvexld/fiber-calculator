@@ -19,20 +19,29 @@ export const useMealHistory = () => {
 
     const { mutate: saveMeal } = useMutation({
         mutationFn: (params: SaveMealParams) => addMeal({ id: crypto.randomUUID(), ...params }),
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: editMeal } = useMutation({
         mutationFn: ({ id, updates }: { id: string; updates: UpdateMeal }) =>
             updateMeal(id, updates),
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: deleteMeal } = useMutation({
         mutationFn: removeMeal,
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 

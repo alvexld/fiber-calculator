@@ -19,20 +19,29 @@ export const useIngredientsManager = () => {
 
     const { mutate: addIngredient } = useMutation({
         mutationFn: createIngredient,
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: editIngredient } = useMutation({
         mutationFn: ({ id, data }: { id: string; data: CreateIngredient }) =>
             updateIngredient(id, data),
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 
     const { mutate: removeIngredient } = useMutation({
         mutationFn: deleteIngredient,
-        onSuccess: () => { invalidate(); toast.success("Sauvegardé"); },
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
         onError: () => toast.danger("Erreur"),
     });
 
