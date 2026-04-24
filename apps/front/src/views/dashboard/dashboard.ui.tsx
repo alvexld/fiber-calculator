@@ -32,7 +32,7 @@ export const DashboardUI = ({
     averageBristol,
     totalBristols,
 }: DashboardUIProps) => (
-    <div className="flex flex-col gap-6 px-6 py-8">
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 py-8">
         <h1 className="text-2xl font-semibold">Tableau de bord</h1>
 
         <div className="grid grid-cols-3 gap-4">
@@ -110,21 +110,39 @@ export const DashboardUI = ({
             </Card>
         </div>
 
-        <Card>
-            <Card.Header>
-                <Card.Title>Activité fibres</Card.Title>
-                <Card.Description>20 dernières semaines · objectif 25g/jour</Card.Description>
-            </Card.Header>
-            <Card.Content>
-                {meals.length === 0 ? (
-                    <p className="py-8 text-center text-sm text-gray-400">
-                        Aucune donnée. Sauvegardez des repas pour voir votre activité.
-                    </p>
-                ) : (
-                    <FiberCalendar meals={meals} />
-                )}
-            </Card.Content>
-        </Card>
+        <div className="grid grid-cols-2 gap-4">
+            <Card>
+                <Card.Header>
+                    <Card.Title>Activité fibres</Card.Title>
+                    <Card.Description>20 dernières semaines · objectif 25g/jour</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    {meals.length === 0 ? (
+                        <p className="py-8 text-center text-sm text-gray-400">
+                            Aucune donnée. Sauvegardez des repas pour voir votre activité.
+                        </p>
+                    ) : (
+                        <FiberCalendar meals={meals} />
+                    )}
+                </Card.Content>
+            </Card>
+
+            <Card>
+                <Card.Header>
+                    <Card.Title>Activité Bristol</Card.Title>
+                    <Card.Description>20 dernières semaines · zone idéale 3–4</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    {bristols.length === 0 ? (
+                        <p className="py-8 text-center text-sm text-gray-400">
+                            Aucune donnée. Enregistrez des selles pour voir votre activité.
+                        </p>
+                    ) : (
+                        <BristolCalendar bristols={bristols} />
+                    )}
+                </Card.Content>
+            </Card>
+        </div>
 
         <Card>
             <Card.Header>
@@ -140,22 +158,6 @@ export const DashboardUI = ({
                     </p>
                 ) : (
                     <FiberChart data={chartData} />
-                )}
-            </Card.Content>
-        </Card>
-
-        <Card>
-            <Card.Header>
-                <Card.Title>Activité Bristol</Card.Title>
-                <Card.Description>20 dernières semaines · zone idéale 3–4</Card.Description>
-            </Card.Header>
-            <Card.Content>
-                {bristols.length === 0 ? (
-                    <p className="py-8 text-center text-sm text-gray-400">
-                        Aucune donnée. Enregistrez des selles pour voir votre activité.
-                    </p>
-                ) : (
-                    <BristolCalendar bristols={bristols} />
                 )}
             </Card.Content>
         </Card>
