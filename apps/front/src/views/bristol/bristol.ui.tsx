@@ -3,7 +3,11 @@ import { Button } from "@heroui/react/button";
 import { Input } from "@heroui/react/input";
 import { Card } from "@heroui/react/card";
 import { Tooltip } from "@heroui/react/tooltip";
+import { ListBox } from "@heroui/react/list-box";
+import { Header } from "@heroui/react/header";
+import { Separator } from "@heroui/react/separator";
 import type { Bristol } from "@fc/shared";
+import { Description, Fieldset, Label, TextField } from "@heroui/react";
 
 const BRISTOL_LABELS: Record<number, string> = {
     1: "Boules dures",
@@ -16,27 +20,42 @@ const BRISTOL_LABELS: Record<number, string> = {
 };
 
 const VALUE_COLORS: Record<number, string> = {
-    1: "bg-amber-700 text-white border-amber-700",
-    2: "bg-amber-500 text-white border-amber-500",
-    3: "bg-green-500 text-white border-green-500",
-    4: "bg-green-600 text-white border-green-600",
-    5: "bg-yellow-500 text-white border-yellow-500",
-    6: "bg-orange-500 text-white border-orange-500",
-    7: "bg-red-500 text-white border-red-500",
+    1: "bg-amber-700 text-white",
+    2: "bg-amber-500 text-white",
+    3: "bg-green-500 text-white",
+    4: "bg-green-600 text-white",
+    5: "bg-yellow-500 text-white",
+    6: "bg-orange-500 text-white",
+    7: "bg-red-500 text-white",
 };
 
 const VALUE_UNSELECTED =
     "border border-border bg-surface text-foreground hover:border-muted transition-colors";
 
-const formatDateTime = (date: string, time: string): string => {
-    const d = new Date(`${date}T${time}`);
-    return (
-        d.toLocaleDateString("fr-FR", {
-            weekday: "short",
-            day: "numeric",
-            month: "short",
-        }) + ` · ${time}`
-    );
+const formatTime = (time: string) => time.slice(0, 5);
+
+const formatDateHeader = (dateStr: string): string => {
+    const d = new Date(dateStr + "T00:00:00");
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (d.toDateString() === today.toDateString()) return "Aujourd'hui";
+    if (d.toDateString() === yesterday.toDateString()) return "Hier";
+
+    return d.toLocaleDateString("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+    });
+};
+
+const groupByDate = (items: Bristol[]): [string, Bristol[]][] => {
+    const groups: Record<string, Bristol[]> = {};
+    for (const item of items) {
+        (groups[item.date] ??= []).push(item);
+    }
+    return Object.entries(groups).sort(([a], [b]) => b.localeCompare(a));
 };
 
 type BristolUIProps = {
@@ -61,116 +80,160 @@ export const BristolUI = ({
     onValueChange,
     onSubmit,
     onDelete,
-}: BristolUIProps) => (
-    <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
-        <div>
-            <h1 className="text-xl font-semibold">Échelle de Bristol</h1>
-            <p className="mt-1 text-sm text-muted">
-                Enregistrez vos selles selon l'échelle de Bristol (1 = très dure · 7 = liquide).
-            </p>
-        </div>
+}: BristolUIProps) => {
+    const grouped = groupByDate(bristols);
 
-        <Card>
-            <Card.Header>
-                <Card.Title>Nouvelle entrée</Card.Title>
-            </Card.Header>
-            <Card.Content>
-                <div className="flex flex-col gap-5">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-1">
-                            <label className="text-sm font-medium text-foreground">Date</label>
-                            <Input
-                                type="date"
-                                value={date}
-                                onChange={(e) => onDateChange(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <label className="text-sm font-medium text-foreground">Heure</label>
-                            <Input
-                                type="time"
-                                value={time}
-                                onChange={(e) => onTimeChange(e.target.value)}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-foreground">Type</label>
-                        <div className="flex gap-2">
-                            {[1, 2, 3, 4, 5, 6, 7].map((v) => (
-                                <Tooltip key={v}>
-                                    <Tooltip.Trigger>
-                                        <button
-                                            type="button"
-                                            onClick={() => onValueChange(v)}
-                                            className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
-                                        >
-                                            {v}
-                                        </button>
-                                    </Tooltip.Trigger>
-                                    <Tooltip.Content>{BRISTOL_LABELS[v]}</Tooltip.Content>
-                                </Tooltip>
-                            ))}
-                        </div>
-                        {value !== null && (
-                            <p className="text-sm text-muted">
-                                Type {value} — {BRISTOL_LABELS[value]}
-                            </p>
-                        )}
-                    </div>
-
-                    <div className="flex justify-end">
-                        <Button isDisabled={value === null} onPress={onSubmit}>
-                            Enregistrer
-                        </Button>
-                    </div>
+    return (
+        <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-10 lg:flex-row lg:items-start lg:gap-8">
+            {/* Left column — form */}
+            <div className="flex flex-col gap-6">
+                <div>
+                    <h1 className="text-xl font-semibold">Échelle de Bristol</h1>
+                    <Description className="mt-1 text-sm text-muted">
+                        1 = très dure · 7 = liquide
+                    </Description>
                 </div>
-            </Card.Content>
-        </Card>
 
-        <section>
-            <h2 className="mb-3 text-sm font-semibold text-foreground">
-                {bristols.length} entrée{bristols.length !== 1 ? "s" : ""}
-            </h2>
+                <Card className="min-w-md">
+                    <Fieldset>
+                        <Fieldset.Legend>Nouvelle entrée</Fieldset.Legend>
+                    </Fieldset>
+                    <Fieldset.Group>
+                        <div className="flex flex-col gap-5">
+                            <div className="grid grid-cols-2 gap-3">
+                                <TextField>
+                                    <Label>Date</Label>
+                                    <Input
+                                        type="date"
+                                        value={date}
+                                        onChange={(e) => onDateChange(e.target.value)}
+                                    />
+                                </TextField>
+                                <TextField>
+                                    <Label>Heure</Label>
+                                    <Input
+                                        type="time"
+                                        value={time}
+                                        onChange={(e) => onTimeChange(e.target.value)}
+                                    />
+                                </TextField>
+                            </div>
 
-            {bristols.length === 0 ? (
-                <p className="py-8 text-center text-sm text-muted">
-                    Aucune entrée. Commencez par enregistrer votre première selle.
-                </p>
-            ) : (
-                <div className="flex flex-wrap gap-2 justify-evenly">
-                    {bristols.map((b) => (
-                        <Card key={b.id}>
-                            <Card.Content className="flex items-center justify-between py-3">
-                                <div className="flex items-center gap-3">
-                                    <span
-                                        className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold ${VALUE_COLORS[b.value]}`}
-                                    >
-                                        {b.value}
-                                    </span>
-                                    <div>
-                                        <p className="text-sm font-medium">
-                                            {BRISTOL_LABELS[b.value]}
-                                        </p>
-                                        <p className="text-xs text-muted">
-                                            {formatDateTime(b.date, b.time)}
-                                        </p>
-                                    </div>
+                            <TextField>
+                                <Label>Type</Label>
+                                <div className="flex gap-2">
+                                    {[1, 2, 3, 4, 5, 6, 7].map((v) => (
+                                        <Tooltip key={v}>
+                                            <Tooltip.Trigger>
+                                                <Button
+                                                    isIconOnly
+                                                    type="button"
+                                                    onClick={() => onValueChange(v)}
+                                                    className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
+                                                >
+                                                    {v}
+                                                </Button>
+                                            </Tooltip.Trigger>
+                                            <Tooltip.Content>{BRISTOL_LABELS[v]}</Tooltip.Content>
+                                        </Tooltip>
+                                    ))}
                                 </div>
+                                {value !== null && (
+                                    <Description>
+                                        Type {value} — {BRISTOL_LABELS[value]}
+                                    </Description>
+                                )}
+                            </TextField>
+
+                            <Fieldset.Actions>
                                 <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    aria-label="Supprimer"
-                                    onPress={() => onDelete(b.id)}
+                                    isDisabled={value === null}
+                                    onPress={onSubmit}
+                                    className="w-full"
                                 >
-                                    <Trash2 className="h-4 w-4 text-muted hover:text-danger" />
+                                    Enregistrer
                                 </Button>
-                            </Card.Content>
-                        </Card>
-                    ))}
+                            </Fieldset.Actions>
+                        </div>
+                    </Fieldset.Group>
+                </Card>
+            </div>
+
+            {/* Right column — history */}
+            <div className="flex flex-1 flex-col gap-4">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-semibold text-foreground">Historique</h2>
+                    <span className="text-xs text-muted">
+                        {bristols.length} entrée{bristols.length !== 1 ? "s" : ""}
+                    </span>
                 </div>
-            )}
-        </section>
-    </main>
-);
+
+                {bristols.length === 0 ? (
+                    <Card>
+                        <Card.Content>
+                            <p className="py-6 text-center text-sm text-muted">
+                                Aucune entrée. Commencez par enregistrer votre première selle.
+                            </p>
+                        </Card.Content>
+                    </Card>
+                ) : (
+                    <Card>
+                        <Card.Content className="p-0">
+                            <ListBox
+                                aria-label="Historique des entrées Bristol"
+                                selectionMode="none"
+                                className="max-h-[600px] overflow-y-auto"
+                            >
+                                {grouped.map(([dateKey, entries], groupIndex) => (
+                                    <>
+                                        {groupIndex > 0 && <Separator key={`sep-${dateKey}`} />}
+                                        <ListBox.Section key={dateKey}>
+                                            <Header>{formatDateHeader(dateKey)}</Header>
+                                            {entries
+                                                .slice()
+                                                .sort((a, b) => b.time.localeCompare(a.time))
+                                                .map((b) => (
+                                                    <ListBox.Item
+                                                        key={b.id}
+                                                        id={b.id}
+                                                        textValue={BRISTOL_LABELS[b.value]}
+                                                    >
+                                                        <span
+                                                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm font-bold ${VALUE_COLORS[b.value]}`}
+                                                        >
+                                                            {b.value}
+                                                        </span>
+                                                        <Label>{BRISTOL_LABELS[b.value]}</Label>
+                                                        <span className="ml-auto text-xs tabular-nums text-muted">
+                                                            {formatTime(b.time)}
+                                                        </span>
+                                                        <Tooltip>
+                                                            <Tooltip.Trigger>
+                                                                <Button
+                                                                    isIconOnly
+                                                                    variant="ghost"
+                                                                    size="sm"
+                                                                    aria-label="Supprimer"
+                                                                    onPress={() => onDelete(b.id)}
+                                                                    className="opacity-0 transition-opacity group-hover:opacity-100"
+                                                                >
+                                                                    <Trash2 className="h-4 w-4 text-muted" />
+                                                                </Button>
+                                                            </Tooltip.Trigger>
+                                                            <Tooltip.Content>
+                                                                Supprimer
+                                                            </Tooltip.Content>
+                                                        </Tooltip>
+                                                    </ListBox.Item>
+                                                ))}
+                                        </ListBox.Section>
+                                    </>
+                                ))}
+                            </ListBox>
+                        </Card.Content>
+                    </Card>
+                )}
+            </div>
+        </main>
+    );
+};
