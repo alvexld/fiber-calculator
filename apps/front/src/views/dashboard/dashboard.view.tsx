@@ -24,6 +24,7 @@ export const DashboardView = ({ meals, bristols }: DashboardViewProps) => {
     return (
         <DashboardUI
             meals={meals}
+            bristols={bristols}
             chartData={chartData}
             averageDailyFiber={averageDailyFiber}
             totalMeals={meals.length}
