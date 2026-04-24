@@ -35,6 +35,7 @@ export const NavSidebar = () => (
             </p>
             <Link
                 to="/ingredients"
+                search={{ query: "", page: 1 }}
                 className={NAV_INACTIVE}
                 activeProps={{ className: NAV_ACTIVE }}
             >

@@ -2,6 +2,7 @@ import { Trash2 } from "lucide-react";
 import { Button } from "@heroui/react/button";
 import { Input } from "@heroui/react/input";
 import { Card } from "@heroui/react/card";
+import { Tooltip } from "@heroui/react/tooltip";
 import type { Bristol } from "@fc/shared";
 
 const BRISTOL_LABELS: Record<number, string> = {
@@ -98,15 +99,18 @@ export const BristolUI = ({
                         <label className="text-sm font-medium text-foreground">Type</label>
                         <div className="flex gap-2">
                             {[1, 2, 3, 4, 5, 6, 7].map((v) => (
-                                <button
-                                    key={v}
-                                    type="button"
-                                    onClick={() => onValueChange(v)}
-                                    className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
-                                    title={BRISTOL_LABELS[v]}
-                                >
-                                    {v}
-                                </button>
+                                <Tooltip key={v}>
+                                    <Tooltip.Trigger>
+                                        <button
+                                            type="button"
+                                            onClick={() => onValueChange(v)}
+                                            className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
+                                        >
+                                            {v}
+                                        </button>
+                                    </Tooltip.Trigger>
+                                    <Tooltip.Content>{BRISTOL_LABELS[v]}</Tooltip.Content>
+                                </Tooltip>
                             ))}
                         </div>
                         {value !== null && (
@@ -135,7 +139,7 @@ export const BristolUI = ({
                     Aucune entrée. Commencez par enregistrer votre première selle.
                 </p>
             ) : (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-wrap gap-2 justify-evenly">
                     {bristols.map((b) => (
                         <Card key={b.id}>
                             <Card.Content className="flex items-center justify-between py-3">

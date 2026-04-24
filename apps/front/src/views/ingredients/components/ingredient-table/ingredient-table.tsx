@@ -61,7 +61,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
     }
 
     return (
-        <Table>
+        <Table variant="primary">
             <Table.ScrollContainer>
                 <Table.Content aria-label="Ingrédients" selectionMode="none">
                     <Table.Header>
