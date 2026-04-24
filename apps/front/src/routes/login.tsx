@@ -5,7 +5,7 @@ import { LoginView } from "../views/login";
 export const Route = createFileRoute("/login")({
     beforeLoad: async () => {
         const user = await getMe();
-        if (user) throw redirect({ to: "/" });
+        if (user) throw redirect({ to: "/meals" });
     },
     component: LoginView,
 });
