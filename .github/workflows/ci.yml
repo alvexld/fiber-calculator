@@ -11,6 +11,9 @@ jobs:
     name: Typecheck · Lint · Knip · Format
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: postgresql://localhost/dummy
+
     steps:
       - uses: actions/checkout@v4
 
