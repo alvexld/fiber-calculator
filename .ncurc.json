@@ -1,0 +1,5 @@
+{
+  "reject": ["@types/node", "typescript", "pnpm"],
+  "deep": true,
+  "format": "group"
+}
