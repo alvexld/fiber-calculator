@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "dev": "nest start --watch",
+        "dev": "prisma migrate deploy && prisma db seed && nest start --watch",
         "typecheck": "prisma generate && tsc --noEmit",
         "lint": "oxlint .",
         "knip": "knip",
