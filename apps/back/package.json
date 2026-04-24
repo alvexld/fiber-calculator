@@ -10,7 +10,7 @@
         "format": "oxfmt .",
         "format:check": "oxfmt --check .",
         "dev:prod": "dotenv -e .env.prod -- nest start --watch",
-        "build": "pnpm --filter @fc/shared build && prisma generate && nest build",
+        "build": "prisma generate && nest build",
         "start": "prisma migrate deploy && node dist/main",
         "start:prod": "dotenv -e .env.prod -- node dist/main",
         "db:generate": "prisma generate",
