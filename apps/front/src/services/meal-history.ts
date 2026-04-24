@@ -3,6 +3,8 @@ import { apiUrl, jsonBody, request } from "./api-client";
 
 export const getMeals = (): Promise<SavedMeal[]> => request(apiUrl("/meals"));
 
+export const getMeal = (id: string): Promise<SavedMeal> => request(apiUrl(`/meals/${id}`));
+
 export const addMeal = (meal: SavedMeal): Promise<SavedMeal> =>
     request(apiUrl("/meals"), jsonBody("POST", meal));
 

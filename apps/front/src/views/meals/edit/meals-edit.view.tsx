@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMenu } from "../hooks/use-menu";
-import { useMealHistory } from "../../../hooks/use-meal-history";
+import { useMealEdit } from "./hooks/use-meal-edit";
 import { computeTotalFiber } from "../utils/compute-total-fiber";
 import { MealsEditUI } from "./meals-edit.ui";
 
@@ -10,8 +10,7 @@ type MealsEditViewProps = {
 };
 
 export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
-    const { meals, editMeal } = useMealHistory();
-    const meal = meals.find((m) => m.id === mealId);
+    const { meal, isLoading, saveMeal } = useMealEdit(mealId);
     const navigate = useNavigate();
     const {
         ingredients,
@@ -28,8 +27,7 @@ export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
     }, [mealId]);
 
     const handleSave = (name: string) => {
-        if (!meal) return;
-        editMeal(meal.id, { name, ingredients, totalFiberGrams });
+        saveMeal({ name, ingredients, totalFiberGrams });
         resetMenu();
         void navigate({ to: "/meals" });
     };
@@ -38,6 +36,8 @@ export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
         resetMenu();
         void navigate({ to: "/meals" });
     };
+
+    if (isLoading) return null;
 
     if (!meal)
         return (
