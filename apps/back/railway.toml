@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "pnpm install --frozen-lockfile && pnpm turbo run build --filter=@fc/back"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter @fc/shared build && pnpm --filter @fc/back run build"
 
 [deploy]
 startCommand = "pnpm --filter @fc/back start"
