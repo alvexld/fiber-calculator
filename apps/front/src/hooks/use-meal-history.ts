@@ -1,21 +1,14 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "@heroui/react/toast";
 import type { SavedMeal, UpdateMeal } from "@fc/shared";
-import { getMeals, addMeal, removeMeal, updateMeal } from "../services/meal-history";
-
-const MEALS_KEY = ["meals"] as const;
+import { addMeal, removeMeal, updateMeal } from "../services/meal-history";
 
 type SaveMealParams = Omit<SavedMeal, "id">;
 
 export const useMealHistory = () => {
-    const queryClient = useQueryClient();
-
-    const { data: meals = [] } = useQuery({
-        queryKey: MEALS_KEY,
-        queryFn: getMeals,
-    });
-
-    const invalidate = () => queryClient.invalidateQueries({ queryKey: MEALS_KEY });
+    const router = useRouter();
+    const invalidate = () => router.invalidate();
 
     const { mutate: saveMeal } = useMutation({
         mutationFn: (params: SaveMealParams) => addMeal({ id: crypto.randomUUID(), ...params }),
@@ -46,7 +39,6 @@ export const useMealHistory = () => {
     });
 
     return {
-        meals,
         saveMeal: (params: SaveMealParams) => saveMeal(params),
         editMeal: (id: string, updates: UpdateMeal) => editMeal({ id, updates }),
         deleteMeal,

@@ -1,3 +1,5 @@
+import { Tooltip } from "@heroui/react/tooltip";
+
 const DAY_LABELS = ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
 const SHOWN_DAY_ROWS = [1, 3, 5];
 
@@ -73,13 +75,21 @@ export const ActivityCalendar = ({
 
             {weeks.map((week, wi) => (
                 <div key={wi} className="flex flex-col gap-1">
-                    {week.map((day, di) => (
-                        <div
-                            key={di}
-                            title={day.tooltip}
-                            className={`h-3 w-3 rounded-sm transition-opacity hover:opacity-70 ${day.date === "" ? "opacity-0" : levelColors[day.level]}`}
-                        />
-                    ))}
+                    {week.map((day, di) =>
+                        day.tooltip ? (
+                            <Tooltip key={di}>
+                                <Tooltip.Trigger
+                                    className={`h-3 w-3 rounded-sm transition-opacity hover:opacity-70 ${day.date === "" ? "opacity-0" : levelColors[day.level]}`}
+                                />
+                                <Tooltip.Content>{day.tooltip}</Tooltip.Content>
+                            </Tooltip>
+                        ) : (
+                            <div
+                                key={di}
+                                className={`h-3 w-3 rounded-sm transition-opacity hover:opacity-70 ${day.date === "" ? "opacity-0" : levelColors[day.level]}`}
+                            />
+                        ),
+                    )}
                 </div>
             ))}
         </div>

@@ -1,11 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MealsEditView } from "../../../views/meals/edit/meals-edit.view";
+import { getMeal } from "../../../services/meal-history";
 
 export const Route = createFileRoute("/_app/meals/$id")({
+    loader: async ({ params }) => {
+        const meal = await getMeal(params.id).catch(() => {
+            throw notFound();
+        });
+        return { meal };
+    },
     component: MealsEditRoute,
 });
 
 function MealsEditRoute() {
-    const { id } = Route.useParams();
-    return <MealsEditView mealId={id} />;
+    const { meal } = Route.useLoaderData();
+    return <MealsEditView meal={meal} />;
 }

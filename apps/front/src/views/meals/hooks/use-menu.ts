@@ -3,8 +3,8 @@ import type { MenuIngredient } from "../../../types/meal";
 
 type AddIngredientParams = Omit<MenuIngredient, "id">;
 
-export const useMenu = () => {
-    const [ingredients, setIngredients] = useState<MenuIngredient[]>([]);
+export const useMenu = (initialIngredients: MenuIngredient[] = []) => {
+    const [ingredients, setIngredients] = useState<MenuIngredient[]>(initialIngredients);
 
     const addIngredient = (params: AddIngredientParams) => {
         setIngredients((prev) => [...prev, { id: crypto.randomUUID(), ...params }]);
@@ -24,8 +24,6 @@ export const useMenu = () => {
         );
     };
 
-    const loadIngredients = (items: MenuIngredient[]) => setIngredients(items);
-
     const resetMenu = () => setIngredients([]);
 
     return {
@@ -33,7 +31,6 @@ export const useMenu = () => {
         addIngredient,
         removeIngredient,
         updateIngredient,
-        loadIngredients,
         resetMenu,
     };
 };

@@ -1,19 +1,12 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "@heroui/react/toast";
 import type { CreateBristol } from "@fc/shared";
-import { getBristols, addBristol, removeBristol } from "../services/bristol";
-
-const BRISTOL_KEY = ["bristol"] as const;
+import { addBristol, removeBristol } from "../services/bristol";
 
 export const useBristol = () => {
-    const queryClient = useQueryClient();
-
-    const { data: bristols = [] } = useQuery({
-        queryKey: BRISTOL_KEY,
-        queryFn: getBristols,
-    });
-
-    const invalidate = () => queryClient.invalidateQueries({ queryKey: BRISTOL_KEY });
+    const router = useRouter();
+    const invalidate = () => router.invalidate();
 
     const { mutate: createBristol } = useMutation({
         mutationFn: (data: CreateBristol) => addBristol(data),
@@ -33,5 +26,5 @@ export const useBristol = () => {
         onError: () => toast.danger("Erreur"),
     });
 
-    return { bristols, createBristol, deleteBristol };
+    return { createBristol, deleteBristol };
 };

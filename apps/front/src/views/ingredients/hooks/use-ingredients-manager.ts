@@ -1,21 +1,16 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "@tanstack/react-router";
 import { toast } from "@heroui/react/toast";
 import type { CreateIngredient } from "@fc/shared";
 import {
     createIngredient,
     deleteIngredient,
-    getIngredients,
     updateIngredient,
 } from "../../../services/ingredients";
 
 export const useIngredientsManager = () => {
-    const queryClient = useQueryClient();
-    const invalidate = () => queryClient.invalidateQueries({ queryKey: ["ingredients"] });
-
-    const { data: ingredients = [], isLoading } = useQuery({
-        queryKey: ["ingredients"],
-        queryFn: () => getIngredients(),
-    });
+    const router = useRouter();
+    const invalidate = () => router.invalidate();
 
     const { mutate: addIngredient } = useMutation({
         mutationFn: createIngredient,
@@ -45,5 +40,5 @@ export const useIngredientsManager = () => {
         onError: () => toast.danger("Erreur"),
     });
 
-    return { ingredients, isLoading, addIngredient, editIngredient, removeIngredient };
+    return { addIngredient, editIngredient, removeIngredient };
 };

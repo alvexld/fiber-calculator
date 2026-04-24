@@ -1,9 +1,11 @@
+import type { Ingredient } from "@fc/shared";
 import { useIngredientsManager } from "./hooks/use-ingredients-manager";
 import { IngredientsUI } from "./ingredients.ui";
 
-export const IngredientsView = () => {
-    const { ingredients, addIngredient, editIngredient, removeIngredient } =
-        useIngredientsManager();
+type IngredientsViewProps = { ingredients: Ingredient[] };
+
+export const IngredientsView = ({ ingredients }: IngredientsViewProps) => {
+    const { addIngredient, editIngredient, removeIngredient } = useIngredientsManager();
 
     return (
         <IngredientsUI

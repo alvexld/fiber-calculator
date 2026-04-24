@@ -1,30 +1,21 @@
-import { useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import type { SavedMeal } from "@fc/shared";
 import { useMenu } from "../hooks/use-menu";
 import { useMealEdit } from "./hooks/use-meal-edit";
 import { computeTotalFiber } from "../utils/compute-total-fiber";
 import { MealsEditUI } from "./meals-edit.ui";
 
 type MealsEditViewProps = {
-    mealId: string;
+    meal: SavedMeal;
 };
 
-export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
-    const { meal, isLoading, saveMeal } = useMealEdit(mealId);
+export const MealsEditView = ({ meal }: MealsEditViewProps) => {
+    const { saveMeal } = useMealEdit(meal.id);
     const navigate = useNavigate();
-    const {
-        ingredients,
-        addIngredient,
-        removeIngredient,
-        updateIngredient,
-        loadIngredients,
-        resetMenu,
-    } = useMenu();
+    const { ingredients, addIngredient, removeIngredient, updateIngredient, resetMenu } = useMenu(
+        meal.ingredients,
+    );
     const totalFiberGrams = computeTotalFiber(ingredients);
-
-    useEffect(() => {
-        if (meal) loadIngredients(meal.ingredients);
-    }, [mealId]);
 
     const handleSave = (name: string) => {
         saveMeal({ name, ingredients, totalFiberGrams });
@@ -36,15 +27,6 @@ export const MealsEditView = ({ mealId }: MealsEditViewProps) => {
         resetMenu();
         void navigate({ to: "/meals" });
     };
-
-    if (isLoading) return null;
-
-    if (!meal)
-        return (
-            <div className="mx-auto max-w-2xl px-6 py-8">
-                <p className="text-muted">Repas introuvable.</p>
-            </div>
-        );
 
     return (
         <MealsEditUI

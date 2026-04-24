@@ -15,6 +15,11 @@ export class MealsController {
         return this.meals.findAll();
     }
 
+    @Get(":id")
+    findOne(@Param("id") id: string) {
+        return this.meals.findOne(id);
+    }
+
     @Post()
     create(@Body() body: SavedMealDto) {
         return this.meals.create(body);

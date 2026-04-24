@@ -13,6 +13,13 @@ export class MealsService {
         });
     }
 
+    findOne(id: string) {
+        return this.prisma.meal.findUniqueOrThrow({
+            where: { id },
+            include: { ingredients: true },
+        });
+    }
+
     create(data: SavedMeal) {
         return this.prisma.meal.create({
             data: {

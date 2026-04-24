@@ -1,10 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
+import type { SavedMeal } from "@fc/shared";
 import { useMealHistory } from "../../../hooks/use-meal-history";
 import { groupMealsByDate } from "./utils/group-meals-by-date";
 import { MealsListUI } from "./meals-list.ui";
 
-export const MealsListView = () => {
-    const { meals, deleteMeal } = useMealHistory();
+type MealsListViewProps = { meals: SavedMeal[] };
+
+export const MealsListView = ({ meals }: MealsListViewProps) => {
+    const { deleteMeal } = useMealHistory();
     const navigate = useNavigate();
     const groups = groupMealsByDate(meals);
 
