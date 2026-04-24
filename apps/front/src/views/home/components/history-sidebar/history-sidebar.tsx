@@ -1,4 +1,4 @@
-import { LayoutDashboard, Calculator, Salad, Trash2 } from "lucide-react";
+import { LayoutDashboard, Calculator, Salad, Trash2, Activity } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@heroui/react/button";
 import { ScrollShadow } from "@heroui/react/scroll-shadow";
@@ -52,6 +52,10 @@ export const HistorySidebar = ({
             >
                 <Salad className="h-4 w-4 shrink-0" />
                 Ingrédients
+            </Link>
+            <Link to="/bristol" className={NAV_INACTIVE} activeProps={{ className: NAV_ACTIVE }}>
+                <Activity className="h-4 w-4 shrink-0" />
+                Bristol
             </Link>
         </div>
 

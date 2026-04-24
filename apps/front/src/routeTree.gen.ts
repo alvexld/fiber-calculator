@@ -15,6 +15,7 @@ import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppIngredientsRouteImport } from './routes/_app.ingredients'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppBristolRouteImport } from './routes/_app.bristol'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -45,17 +46,24 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppRoute,
 } as any)
+const AppBristolRoute = AppBristolRouteImport.update({
+  id: '/bristol',
+  path: '/bristol',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/bristol': typeof AppBristolRoute
   '/dashboard': typeof AppDashboardRoute
   '/ingredients': typeof AppIngredientsRoute
 }
 export interface FileRoutesByTo {
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/bristol': typeof AppBristolRoute
   '/dashboard': typeof AppDashboardRoute
   '/ingredients': typeof AppIngredientsRoute
   '/': typeof AppIndexRoute
@@ -65,20 +73,28 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteWithChildren
   '/history': typeof HistoryRoute
   '/login': typeof LoginRoute
+  '/_app/bristol': typeof AppBristolRoute
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/ingredients': typeof AppIngredientsRoute
   '/_app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/history' | '/login' | '/dashboard' | '/ingredients'
+  fullPaths:
+    | '/'
+    | '/history'
+    | '/login'
+    | '/bristol'
+    | '/dashboard'
+    | '/ingredients'
   fileRoutesByTo: FileRoutesByTo
-  to: '/history' | '/login' | '/dashboard' | '/ingredients' | '/'
+  to: '/history' | '/login' | '/bristol' | '/dashboard' | '/ingredients' | '/'
   id:
     | '__root__'
     | '/_app'
     | '/history'
     | '/login'
+    | '/_app/bristol'
     | '/_app/dashboard'
     | '/_app/ingredients'
     | '/_app/'
@@ -134,16 +150,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/bristol': {
+      id: '/_app/bristol'
+      path: '/bristol'
+      fullPath: '/bristol'
+      preLoaderRoute: typeof AppBristolRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppBristolRoute: typeof AppBristolRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppIngredientsRoute: typeof AppIngredientsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppBristolRoute: AppBristolRoute,
   AppDashboardRoute: AppDashboardRoute,
   AppIngredientsRoute: AppIngredientsRoute,
   AppIndexRoute: AppIndexRoute,

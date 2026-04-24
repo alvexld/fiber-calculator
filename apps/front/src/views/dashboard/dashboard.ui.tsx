@@ -1,7 +1,9 @@
 import { Card } from "@heroui/react/card";
 import { FiberChart } from "./components/fiber-chart/fiber-chart";
 import { FiberCalendar } from "./components/fiber-calendar/fiber-calendar";
+import { BristolChart } from "./components/bristol-chart/bristol-chart";
 import type { DailyFiberPoint } from "./utils/build-chart-data";
+import type { DailyBristolPoint } from "../bristol/utils/build-bristol-chart-data";
 import type { SavedMeal } from "../../types/meal";
 
 type DashboardUIProps = {
@@ -10,6 +12,9 @@ type DashboardUIProps = {
     averageDailyFiber: number;
     totalMeals: number;
     daysTracked: number;
+    bristolChartData: DailyBristolPoint[];
+    averageBristol: number;
+    totalBristols: number;
 };
 
 export const DashboardUI = ({
@@ -18,6 +23,9 @@ export const DashboardUI = ({
     averageDailyFiber,
     totalMeals,
     daysTracked,
+    bristolChartData,
+    averageBristol,
+    totalBristols,
 }: DashboardUIProps) => (
     <div className="flex flex-col gap-6 px-6 py-8">
         <h1 className="text-2xl font-semibold">Tableau de bord</h1>
@@ -28,7 +36,7 @@ export const DashboardUI = ({
                     <p className="text-3xl font-bold tabular-nums">
                         {averageDailyFiber.toFixed(1)}g
                     </p>
-                    <p className="mt-1 text-sm text-gray-500">Moyenne quotidienne</p>
+                    <p className="mt-1 text-sm text-gray-500">Moyenne fibres / jour</p>
                 </Card.Content>
             </Card>
             <Card>
@@ -41,6 +49,23 @@ export const DashboardUI = ({
                 <Card.Content className="pt-6">
                     <p className="text-3xl font-bold tabular-nums">{daysTracked}</p>
                     <p className="mt-1 text-sm text-gray-500">Jours suivis</p>
+                </Card.Content>
+            </Card>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+            <Card>
+                <Card.Content className="pt-6">
+                    <p className="text-3xl font-bold tabular-nums">
+                        {averageBristol > 0 ? averageBristol.toFixed(1) : "—"}
+                    </p>
+                    <p className="mt-1 text-sm text-gray-500">Bristol moyen</p>
+                </Card.Content>
+            </Card>
+            <Card>
+                <Card.Content className="pt-6">
+                    <p className="text-3xl font-bold tabular-nums">{totalBristols}</p>
+                    <p className="mt-1 text-sm text-gray-500">Selles enregistrées</p>
                 </Card.Content>
             </Card>
         </div>
@@ -75,6 +100,22 @@ export const DashboardUI = ({
                     </p>
                 ) : (
                     <FiberChart data={chartData} />
+                )}
+            </Card.Content>
+        </Card>
+
+        <Card>
+            <Card.Header>
+                <Card.Title>Bristol par jour</Card.Title>
+                <Card.Description>Moyenne quotidienne · zone idéale entre 3 et 4</Card.Description>
+            </Card.Header>
+            <Card.Content>
+                {bristolChartData.length === 0 ? (
+                    <p className="py-12 text-center text-sm text-gray-400">
+                        Aucune donnée. Enregistrez des selles pour voir votre évolution.
+                    </p>
+                ) : (
+                    <BristolChart data={bristolChartData} />
                 )}
             </Card.Content>
         </Card>

@@ -4,6 +4,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
+import { BristolModule } from "./bristol/bristol.module";
 import { IngredientsModule } from "./ingredients/ingredients.module";
 import { MealsModule } from "./meals/meals.module";
 import { PrismaModule } from "./prisma/prisma.module";
@@ -16,6 +17,7 @@ import { PrismaModule } from "./prisma/prisma.module";
         AuthModule,
         MealsModule,
         IngredientsModule,
+        BristolModule,
     ],
     providers: [
         // ThrottlerGuard must come first so rate-limiting is applied before JWT auth

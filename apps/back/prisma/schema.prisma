@@ -42,3 +42,11 @@ model MealIngredient {
   meal         Meal       @relation(fields: [mealId], references: [id], onDelete: Cascade)
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
 }
+
+model Bristol {
+  id        String   @id @default(cuid())
+  date      String
+  time      String
+  value     Int
+  createdAt DateTime @default(now())
+}

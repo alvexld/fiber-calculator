@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMealHistory } from "../hooks/use-meal-history";
+import { useBristol } from "../hooks/use-bristol";
 import { DashboardView } from "../views/dashboard/dashboard.view";
 
 export const Route = createFileRoute("/_app/dashboard")({
@@ -8,5 +9,6 @@ export const Route = createFileRoute("/_app/dashboard")({
 
 function DashboardRoute() {
     const { meals } = useMealHistory();
-    return <DashboardView meals={meals} />;
+    const { bristols } = useBristol();
+    return <DashboardView meals={meals} bristols={bristols} />;
 }
