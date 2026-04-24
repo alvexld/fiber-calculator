@@ -1,1 +1,0 @@
-ALTER TABLE "Ingredient" ADD COLUMN "nameSearch" TEXT NOT NULL DEFAULT '';

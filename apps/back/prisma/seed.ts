@@ -1,7 +1,6 @@
 import { PrismaClient, Unit } from "@prisma/client";
-import { createSqlitePrismaAdapter } from "../src/prisma-sqlite-adapter";
 
-const prisma = new PrismaClient({ adapter: createSqlitePrismaAdapter() });
+const prisma = new PrismaClient();
 
 const normalizeForSearch = (str: string) =>
     str
