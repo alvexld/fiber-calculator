@@ -155,7 +155,7 @@ importers:
         specifier: ^1.61.0
         version: 1.61.0
       serve:
-        specifier: ^14.2.4
+        specifier: ^14.2.6
         version: 14.2.6
       typescript:
         specifier: ~6.0.3

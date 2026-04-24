@@ -19,6 +19,7 @@
         "db:seed": "prisma db seed",
         "db:seed:prod": "dotenv -e .env.prod -- prisma db seed",
         "db:studio": "prisma studio",
+        "db:check": "prisma migrate diff --from-migrations --to-schema --exit-code",
         "db:studio:prod": "dotenv -e .env.prod -- prisma studio"
     },
     "dependencies": {
