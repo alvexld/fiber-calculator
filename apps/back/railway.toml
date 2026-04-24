@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter @fc/back build"
+
+[deploy]
+startCommand = "pnpm --filter @fc/back start"
+restartPolicyType = "on_failure"
