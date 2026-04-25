@@ -1,0 +1,3 @@
+{
+    "ignore": ["src/gql/generated.ts"]
+}

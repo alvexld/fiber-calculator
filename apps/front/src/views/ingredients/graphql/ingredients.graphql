@@ -1,0 +1,39 @@
+query Ingredients($search: String, $orderBy: String, $page: Int, $perPage: Int) {
+    ingredients(search: $search, orderBy: $orderBy, page: $page, perPage: $perPage) {
+        data {
+            id
+            name
+            unit
+            unitDisplay
+            fiberPerUnit
+            defaultQuantity
+        }
+        total
+    }
+}
+
+mutation CreateIngredient($input: CreateIngredientInput!) {
+    createIngredient(input: $input) {
+        id
+        name
+        unit
+        unitDisplay
+        fiberPerUnit
+        defaultQuantity
+    }
+}
+
+mutation UpdateIngredient($input: UpdateIngredientInput!) {
+    updateIngredient(input: $input) {
+        id
+        name
+        unit
+        unitDisplay
+        fiberPerUnit
+        defaultQuantity
+    }
+}
+
+mutation DeleteIngredient($input: DeleteIngredientInput!) {
+    deleteIngredient(input: $input)
+}

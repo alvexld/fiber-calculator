@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@heroui/react/button";
 import { ListBox } from "@heroui/react/list-box";
@@ -27,10 +27,6 @@ const IngredientRow = ({
     onUpdate: (id: string, quantity: number) => void;
 }) => {
     const [inputValue, setInputValue] = useState(String(ingredient.quantity));
-
-    useEffect(() => {
-        setInputValue(String(ingredient.quantity));
-    }, [ingredient.quantity]);
 
     const commit = (raw: string) => {
         const val = parseFloat(raw);

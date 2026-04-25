@@ -16,8 +16,14 @@ export const IngredientSchema = z.object({
 
 export const CreateIngredientSchema = IngredientSchema.omit({ id: true });
 
+export const PaginatedIngredientsSchema = z.object({
+    data: z.array(IngredientSchema),
+    total: z.number().int().nonnegative(),
+});
+
 export type Ingredient = z.infer<typeof IngredientSchema>;
 export type CreateIngredient = z.infer<typeof CreateIngredientSchema>;
+export type PaginatedIngredients = z.infer<typeof PaginatedIngredientsSchema>;
 
 // ─── Meal ingredient ─────────────────────────────────────────────────────────
 

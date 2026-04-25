@@ -1,15 +1,14 @@
-import type { SavedMeal } from "../../types/meal";
-import type { Bristol } from "@fc/shared";
+import { useMealsQuery, useBristolsQuery } from "../../gql/generated";
 import { buildChartData } from "./utils/build-chart-data";
 import { buildBristolChartData } from "./utils/build-bristol-chart-data";
 import { DashboardUI } from "./dashboard.ui";
 
-type DashboardViewProps = {
-    meals: SavedMeal[];
-    bristols: Bristol[];
-};
+export const DashboardView = () => {
+    const { data: mealsData } = useMealsQuery();
+    const { data: bristolsData } = useBristolsQuery();
+    const meals = mealsData?.meals ?? [];
+    const bristols = bristolsData?.bristols ?? [];
 
-export const DashboardView = ({ meals, bristols }: DashboardViewProps) => {
     const chartData = buildChartData(meals);
     const daysTracked = chartData.length;
     const averageDailyFiber =

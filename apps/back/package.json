@@ -22,10 +22,13 @@
         "db:studio:prod": "dotenv -e .env.prod -- prisma studio"
     },
     "dependencies": {
+        "@apollo/server": "^5.5.0",
         "@fc/shared": "workspace:*",
+        "@nestjs/apollo": "^13",
         "@nestjs/common": "^11.1.19",
         "@nestjs/config": "^4.0.4",
         "@nestjs/core": "^11",
+        "@nestjs/graphql": "^13",
         "@nestjs/jwt": "^11.0.2",
         "@nestjs/passport": "^11.0.5",
         "@nestjs/platform-express": "^11",
@@ -35,6 +38,7 @@
         "bcryptjs": "^3.0.3",
         "cookie-parser": "^1.4.7",
         "dotenv": "^17.4.2",
+        "graphql": "^16",
         "helmet": "^8.1.0",
         "nestjs-zod": "^5.3.0",
         "passport": "^0.7.0",

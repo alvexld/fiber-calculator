@@ -12,7 +12,7 @@ const normalizeForSearch = (str: string) =>
 export class IngredientsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    findAll({
+    async findAll({
         search,
         orderBy = "name",
         page = 1,
@@ -23,15 +23,22 @@ export class IngredientsService {
         page?: number;
         perPage?: number;
     }) {
-        return this.prisma.ingredient.findMany({
-            where: search ? { nameSearch: { contains: normalizeForSearch(search) } } : undefined,
-            orderBy:
-                orderBy === "usage" ? { mealIngredients: { _count: "desc" } } : { name: "asc" },
-            ...(perPage !== undefined && {
-                skip: (page - 1) * perPage,
-                take: perPage,
+        const where = search ? { nameSearch: { contains: normalizeForSearch(search) } } : undefined;
+        const orderByClause =
+            orderBy === "usage"
+                ? { mealIngredients: { _count: "desc" as const } }
+                : { name: "asc" as const };
+
+        const [data, total] = await this.prisma.$transaction([
+            this.prisma.ingredient.findMany({
+                where,
+                orderBy: orderByClause,
+                ...(perPage !== undefined && { skip: (page - 1) * perPage, take: perPage }),
             }),
-        });
+            this.prisma.ingredient.count({ where }),
+        ]);
+
+        return { data, total };
     }
 
     create(data: CreateIngredient) {

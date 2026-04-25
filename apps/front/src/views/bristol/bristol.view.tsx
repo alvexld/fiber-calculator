@@ -1,14 +1,14 @@
 import { useState } from "react";
-import type { Bristol, CreateBristol } from "@fc/shared";
+import { useBristolsQuery, type CreateBristolInput } from "../../gql/generated";
 import { useBristol } from "../../hooks/use-bristol";
 import { BristolUI } from "./bristol.ui";
 
 const nowDate = () => new Date().toISOString().slice(0, 10);
 const nowTime = () => new Date().toTimeString().slice(0, 5);
 
-type BristolViewProps = { bristols: Bristol[] };
-
-export const BristolView = ({ bristols }: BristolViewProps) => {
+export const BristolView = () => {
+    const { data } = useBristolsQuery();
+    const bristols = data?.bristols ?? [];
     const { createBristol, deleteBristol } = useBristol();
     const [date, setDate] = useState(nowDate);
     const [time, setTime] = useState(nowTime);
@@ -16,8 +16,8 @@ export const BristolView = ({ bristols }: BristolViewProps) => {
 
     const handleSubmit = () => {
         if (!value) return;
-        const entry: CreateBristol = { date, time, value };
-        createBristol(entry, { onSuccess: () => setValue(null) });
+        const input: CreateBristolInput = { date, time, value };
+        createBristol(input, { onSuccess: () => setValue(null) });
     };
 
     return (

@@ -1,13 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getMeals } from "../../../services/meals";
 import { MealsListView } from "../../../views/meals/views/list/meals-list.view";
 
 export const Route = createFileRoute("/_app/meals/")({
-    loader: () => getMeals(),
-    component: MealsListRoute,
+    component: MealsListView,
 });
-
-function MealsListRoute() {
-    const meals = Route.useLoaderData();
-    return <MealsListView meals={meals} />;
-}

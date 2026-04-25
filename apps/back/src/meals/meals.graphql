@@ -1,0 +1,52 @@
+type MealIngredient {
+    id: String!
+    ingredientId: String!
+    name: String!
+    quantity: Float!
+    unit: String!
+    fiberPerUnit: Float!
+    fiberGrams: Float!
+}
+
+type Meal {
+    id: String!
+    date: String!
+    name: String!
+    ingredients: [MealIngredient!]!
+    totalFiberGrams: Float!
+}
+
+input MealIngredientInput {
+    id: String!
+    ingredientId: String!
+    name: String!
+    quantity: Float!
+}
+
+input CreateMealInput {
+    id: String!
+    date: String!
+    name: String!
+    ingredients: [MealIngredientInput!]!
+}
+
+input UpdateMealInput {
+    id: String!
+    name: String!
+    ingredients: [MealIngredientInput!]!
+}
+
+input DeleteMealInput {
+    id: String!
+}
+
+extend type Query {
+    meals: [Meal!]!
+    meal(id: String!): Meal!
+}
+
+extend type Mutation {
+    createMeal(input: CreateMealInput!): Meal!
+    updateMeal(input: UpdateMealInput!): Meal!
+    deleteMeal(input: DeleteMealInput!): Boolean!
+}

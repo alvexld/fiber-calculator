@@ -1,0 +1,21 @@
+query Bristols {
+    bristols {
+        id
+        date
+        time
+        value
+    }
+}
+
+mutation CreateBristol($input: CreateBristolInput!) {
+    createBristol(input: $input) {
+        id
+        date
+        time
+        value
+    }
+}
+
+mutation DeleteBristol($input: DeleteBristolInput!) {
+    deleteBristol(input: $input)
+}

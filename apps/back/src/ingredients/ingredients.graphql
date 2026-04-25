@@ -1,0 +1,49 @@
+enum Unit {
+    PIECE
+    HUNDRED_G
+}
+
+type Ingredient {
+    id: String!
+    name: String!
+    unit: Unit!
+    unitDisplay: String
+    fiberPerUnit: Float!
+    defaultQuantity: Float!
+}
+
+type PaginatedIngredients {
+    data: [Ingredient!]!
+    total: Int!
+}
+
+input CreateIngredientInput {
+    name: String!
+    unit: Unit!
+    unitDisplay: String
+    fiberPerUnit: Float!
+    defaultQuantity: Float!
+}
+
+input UpdateIngredientInput {
+    id: String!
+    name: String!
+    unit: Unit!
+    unitDisplay: String
+    fiberPerUnit: Float!
+    defaultQuantity: Float!
+}
+
+input DeleteIngredientInput {
+    id: String!
+}
+
+extend type Query {
+    ingredients(search: String, orderBy: String, page: Int, perPage: Int): PaginatedIngredients!
+}
+
+extend type Mutation {
+    createIngredient(input: CreateIngredientInput!): Ingredient!
+    updateIngredient(input: UpdateIngredientInput!): Ingredient!
+    deleteIngredient(input: DeleteIngredientInput!): Boolean!
+}

@@ -1,9 +1,8 @@
 import { Module } from "@nestjs/common";
-import { BristolController } from "./bristol.controller";
+import { BristolResolver } from "./bristol.resolver";
 import { BristolService } from "./bristol.service";
 
 @Module({
-    controllers: [BristolController],
-    providers: [BristolService],
+    providers: [BristolResolver, BristolService],
 })
 export class BristolModule {}

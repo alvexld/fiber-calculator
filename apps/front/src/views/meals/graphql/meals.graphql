@@ -1,0 +1,43 @@
+fragment MealFields on Meal {
+    id
+    date
+    name
+    ingredients {
+        id
+        ingredientId
+        name
+        quantity
+        unit
+        fiberPerUnit
+        fiberGrams
+    }
+    totalFiberGrams
+}
+
+query Meals {
+    meals {
+        ...MealFields
+    }
+}
+
+query Meal($id: String!) {
+    meal(id: $id) {
+        ...MealFields
+    }
+}
+
+mutation CreateMeal($input: CreateMealInput!) {
+    createMeal(input: $input) {
+        ...MealFields
+    }
+}
+
+mutation UpdateMeal($input: UpdateMealInput!) {
+    updateMeal(input: $input) {
+        ...MealFields
+    }
+}
+
+mutation DeleteMeal($input: DeleteMealInput!) {
+    deleteMeal(input: $input)
+}

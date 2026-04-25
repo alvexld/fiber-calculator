@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query";
 import { SearchField } from "@heroui/react/search-field";
 import { ListBox } from "@heroui/react/list-box";
 import { ListBoxItem } from "@heroui/react/list-box-item";
 import { useDebounce } from "../../../../hooks/use-debounce";
-import { getIngredients } from "../../../../services/ingredients";
+import { useIngredientsQuery } from "../../../../gql/generated";
 import { formatUnit } from "../../utils/format-unit";
 import type { MenuIngredient } from "../../../../types/meal";
 
@@ -16,17 +16,11 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
     const [search, setSearch] = useState("");
     const debouncedSearch = useDebounce(search, 300);
 
-    const { data: ingredients = [] } = useQuery({
-        queryKey: ["ingredients", debouncedSearch],
-        queryFn: () =>
-            getIngredients({
-                search: debouncedSearch || undefined,
-                orderBy: "usage",
-                perPage: 30,
-            }),
-        placeholderData: keepPreviousData,
-        staleTime: 30_000,
-    });
+    const { data } = useIngredientsQuery(
+        { search: debouncedSearch || undefined, orderBy: "usage", perPage: 30 },
+        { placeholderData: keepPreviousData, staleTime: 30_000 },
+    );
+    const ingredients = data?.ingredients.data ?? [];
 
     const handleSelect = (ingredientId: string) => {
         const ingredient = ingredients.find((i) => i.id === ingredientId);

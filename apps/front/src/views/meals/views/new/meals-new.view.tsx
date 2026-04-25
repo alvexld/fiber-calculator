@@ -19,7 +19,6 @@ export const MealsNewView = () => {
     const handleSubmit = (value: MealFormValues) => {
         saveMeal({
             date: value.date,
-            time: value.time,
             name: value.name,
             ingredients: value.ingredients.map(({ id, ingredientId, name, quantity }) => ({
                 id,

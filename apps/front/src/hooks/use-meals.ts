@@ -1,17 +1,22 @@
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
-import type { CreateMeal, UpdateMeal } from "@fc/shared";
-import { addMeal, removeMeal, updateMeal } from "../services/meals";
+import {
+    useCreateMealMutation,
+    useUpdateMealMutation,
+    useDeleteMealMutation,
+    useMealsQuery,
+    type CreateMealInput,
+    type UpdateMealInput,
+} from "../gql/generated";
 
-type SaveMealParams = Omit<CreateMeal, "id">;
+type SaveMealParams = Omit<CreateMealInput, "id">;
+type EditMealParams = Omit<UpdateMealInput, "id">;
 
 export const useMeals = () => {
-    const router = useRouter();
-    const invalidate = () => router.invalidate();
+    const queryClient = useQueryClient();
+    const invalidate = () => queryClient.invalidateQueries({ queryKey: useMealsQuery.getKey() });
 
-    const { mutate: saveMeal } = useMutation({
-        mutationFn: (params: SaveMealParams) => addMeal({ id: crypto.randomUUID(), ...params }),
+    const { mutate: createMealMutate } = useCreateMealMutation({
         onSuccess: () => {
             invalidate();
             toast.success("Sauvegardé");
@@ -19,9 +24,7 @@ export const useMeals = () => {
         onError: () => toast.danger("Erreur"),
     });
 
-    const { mutate: editMeal } = useMutation({
-        mutationFn: ({ id, updates }: { id: string; updates: UpdateMeal }) =>
-            updateMeal(id, updates),
+    const { mutate: updateMealMutate } = useUpdateMealMutation({
         onSuccess: () => {
             invalidate();
             toast.success("Sauvegardé");
@@ -29,18 +32,19 @@ export const useMeals = () => {
         onError: () => toast.danger("Erreur"),
     });
 
-    const { mutate: deleteMeal } = useMutation({
-        mutationFn: removeMeal,
+    const { mutate: deleteMealMutate } = useDeleteMealMutation({
         onSuccess: () => {
             invalidate();
-            toast.success("Sauvegardé");
+            toast.success("Supprimé");
         },
         onError: () => toast.danger("Erreur"),
     });
 
     return {
-        saveMeal: (params: SaveMealParams) => saveMeal(params),
-        editMeal: (id: string, updates: UpdateMeal) => editMeal({ id, updates }),
-        deleteMeal,
+        saveMeal: (params: SaveMealParams) =>
+            createMealMutate({ input: { id: crypto.randomUUID(), ...params } }),
+        editMeal: (id: string, updates: EditMealParams) =>
+            updateMealMutate({ input: { id, ...updates } }),
+        deleteMeal: (id: string) => deleteMealMutate({ input: { id } }),
     };
 };

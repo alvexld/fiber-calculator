@@ -1,0 +1,25 @@
+type Bristol {
+    id: String!
+    date: String!
+    time: String!
+    value: Int!
+}
+
+input CreateBristolInput {
+    date: String!
+    time: String!
+    value: Int!
+}
+
+input DeleteBristolInput {
+    id: String!
+}
+
+extend type Query {
+    bristols: [Bristol!]!
+}
+
+extend type Mutation {
+    createBristol(input: CreateBristolInput!): Bristol!
+    deleteBristol(input: DeleteBristolInput!): Boolean!
+}
