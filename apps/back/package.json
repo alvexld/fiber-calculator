@@ -23,6 +23,7 @@
     },
     "dependencies": {
         "@apollo/server": "^5.5.0",
+        "@as-integrations/express5": "^1.1.2",
         "@fc/shared": "workspace:*",
         "@nestjs/apollo": "^13",
         "@nestjs/common": "^11.1.19",
