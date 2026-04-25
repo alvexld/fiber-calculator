@@ -46,7 +46,12 @@ export const MealsListView = () => {
                 </p>
             ) : (
                 groups.map((group) => (
-                    <DayGroup key={group.date} group={group} onDelete={handleDelete} onEdit={handleEdit} />
+                    <DayGroup
+                        key={group.date}
+                        group={group}
+                        onDelete={handleDelete}
+                        onEdit={handleEdit}
+                    />
                 ))
             )}
         </main>

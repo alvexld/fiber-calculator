@@ -24,12 +24,14 @@ export const MealsNewView = () => {
                         id: crypto.randomUUID(),
                         date: value.date,
                         name: value.name,
-                        ingredients: value.ingredients.map(({ id, ingredientId, name, quantity }) => ({
-                            id,
-                            ingredientId,
-                            name,
-                            quantity,
-                        })),
+                        ingredients: value.ingredients.map(
+                            ({ id, ingredientId, name, quantity }) => ({
+                                id,
+                                ingredientId,
+                                name,
+                                quantity,
+                            }),
+                        ),
                     },
                 });
                 void navigate({ to: "/meals" });

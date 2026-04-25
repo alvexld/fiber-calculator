@@ -1,9 +1,14 @@
+import { scan } from "react-scan";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider, keepPreviousData } from "@tanstack/react-query";
 import { routeTree } from "./routeTree.gen";
 import "./index.css";
+
+if (import.meta.env.DEV) {
+    scan({ enabled: true });
+}
 
 const queryClient = new QueryClient({
     defaultOptions: {

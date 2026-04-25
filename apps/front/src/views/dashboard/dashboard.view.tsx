@@ -37,7 +37,9 @@ export const DashboardView = () => {
                                 <p className="text-3xl font-bold tabular-nums text-white">
                                     {averageDailyFiber.toFixed(1)}g
                                 </p>
-                                <p className="mt-1 text-sm text-violet-200">Moyenne fibres / jour</p>
+                                <p className="mt-1 text-sm text-violet-200">
+                                    Moyenne fibres / jour
+                                </p>
                             </div>
                             <div className="rounded-lg bg-white/20 p-2">
                                 <Flame className="h-5 w-5 text-white" />
@@ -114,7 +116,9 @@ export const DashboardView = () => {
                 <Card className="shadow-md">
                     <Card.Header>
                         <Card.Title>Activité fibres</Card.Title>
-                        <Card.Description>20 dernières semaines · objectif 25g/jour</Card.Description>
+                        <Card.Description>
+                            20 dernières semaines · objectif 25g/jour
+                        </Card.Description>
                     </Card.Header>
                     <Card.Content>
                         {meals.length === 0 ? (
@@ -165,7 +169,9 @@ export const DashboardView = () => {
             <Card className="shadow-md">
                 <Card.Header>
                     <Card.Title>Bristol par jour</Card.Title>
-                    <Card.Description>Moyenne quotidienne · zone idéale entre 3 et 4</Card.Description>
+                    <Card.Description>
+                        Moyenne quotidienne · zone idéale entre 3 et 4
+                    </Card.Description>
                 </Card.Header>
                 <Card.Content>
                     {bristolChartData.length === 0 ? (

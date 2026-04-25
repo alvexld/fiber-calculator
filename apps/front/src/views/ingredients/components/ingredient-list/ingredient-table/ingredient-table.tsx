@@ -1,49 +1,57 @@
-import { Table } from "@heroui/react/table";
+import { memo } from "react";
 import { EmptyState } from "@heroui/react/empty-state";
-import type { CreateIngredient, Ingredient } from "@fc/shared";
+import type { Ingredient } from "@fc/shared";
 import { IngredientRow } from "./ingredient-row";
 
 type IngredientTableProps = {
-  ingredients: Ingredient[];
-  onEdit: (id: string, data: CreateIngredient) => void;
-  onDelete: (id: string) => void;
+    ingredients: Ingredient[];
+    onStartEdit: (ingredient: Ingredient) => void;
+    onDelete: (id: string) => void;
 };
 
-export const IngredientTable = ({
-  ingredients,
-  onEdit,
-  onDelete,
-}: IngredientTableProps) => (
-  <Table variant="primary">
-    <Table.ScrollContainer>
-      <Table.Content aria-label="Ingrédients" selectionMode="none">
-        <Table.Header>
-          <Table.Column isRowHeader>Nom</Table.Column>
-          <Table.Column>Unité</Table.Column>
-          <Table.Column>Affichage</Table.Column>
-          <Table.Column>Fibres / unité</Table.Column>
-          <Table.Column>Qté défaut</Table.Column>
-          <Table.Column>{""}</Table.Column>
-        </Table.Header>
-        <Table.Body
-          renderEmptyState={() => (
-            <EmptyState className="flex w-full flex-col items-center justify-center py-8 text-center">
-              <span className="text-sm text-muted">
-                Aucun ingrédient. Ajoutez-en un ci-dessus.
-              </span>
-            </EmptyState>
-          )}
-        >
-          {ingredients.map((ingredient) => (
-            <IngredientRow
-              key={ingredient.id}
-              ingredient={ingredient}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ))}
-        </Table.Body>
-      </Table.Content>
-    </Table.ScrollContainer>
-  </Table>
+export const IngredientTable = memo(
+    ({ ingredients, onStartEdit, onDelete }: IngredientTableProps) => {
+        if (ingredients.length === 0) {
+            return (
+                <EmptyState className="flex w-full flex-col items-center justify-center py-8 text-center">
+                    <span className="text-sm text-muted">
+                        Aucun ingrédient. Ajoutez-en un ci-dessus.
+                    </span>
+                </EmptyState>
+            );
+        }
+
+        return (
+            <div className="overflow-hidden rounded-xl border border-border">
+                <table className="w-full text-sm">
+                    <thead>
+                        <tr className="border-b border-border bg-surface-secondary">
+                            <th className="px-4 py-2.5 text-left font-medium text-muted">Nom</th>
+                            <th className="px-4 py-2.5 text-left font-medium text-muted">Unité</th>
+                            <th className="px-4 py-2.5 text-left font-medium text-muted">
+                                Affichage
+                            </th>
+                            <th className="px-4 py-2.5 text-left font-medium text-muted">
+                                Fibres / unité
+                            </th>
+                            <th className="px-4 py-2.5 text-left font-medium text-muted">
+                                Qté défaut
+                            </th>
+                            <th className="px-4 py-2.5" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {ingredients.map((ingredient) => (
+                            <IngredientRow
+                                key={ingredient.id}
+                                ingredient={ingredient}
+                                onStartEdit={onStartEdit}
+                                onDelete={onDelete}
+                            />
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        );
+    },
 );
