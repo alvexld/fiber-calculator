@@ -1,22 +1,20 @@
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
 import { Trash2 } from "lucide-react";
 import { Button } from "@heroui/react/button";
-import { Input } from "@heroui/react/input";
 import { Card } from "@heroui/react/card";
 import { Tooltip } from "@heroui/react/tooltip";
 import { ListBox } from "@heroui/react/list-box";
 import { Header } from "@heroui/react/header";
 import { Separator } from "@heroui/react/separator";
-import { Description, Fieldset, Label, TextField } from "@heroui/react";
+import { Label } from "@heroui/react";
 import {
     useBristolsQuery,
     useCreateBristolMutation,
     useDeleteBristolMutation,
-    type CreateBristolInput,
 } from "../../gql/generated";
 import type { Bristol } from "@fc/shared";
+import { BristolForm } from "./components/bristol-form/bristol-form";
 
 const BRISTOL_LABELS: Record<number, string> = {
     1: "Boules dures",
@@ -37,12 +35,6 @@ const VALUE_COLORS: Record<number, string> = {
     6: "bg-orange-500 text-white",
     7: "bg-red-500 text-white",
 };
-
-const VALUE_UNSELECTED =
-    "border border-border bg-surface text-foreground hover:border-muted transition-colors";
-
-const nowDate = () => new Date().toISOString().slice(0, 10);
-const nowTime = () => new Date().toTimeString().slice(0, 5);
 
 const formatTime = (time: string) => time.slice(0, 5);
 
@@ -93,92 +85,11 @@ export const BristolView = () => {
         onError: () => toast.danger("Erreur"),
     });
 
-    const [date, setDate] = useState(nowDate);
-    const [time, setTime] = useState(nowTime);
-    const [value, setValue] = useState<number | null>(null);
-
-    const handleSubmit = () => {
-        if (!value) return;
-        const input: CreateBristolInput = { date, time, value };
-        createBristolMutate({ input }, { onSuccess: () => setValue(null) });
-    };
-
     const grouped = groupByDate(bristols);
 
     return (
         <main className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 py-10 lg:flex-row lg:items-start lg:gap-8">
-            <div className="flex flex-col gap-6">
-                <div>
-                    <h1 className="text-xl font-semibold">Échelle de Bristol</h1>
-                    <Description className="mt-1 text-sm text-muted">
-                        1 = très dure · 7 = liquide
-                    </Description>
-                </div>
-
-                <Card className="min-w-md">
-                    <Fieldset>
-                        <Fieldset.Legend>Nouvelle entrée</Fieldset.Legend>
-                    </Fieldset>
-                    <Fieldset.Group>
-                        <div className="flex flex-col gap-5">
-                            <div className="grid grid-cols-2 gap-3">
-                                <TextField>
-                                    <Label>Date</Label>
-                                    <Input
-                                        type="date"
-                                        value={date}
-                                        onChange={(e) => setDate(e.target.value)}
-                                    />
-                                </TextField>
-                                <TextField>
-                                    <Label>Heure</Label>
-                                    <Input
-                                        type="time"
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                    />
-                                </TextField>
-                            </div>
-
-                            <TextField>
-                                <Label>Type</Label>
-                                <div className="flex gap-2">
-                                    {[1, 2, 3, 4, 5, 6, 7].map((v) => (
-                                        <Tooltip key={v}>
-                                            <Tooltip.Trigger>
-                                                <Button
-                                                    isIconOnly
-                                                    type="button"
-                                                    onClick={() => setValue(v)}
-                                                    className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold ${value === v ? VALUE_COLORS[v] : VALUE_UNSELECTED}`}
-                                                >
-                                                    {v}
-                                                </Button>
-                                            </Tooltip.Trigger>
-                                            <Tooltip.Content>{BRISTOL_LABELS[v]}</Tooltip.Content>
-                                        </Tooltip>
-                                    ))}
-                                </div>
-                                {value !== null && (
-                                    <Description>
-                                        Type {value} — {BRISTOL_LABELS[value]}
-                                    </Description>
-                                )}
-                            </TextField>
-
-                            <Fieldset.Actions>
-                                <Button
-                                    isDisabled={value === null}
-                                    onPress={handleSubmit}
-                                    className="w-full"
-                                >
-                                    Enregistrer
-                                </Button>
-                            </Fieldset.Actions>
-                        </div>
-                    </Fieldset.Group>
-                </Card>
-            </div>
+            <BristolForm onSubmit={(values) => createBristolMutate({ input: values })} />
 
             <div className="flex flex-1 flex-col gap-4">
                 <div className="flex items-center justify-between">
