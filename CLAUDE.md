@@ -119,7 +119,9 @@ src/
 
 - Default to HeroUI components; avoid mixing other UI systems
 - Import per-module: `import { Button } from '@heroui/react/button'`
+- Always use `SearchField` (from `@heroui/react/search-field`) for search inputs — never a plain `Input`
 - Override via `className` only when theme tokens and variants are insufficient
+- Never override colors, borders, or typography via custom classes — rely on HeroUI defaults and design tokens
 - Never remove accessibility defaults (labels, roles, focus indicators)
 
 ## Tailwind Usage
