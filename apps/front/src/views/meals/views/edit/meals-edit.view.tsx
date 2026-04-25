@@ -18,7 +18,15 @@ export const MealsEditView = ({ meal }: MealsEditViewProps) => {
     const totalFiberGrams = computeTotalFiber(ingredients);
 
     const handleSave = (name: string) => {
-        saveMeal({ name, ingredients, totalFiberGrams });
+        saveMeal({
+            name,
+            ingredients: ingredients.map(({ id, ingredientId, name: ingName, quantity }) => ({
+                id,
+                ingredientId,
+                name: ingName,
+                quantity,
+            })),
+        });
         resetMenu();
         void navigate({ to: "/meals" });
     };

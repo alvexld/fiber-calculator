@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from "@nestjs/common";
 import { createZodDto } from "nestjs-zod";
-import { SavedMealSchema, UpdateMealSchema } from "@fc/shared";
+import { CreateMealSchema, UpdateMealSchema } from "@fc/shared";
 import { MealsService } from "./meals.service";
 
-class SavedMealDto extends createZodDto(SavedMealSchema) {}
+class CreateMealDto extends createZodDto(CreateMealSchema) {}
 class UpdateMealDto extends createZodDto(UpdateMealSchema) {}
 
 @Controller("meals")
@@ -21,7 +21,7 @@ export class MealsController {
     }
 
     @Post()
-    create(@Body() body: SavedMealDto) {
+    create(@Body() body: CreateMealDto) {
         return this.meals.create(body);
     }
 

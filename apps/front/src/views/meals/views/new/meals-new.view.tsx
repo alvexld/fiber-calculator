@@ -1,7 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import type { MenuIngredient } from "../../../../types/meal";
 import { useMeals } from "../../../../hooks/use-meals";
-import { computeTotalFiber } from "../../utils/compute-total-fiber";
 import { MealsNewUI } from "./meals-new.ui";
 
 type MealFormValues = {
@@ -18,16 +17,16 @@ export const MealsNewView = () => {
     const navigate = useNavigate();
 
     const handleSubmit = (value: MealFormValues) => {
-        const ingredients = value.ingredients.map((ing) => ({
-            ...ing,
-            fiberGrams: ing.quantity * ing.fiberPerUnit,
-        }));
         saveMeal({
             date: value.date,
             time: value.time,
             name: value.name,
-            ingredients,
-            totalFiberGrams: computeTotalFiber(ingredients),
+            ingredients: value.ingredients.map(({ id, ingredientId, name, quantity }) => ({
+                id,
+                ingredientId,
+                name,
+                quantity,
+            })),
         });
         void navigate({ to: "/meals" });
     };

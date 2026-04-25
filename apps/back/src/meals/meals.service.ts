@@ -1,74 +1,95 @@
 import { Injectable } from "@nestjs/common";
-import type { SavedMeal, UpdateMeal } from "@fc/shared";
+import type { Prisma } from "@prisma/client";
+import type { CreateMeal, MealIngredientInput, SavedMeal, UpdateMeal } from "@fc/shared";
 import { PrismaService } from "../prisma/prisma.service";
+
+type MealWithIngredients = Prisma.MealGetPayload<{
+    include: { ingredients: { include: { ingredient: true } } };
+}>;
+
+const INCLUDE = {
+    ingredients: { include: { ingredient: true } },
+} satisfies Prisma.MealInclude;
+
+const formatUnit = (ingredient: { unit: string; unitDisplay: string | null }): string =>
+    ingredient.unit === "HUNDRED_G" ? "100g" : (ingredient.unitDisplay ?? "pièce");
+
+const toSavedMeal = (meal: MealWithIngredients): SavedMeal => {
+    const ingredients = meal.ingredients.map((mi) => ({
+        id: mi.id,
+        ingredientId: mi.ingredientId,
+        name: mi.name,
+        unit: formatUnit(mi.ingredient),
+        quantity: mi.quantity,
+        fiberPerUnit: mi.ingredient.fiberPerUnit,
+        fiberGrams: mi.quantity * mi.ingredient.fiberPerUnit,
+    }));
+
+    return {
+        id: meal.id,
+        date: meal.date,
+        name: meal.name,
+        ingredients,
+        totalFiberGrams: ingredients.reduce((sum, i) => sum + i.fiberGrams, 0),
+    };
+};
+
+const toIngredientCreate = (i: MealIngredientInput) => ({
+    id: i.id,
+    ingredientId: i.ingredientId,
+    name: i.name,
+    quantity: i.quantity,
+});
 
 @Injectable()
 export class MealsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    findAll() {
-        return this.prisma.meal.findMany({
-            include: { ingredients: true },
+    async findAll(): Promise<SavedMeal[]> {
+        const meals = await this.prisma.meal.findMany({
+            include: INCLUDE,
             orderBy: { date: "desc" },
         });
+        return meals.map(toSavedMeal);
     }
 
-    findOne(id: string) {
-        return this.prisma.meal.findUniqueOrThrow({
+    async findOne(id: string): Promise<SavedMeal> {
+        const meal = await this.prisma.meal.findUniqueOrThrow({
             where: { id },
-            include: { ingredients: true },
+            include: INCLUDE,
         });
+        return toSavedMeal(meal);
     }
 
-    create(data: SavedMeal) {
-        return this.prisma.meal.create({
+    async create(data: CreateMeal): Promise<SavedMeal> {
+        const meal = await this.prisma.meal.create({
             data: {
                 id: data.id,
                 date: data.date,
                 name: data.name,
-                totalFiberGrams: data.totalFiberGrams,
-                ingredients: {
-                    create: data.ingredients.map((i) => ({
-                        id: i.id,
-                        ingredientId: i.ingredientId,
-                        name: i.name,
-                        unit: i.unit,
-                        quantity: i.quantity,
-                        fiberPerUnit: i.fiberPerUnit,
-                        fiberGrams: i.fiberGrams,
-                    })),
-                },
+                ingredients: { create: data.ingredients.map(toIngredientCreate) },
             },
-            include: { ingredients: true },
+            include: INCLUDE,
         });
+        return toSavedMeal(meal);
     }
 
-    update(id: string, data: UpdateMeal) {
-        return this.prisma.$transaction(async (tx) => {
+    async update(id: string, data: UpdateMeal): Promise<SavedMeal> {
+        const meal = await this.prisma.$transaction(async (tx) => {
             await tx.mealIngredient.deleteMany({ where: { mealId: id } });
             return tx.meal.update({
                 where: { id },
                 data: {
                     name: data.name,
-                    totalFiberGrams: data.totalFiberGrams,
-                    ingredients: {
-                        create: data.ingredients.map((i) => ({
-                            id: i.id,
-                            ingredientId: i.ingredientId,
-                            name: i.name,
-                            unit: i.unit,
-                            quantity: i.quantity,
-                            fiberPerUnit: i.fiberPerUnit,
-                            fiberGrams: i.fiberGrams,
-                        })),
-                    },
+                    ingredients: { create: data.ingredients.map(toIngredientCreate) },
                 },
-                include: { ingredients: true },
+                include: INCLUDE,
             });
         });
+        return toSavedMeal(meal);
     }
 
-    async remove(id: string) {
+    async remove(id: string): Promise<void> {
         await this.prisma.meal.delete({ where: { id } });
     }
 }

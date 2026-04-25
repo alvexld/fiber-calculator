@@ -200,7 +200,9 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                         (v) =>
                                                             v && {
                                                                 ...v,
-                                                                defaultQuantity: isNaN(val) ? 1 : val,
+                                                                defaultQuantity: isNaN(val)
+                                                                    ? 1
+                                                                    : val,
                                                             },
                                                     )
                                                 }
