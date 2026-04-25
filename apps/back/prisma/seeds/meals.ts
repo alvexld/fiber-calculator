@@ -472,24 +472,14 @@ export const seedMeals = async (prisma: PrismaClient) => {
             const ing = ingredientMap.get(ingredientId);
             if (!ing) return [];
             return [
-                {
-                    id: `${def.id}-${idx}`,
-                    ingredientId: ing.id,
-                    name: ing.name,
-                    unit: ing.unit,
-                    quantity: qty,
-                    fiberPerUnit: ing.fiberPerUnit,
-                    fiberGrams: qty * ing.fiberPerUnit,
-                },
+                { id: `${def.id}-${idx}`, ingredientId: ing.id, name: ing.name, quantity: qty },
             ];
         });
 
-        const totalFiberGrams = items.reduce((sum, i) => sum + i.fiberGrams, 0);
-
         await prisma.meal.upsert({
             where: { id: def.id },
-            update: { date: def.date, name: def.name, totalFiberGrams },
-            create: { id: def.id, date: def.date, name: def.name, totalFiberGrams },
+            update: { date: def.date, name: def.name },
+            create: { id: def.id, date: def.date, name: def.name },
         });
 
         for (const item of items) {
