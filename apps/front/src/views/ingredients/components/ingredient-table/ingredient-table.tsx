@@ -55,6 +55,11 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
         cancelEdit();
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") confirmEdit();
+        if (e.key === "Escape") cancelEdit();
+    };
+
     if (ingredients.length === 0) {
         return (
             <p className="py-8 text-center text-sm text-muted">
@@ -66,7 +71,14 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
     return (
         <Table variant="primary">
             <Table.ScrollContainer>
-                <Table.Content aria-label="Ingrédients" selectionMode="none">
+                <Table.Content
+                    aria-label="Ingrédients"
+                    selectionMode="none"
+                    onRowAction={(key) => {
+                        const ingredient = ingredients.find((i) => i.id === String(key));
+                        if (ingredient && editingId !== String(key)) startEdit(ingredient);
+                    }}
+                >
                     <Table.Header>
                         <Table.Column isRowHeader>Nom</Table.Column>
                         <Table.Column>Unité</Table.Column>
@@ -97,18 +109,10 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                         (v) => v && { ...v, name: e.target.value },
                                                     )
                                                 }
-                                                onKeyDown={(e) => {
-                                                    if (e.key === "Enter") confirmEdit();
-                                                    if (e.key === "Escape") cancelEdit();
-                                                }}
+                                                onKeyDown={handleKeyDown}
                                             />
                                         ) : (
-                                            <span
-                                                className="block font-medium"
-                                                onClick={() => startEdit(ingredient)}
-                                            >
-                                                {ingredient.name}
-                                            </span>
+                                            <span className="font-medium">{ingredient.name}</span>
                                         )}
                                     </Table.Cell>
                                     <Table.Cell>
@@ -141,10 +145,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                 </Select.Popover>
                                             </Select>
                                         ) : (
-                                            <span
-                                                className="block text-muted"
-                                                onClick={() => startEdit(ingredient)}
-                                            >
+                                            <span className="text-muted">
                                                 {ingredient.unit === "HUNDRED_G" ? "100g" : "Pièce"}
                                             </span>
                                         )}
@@ -163,16 +164,10 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                             },
                                                     )
                                                 }
-                                                onKeyDown={(e) => {
-                                                    if (e.key === "Enter") confirmEdit();
-                                                    if (e.key === "Escape") cancelEdit();
-                                                }}
+                                                onKeyDown={handleKeyDown}
                                             />
                                         ) : (
-                                            <span
-                                                className="block text-muted"
-                                                onClick={() => startEdit(ingredient)}
-                                            >
+                                            <span className="text-muted">
                                                 {ingredient.unitDisplay ?? "—"}
                                             </span>
                                         )}
@@ -205,12 +200,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                 </NumberField.Group>
                                             </NumberField>
                                         ) : (
-                                            <span
-                                                className="block"
-                                                onClick={() => startEdit(ingredient)}
-                                            >
-                                                {ingredient.fiberPerUnit}g
-                                            </span>
+                                            <span>{ingredient.fiberPerUnit}g</span>
                                         )}
                                     </Table.Cell>
                                     <Table.Cell>
@@ -243,12 +233,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                 </NumberField.Group>
                                             </NumberField>
                                         ) : (
-                                            <span
-                                                className="block"
-                                                onClick={() => startEdit(ingredient)}
-                                            >
-                                                {ingredient.defaultQuantity}
-                                            </span>
+                                            <span>{ingredient.defaultQuantity}</span>
                                         )}
                                     </Table.Cell>
                                     <Table.Cell>
@@ -279,7 +264,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                                     aria-label="Supprimer"
                                                     onPress={() => onDelete(ingredient.id)}
                                                 >
-                                                    <Trash2 className="h-3.5 w-3.5 text-muted hover:text-danger" />
+                                                    <Trash2 className="h-3.5 w-3.5 text-muted" />
                                                 </Button>
                                             </div>
                                         )}
