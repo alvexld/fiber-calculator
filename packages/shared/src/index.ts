@@ -37,6 +37,7 @@ export const IngredientSchema = z.object({
     unit: UnitSchema,
     unitDisplay: z.string().nullish(),
     fiberPerUnit: z.number().positive(),
+    defaultQuantity: z.number().positive().default(1),
 });
 
 export const CreateIngredientSchema = IngredientSchema.omit({ id: true });

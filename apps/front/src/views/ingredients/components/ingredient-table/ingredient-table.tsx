@@ -14,6 +14,7 @@ type EditState = {
     unit: Unit;
     unitDisplay: string;
     fiberPerUnit: number;
+    defaultQuantity: number;
 };
 
 type IngredientTableProps = {
@@ -33,6 +34,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
             unit: ingredient.unit,
             unitDisplay: ingredient.unitDisplay ?? "",
             fiberPerUnit: ingredient.fiberPerUnit,
+            defaultQuantity: ingredient.defaultQuantity,
         });
     };
 
@@ -48,6 +50,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
             unit: editValues.unit,
             unitDisplay: editValues.unitDisplay.trim() || null,
             fiberPerUnit: editValues.fiberPerUnit,
+            defaultQuantity: editValues.defaultQuantity,
         });
         cancelEdit();
     };
@@ -69,6 +72,7 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                         <Table.Column>Unité</Table.Column>
                         <Table.Column>Affichage</Table.Column>
                         <Table.Column>Fibres / unité</Table.Column>
+                        <Table.Column>Qté défaut</Table.Column>
                         <Table.Column>{""}</Table.Column>
                     </Table.Header>
                     <Table.Body items={ingredients}>
@@ -184,6 +188,37 @@ export const IngredientTable = ({ ingredients, onEdit, onDelete }: IngredientTab
                                             </NumberField>
                                         ) : (
                                             <span>{ingredient.fiberPerUnit}g</span>
+                                        )}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {isEditing ? (
+                                            <NumberField
+                                                aria-label="Quantité par défaut"
+                                                value={editValues!.defaultQuantity}
+                                                onChange={(val) =>
+                                                    setEditValues(
+                                                        (v) =>
+                                                            v && {
+                                                                ...v,
+                                                                defaultQuantity: isNaN(val) ? 1 : val,
+                                                            },
+                                                    )
+                                                }
+                                                minValue={0.5}
+                                                step={0.5}
+                                            >
+                                                <NumberField.Group>
+                                                    <NumberField.DecrementButton>
+                                                        −
+                                                    </NumberField.DecrementButton>
+                                                    <NumberField.Input />
+                                                    <NumberField.IncrementButton>
+                                                        +
+                                                    </NumberField.IncrementButton>
+                                                </NumberField.Group>
+                                            </NumberField>
+                                        ) : (
+                                            <span>{ingredient.defaultQuantity}</span>
                                         )}
                                     </Table.Cell>
                                     <Table.Cell>

@@ -8,8 +8,8 @@ export const Route = createFileRoute("/_app/ingredients")({
         query: typeof search.query === "string" ? search.query : "",
         page: typeof search.page === "number" ? Math.max(1, search.page) : 1,
     }),
-    loaderDeps: ({ search: { query } }) => ({ query }),
-    loader: ({ deps }) => getIngredients(deps.query),
+    loaderDeps: ({ search: { query, page } }) => ({ query, page }),
+    loader: ({ deps }) => getIngredients({ search: deps.query, page: deps.page, perPage: 20 }),
     pendingComponent: IngredientsSkeleton,
     component: IngredientsRoute,
 });

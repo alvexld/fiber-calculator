@@ -18,6 +18,7 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
             unit: "PIECE" as Unit,
             unitDisplay: "",
             fiberPerUnit: 1,
+            defaultQuantity: 1,
         },
         onSubmit: ({ value }) => {
             onAdd({
@@ -25,6 +26,7 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
                 unit: value.unit,
                 unitDisplay: value.unitDisplay.trim() || null,
                 fiberPerUnit: value.fiberPerUnit,
+                defaultQuantity: value.defaultQuantity,
             });
             form.reset();
         },
@@ -108,6 +110,29 @@ export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {
                             onChange={(val) => field.handleChange(isNaN(val) ? 0 : val)}
                             minValue={0}
                             step={0.1}
+                        >
+                            <NumberField.Group>
+                                <NumberField.DecrementButton>−</NumberField.DecrementButton>
+                                <NumberField.Input />
+                                <NumberField.IncrementButton>+</NumberField.IncrementButton>
+                            </NumberField.Group>
+                        </NumberField>
+                    </div>
+                )}
+            </form.Field>
+
+            <form.Field name="defaultQuantity">
+                {(field) => (
+                    <div className="flex flex-col gap-1">
+                        <label className="text-sm font-medium text-foreground">
+                            Quantité par défaut
+                        </label>
+                        <NumberField
+                            aria-label="Quantité par défaut"
+                            value={field.state.value}
+                            onChange={(val) => field.handleChange(isNaN(val) ? 1 : val)}
+                            minValue={0.5}
+                            step={0.5}
                         >
                             <NumberField.Group>
                                 <NumberField.DecrementButton>−</NumberField.DecrementButton>

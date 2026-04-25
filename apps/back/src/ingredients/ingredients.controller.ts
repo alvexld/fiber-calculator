@@ -10,8 +10,18 @@ export class IngredientsController {
     constructor(private readonly ingredients: IngredientsService) {}
 
     @Get()
-    findAll(@Query("search") search?: string) {
-        return this.ingredients.findAll(search);
+    findAll(
+        @Query("search") search?: string,
+        @Query("orderBy") orderBy?: string,
+        @Query("page") page?: string,
+        @Query("perPage") perPage?: string,
+    ) {
+        return this.ingredients.findAll({
+            search,
+            orderBy: orderBy === "usage" ? "usage" : "name",
+            page: page !== undefined ? parseInt(page, 10) : undefined,
+            perPage: perPage !== undefined ? parseInt(perPage, 10) : undefined,
+        });
     }
 
     @Post()

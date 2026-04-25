@@ -18,6 +18,7 @@ model Ingredient {
   unit            Unit
   unitDisplay     String?
   fiberPerUnit    Float
+  defaultQuantity Float            @default(1)
   mealIngredients MealIngredient[]
 }
 

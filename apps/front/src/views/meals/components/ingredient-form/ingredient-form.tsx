@@ -24,7 +24,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
 
     const { data: ingredients = [] } = useQuery({
         queryKey: ["ingredients", debouncedSearch],
-        queryFn: () => getIngredients(debouncedSearch || undefined),
+        queryFn: () => getIngredients({ search: debouncedSearch || undefined, orderBy: "usage", perPage: 30 }),
         placeholderData: keepPreviousData,
         staleTime: 30_000,
     });
@@ -66,7 +66,10 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
                         onSelectionChange={(key) => {
                             field.handleChange(key as string);
                             const found = ingredients.find((i) => i.id === key);
-                            if (found) setSearch(found.name);
+                            if (found) {
+                                setSearch(found.name);
+                                form.setFieldValue("quantity", found.defaultQuantity);
+                            }
                         }}
                     >
                         <ComboBox.InputGroup>
