@@ -40,8 +40,18 @@ input DeleteMealInput {
     id: String!
 }
 
+type PaginatedMeals {
+    data: [Meal!]!
+    total: Int!
+}
+
+input MealsInput {
+    page: Int
+    perPage: Int
+}
+
 extend type Query {
-    meals: [Meal!]!
+    meals(input: MealsInput): PaginatedMeals!
     meal(id: String!): Meal!
 }
 

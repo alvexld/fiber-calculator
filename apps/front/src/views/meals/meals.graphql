@@ -14,9 +14,12 @@ fragment MealFields on Meal {
     totalFiberGrams
 }
 
-query Meals {
-    meals {
-        ...MealFields
+query Meals($input: MealsInput) {
+    meals(input: $input) {
+        data {
+            ...MealFields
+        }
+        total
     }
 }
 

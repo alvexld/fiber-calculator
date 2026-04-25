@@ -15,8 +15,18 @@ input DeleteBristolInput {
     id: String!
 }
 
+type PaginatedBristols {
+    data: [Bristol!]!
+    total: Int!
+}
+
+input BristolsInput {
+    page: Int
+    perPage: Int
+}
+
 extend type Query {
-    bristols: [Bristol!]!
+    bristols(input: BristolsInput): PaginatedBristols!
 }
 
 extend type Mutation {

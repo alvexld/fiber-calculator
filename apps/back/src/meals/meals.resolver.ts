@@ -7,8 +7,8 @@ export class MealsResolver {
     constructor(private readonly mealsService: MealsService) {}
 
     @Query("meals")
-    findAll() {
-        return this.mealsService.findAll();
+    findAll(@Args("input") input?: { page?: number; perPage?: number }) {
+        return this.mealsService.findAll(input?.page, input?.perPage);
     }
 
     @Query("meal")

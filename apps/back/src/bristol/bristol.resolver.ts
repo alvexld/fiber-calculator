@@ -7,8 +7,8 @@ export class BristolResolver {
     constructor(private readonly bristolService: BristolService) {}
 
     @Query("bristols")
-    findAll() {
-        return this.bristolService.findAll();
+    findAll(@Args("input") input?: { page?: number; perPage?: number }) {
+        return this.bristolService.findAll(input?.page, input?.perPage);
     }
 
     @Mutation("createBristol")

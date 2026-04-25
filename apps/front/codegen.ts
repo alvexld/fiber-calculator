@@ -1,6 +1,7 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const typedDocumentString = `
+// @ts-nocheck
 class TypedDocumentString<TResult, TVariables> extends String {
     __apiType?: (variables: TVariables) => TResult;
     constructor(value: string, _?: unknown) {

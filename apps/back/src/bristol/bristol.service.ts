@@ -6,8 +6,16 @@ import { PrismaService } from "../prisma/prisma.service";
 export class BristolService {
     constructor(private readonly prisma: PrismaService) {}
 
-    findAll() {
-        return this.prisma.bristol.findMany({ orderBy: [{ date: "desc" }, { time: "desc" }] });
+    async findAll(page?: number, perPage?: number): Promise<{ data: unknown[]; total: number }> {
+        const paginated = page !== undefined && perPage !== undefined;
+        const [data, total] = await Promise.all([
+            this.prisma.bristol.findMany({
+                orderBy: [{ date: "desc" }, { time: "desc" }],
+                ...(paginated && { skip: (page - 1) * perPage, take: perPage }),
+            }),
+            this.prisma.bristol.count(),
+        ]);
+        return { data, total };
     }
 
     create(data: CreateBristol) {

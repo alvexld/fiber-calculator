@@ -1,12 +1,12 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import type { UseQueryOptions, UseMutationOptions } from "@tanstack/react-query";
-import { fetcher } from "../services/graphql-client";
+// @ts-nocheck
 class TypedDocumentString<TResult, TVariables> extends String {
     __apiType?: (variables: TVariables) => TResult;
     constructor(value: string, _?: unknown) {
         super(value);
     }
 }
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from "@tanstack/react-query";
+import { fetcher } from "../services/graphql-client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -33,6 +33,11 @@ export type Bristol = {
     id: Scalars["String"]["output"];
     time: Scalars["String"]["output"];
     value: Scalars["Int"]["output"];
+};
+
+export type BristolsInput = {
+    page?: InputMaybe<Scalars["Int"]["input"]>;
+    perPage?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type CreateBristolInput = {
@@ -105,6 +110,11 @@ export type MealIngredientInput = {
     quantity: Scalars["Float"]["input"];
 };
 
+export type MealsInput = {
+    page?: InputMaybe<Scalars["Int"]["input"]>;
+    perPage?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 export type Mutation = {
     __typename?: "Mutation";
     createBristol: Bristol;
@@ -149,18 +159,34 @@ export type MutationUpdateMealArgs = {
     input: UpdateMealInput;
 };
 
+export type PaginatedBristols = {
+    __typename?: "PaginatedBristols";
+    data: Array<Bristol>;
+    total: Scalars["Int"]["output"];
+};
+
 export type PaginatedIngredients = {
     __typename?: "PaginatedIngredients";
     data: Array<Ingredient>;
     total: Scalars["Int"]["output"];
 };
 
+export type PaginatedMeals = {
+    __typename?: "PaginatedMeals";
+    data: Array<Meal>;
+    total: Scalars["Int"]["output"];
+};
+
 export type Query = {
     __typename?: "Query";
-    bristols: Array<Bristol>;
+    bristols: PaginatedBristols;
     ingredients: PaginatedIngredients;
     meal: Meal;
-    meals: Array<Meal>;
+    meals: PaginatedMeals;
+};
+
+export type QueryBristolsArgs = {
+    input?: InputMaybe<BristolsInput>;
 };
 
 export type QueryIngredientsArgs = {
@@ -172,6 +198,10 @@ export type QueryIngredientsArgs = {
 
 export type QueryMealArgs = {
     id: Scalars["String"]["input"];
+};
+
+export type QueryMealsArgs = {
+    input?: InputMaybe<MealsInput>;
 };
 
 export type Unit = "HUNDRED_G" | "PIECE";
@@ -191,17 +221,23 @@ export type UpdateMealInput = {
     name: Scalars["String"]["input"];
 };
 
-export type BristolsQueryVariables = Exact<{ [key: string]: never }>;
+export type BristolsQueryVariables = Exact<{
+    input?: InputMaybe<BristolsInput>;
+}>;
 
 export type BristolsQuery = {
     __typename?: "Query";
-    bristols: Array<{
-        __typename?: "Bristol";
-        id: string;
-        date: string;
-        time: string;
-        value: number;
-    }>;
+    bristols: {
+        __typename?: "PaginatedBristols";
+        total: number;
+        data: Array<{
+            __typename?: "Bristol";
+            id: string;
+            date: string;
+            time: string;
+            value: number;
+        }>;
+    };
 };
 
 export type CreateBristolMutationVariables = Exact<{
@@ -307,27 +343,33 @@ export type MealFieldsFragment = {
     }>;
 };
 
-export type MealsQueryVariables = Exact<{ [key: string]: never }>;
+export type MealsQueryVariables = Exact<{
+    input?: InputMaybe<MealsInput>;
+}>;
 
 export type MealsQuery = {
     __typename?: "Query";
-    meals: Array<{
-        __typename?: "Meal";
-        id: string;
-        date: string;
-        name: string;
-        totalFiberGrams: number;
-        ingredients: Array<{
-            __typename?: "MealIngredient";
+    meals: {
+        __typename?: "PaginatedMeals";
+        total: number;
+        data: Array<{
+            __typename?: "Meal";
             id: string;
-            ingredientId: string;
+            date: string;
             name: string;
-            quantity: number;
-            unit: string;
-            fiberPerUnit: number;
-            fiberGrams: number;
+            totalFiberGrams: number;
+            ingredients: Array<{
+                __typename?: "MealIngredient";
+                id: string;
+                ingredientId: string;
+                name: string;
+                quantity: number;
+                unit: string;
+                fiberPerUnit: number;
+                fiberGrams: number;
+            }>;
         }>;
-    }>;
+    };
 };
 
 export type MealQueryVariables = Exact<{
@@ -432,12 +474,15 @@ export const MealFieldsFragmentDoc = new TypedDocumentString(
     { fragmentName: "MealFields" },
 );
 export const BristolsDocument = new TypedDocumentString(`
-    query Bristols {
-  bristols {
-    id
-    date
-    time
-    value
+    query Bristols($input: BristolsInput) {
+  bristols(input: $input) {
+    data {
+      id
+      date
+      time
+      value
+    }
+    total
   }
 }
     `);
@@ -711,9 +756,12 @@ useDeleteIngredientMutation.fetcher = (
     );
 
 export const MealsDocument = new TypedDocumentString(`
-    query Meals {
-  meals {
-    ...MealFields
+    query Meals($input: MealsInput) {
+  meals(input: $input) {
+    data {
+      ...MealFields
+    }
+    total
   }
 }
     fragment MealFields on Meal {

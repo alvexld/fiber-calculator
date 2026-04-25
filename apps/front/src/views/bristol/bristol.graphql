@@ -1,9 +1,12 @@
-query Bristols {
-    bristols {
-        id
-        date
-        time
-        value
+query Bristols($input: BristolsInput) {
+    bristols(input: $input) {
+        data {
+            id
+            date
+            time
+            value
+        }
+        total
     }
 }
 

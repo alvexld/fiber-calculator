@@ -11,8 +11,8 @@ import { BristolCalendar } from "./components/bristol-calendar/bristol-calendar"
 export const DashboardView = () => {
     const { data: mealsData } = useMealsQuery();
     const { data: bristolsData } = useBristolsQuery();
-    const meals = mealsData?.meals ?? [];
-    const bristols = bristolsData?.bristols ?? [];
+    const meals = mealsData?.meals.data ?? [];
+    const bristols = bristolsData?.bristols.data ?? [];
 
     const chartData = buildChartData(meals);
     const daysTracked = chartData.length;

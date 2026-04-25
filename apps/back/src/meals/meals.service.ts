@@ -45,12 +45,17 @@ const toIngredientCreate = (i: MealIngredientInput) => ({
 export class MealsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findAll(): Promise<SavedMeal[]> {
-        const meals = await this.prisma.meal.findMany({
-            include: INCLUDE,
-            orderBy: { date: "desc" },
-        });
-        return meals.map(toSavedMeal);
+    async findAll(page?: number, perPage?: number): Promise<{ data: SavedMeal[]; total: number }> {
+        const paginated = page !== undefined && perPage !== undefined;
+        const [meals, total] = await Promise.all([
+            this.prisma.meal.findMany({
+                include: INCLUDE,
+                orderBy: { date: "desc" },
+                ...(paginated && { skip: (page - 1) * perPage, take: perPage }),
+            }),
+            this.prisma.meal.count(),
+        ]);
+        return { data: meals.map(toSavedMeal), total };
     }
 
     async findOne(id: string): Promise<SavedMeal> {
