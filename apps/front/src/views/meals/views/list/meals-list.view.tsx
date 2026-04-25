@@ -1,9 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
+import { Button } from "@heroui/react/button";
+import { Link } from "@tanstack/react-router";
 import { useMealsQuery, useDeleteMealMutation } from "../../../../gql/generated";
 import { groupMealsByDate } from "./utils/group-meals-by-date";
-import { MealsListUI } from "./meals-list.ui";
+import { DayGroup } from "./components/day-group/day-group";
 
 export const MealsListView = () => {
     const queryClient = useQueryClient();
@@ -26,5 +28,27 @@ export const MealsListView = () => {
     const handleEdit = (id: string) => void navigate({ to: "/meals/$id", params: { id } });
     const handleDelete = (id: string) => deleteMealMutate({ input: { id } });
 
-    return <MealsListUI groups={groups} onDelete={handleDelete} onEdit={handleEdit} />;
+    return (
+        <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-10">
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-semibold">Repas</h1>
+                <Link to="/meals/new">
+                    <Button>Nouveau repas</Button>
+                </Link>
+            </div>
+
+            {groups.length === 0 ? (
+                <p className="py-12 text-center text-sm text-muted">
+                    Aucun repas sauvegardé.{" "}
+                    <Link to="/meals/new" className="text-accent hover:underline">
+                        Composez votre premier menu.
+                    </Link>
+                </p>
+            ) : (
+                groups.map((group) => (
+                    <DayGroup key={group.date} group={group} onDelete={handleDelete} onEdit={handleEdit} />
+                ))
+            )}
+        </main>
+    );
 };

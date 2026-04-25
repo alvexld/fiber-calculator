@@ -1,4 +1,7 @@
-import { ActivityCalendar, getMonthLabels } from "../../../../components/activity-calendar";
+import {
+    ActivityCalendar,
+    getMonthLabels,
+} from "../../../../components/activity-calendar/activity-calendar";
 import { buildBristolCalendarData } from "../../utils/build-bristol-calendar-data";
 import type { Bristol } from "@fc/shared";
 

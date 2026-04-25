@@ -63,15 +63,13 @@ button/
 └── index.ts
 ```
 
-### Smart vs Dumb Components
+### Component Model: Colocated Smart Components
 
-**Dumb** (`src/components/`, `views/*/components/`, `*.ui.tsx`): purely presentational, only local UI state, no network/service calls, no app contexts.
+Each view is a single `<view>.view.tsx` file that handles data fetching, mutations, and rendering together. No separate `*.ui.tsx` split.
 
-**Smart** (`*.view.tsx`): data fetching, side effects, error/loading states. No HTML markup or `className` — delegate all presentation to a dumb component.
+Sub-components that belong only to a view live in `views/<view>/components/` and can also fetch their own data via React Query — queries are deduplicated automatically, so there's no extra network cost. Sub-components shared across two or more views move to `src/components/`.
 
-Each view folder contains exactly:
-- `<view>.view.tsx` — smart: fetches data, handles states, passes props down
-- `<view>.ui.tsx` — dumb: renders the full layout
+**Dumb components** (`src/components/`, visualisation/display-only sub-components): purely presentational, only local UI state, no network/service calls. Charts, tables, calendars, and other render-only components fall here and receive data via props.
 
 ### Code Scoping
 
@@ -85,8 +83,7 @@ src/
 ├── utils/          ← pure synchronous functions
 └── views/
     └── homescreen/
-        ├── homescreen.view.tsx
-        ├── homescreen.ui.tsx
+        ├── homescreen.view.tsx   ← data fetching + rendering, all in one
         ├── components/
         ├── hooks/
         ├── services/

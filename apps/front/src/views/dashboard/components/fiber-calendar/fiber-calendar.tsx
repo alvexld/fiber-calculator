@@ -1,4 +1,7 @@
-import { ActivityCalendar, getMonthLabels } from "../../../../components/activity-calendar";
+import {
+    ActivityCalendar,
+    getMonthLabels,
+} from "../../../../components/activity-calendar/activity-calendar";
 import { buildCalendarData } from "../../utils/build-calendar-data";
 import type { SavedMeal } from "../../../../types/meal";
 

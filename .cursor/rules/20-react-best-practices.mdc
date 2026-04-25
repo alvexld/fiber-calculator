@@ -31,114 +31,46 @@ Rationale: Linux filesystems (CI/CD) are case-sensitive. kebab-case prevents fil
 
 ---
 
-## Smart vs Dumb Components
+## Component Model: Colocated Smart Components
 
-### Dumb components (`src/components/`, `views/*/components/`, `*.ui.tsx`)
+Each view is a **single file** (`<view>.view.tsx`) that handles data fetching, mutations, and rendering together. There is no separate `*.ui.tsx` counterpart — the view/ui split is not used in this project.
 
-Dumb components are purely presentational. They receive props and render JSX.
+Sub-components that belong to a single view live in `views/<view>/components/` and can also fetch their own data via React Query (queries are deduplicated automatically). Sub-components shared across two or more views move to `src/components/`.
 
-ALLOWED:
+### Display-only sub-components (`src/components/`, `views/*/components/`)
 
-- Local UI state (open/closed menus, accordions, tooltips, etc.)
-- Handlers that update local UI state only
-- Other dumb components
-- Presentational-only contexts: i18n, theme, UI feature flags
-
-FORBIDDEN:
-
-- Calling services or making network requests
-- Reading application contexts (user data, global business state)
-- Including smart components
-- Accepting data structures tightly coupled to the parent's implementation
+Pure rendering components (charts, tables, calendars, form inputs) that only receive data via props and have no side effects. These are the only components that keep strict prop-driven boundaries.
 
 ```tsx
-// ❌ DO NOT couple to parent state structure
-const ToggleDisplay = ({
-  displayInfo,
-}: {
-  displayInfo: [boolean, Dispatch<SetStateAction<boolean>>];
-}) => {};
-
-// ✅ Expose a clean, decoupled interface
-const ToggleDisplay = ({
-  open,
-  onToggle,
-}: {
-  open: boolean;
-  onToggle: () => void;
-}) => {};
+// ✅ A display-only chart sub-component
+const FiberChart = ({ data }: { data: DailyFiberPoint[] }) => (
+    <ResponsiveContainer>...</ResponsiveContainer>
+);
 ```
 
-```tsx
-// ❌ DO NOT include a smart component inside a dumb component
-const UserListItem = ({ user }) => {
-  const [isEditOpen, setIsEditOpen] = useState(false);
-  return <>{isEditOpen && <EditUserDialog user={user} />}</>; // EditUserDialog is smart
-};
+### Views (`<view>.view.tsx`)
 
-// ✅ Lift state to the smart parent, pass a callback down
-const UserListItem = ({ user, onEditClick }) => {
-  return <button onClick={onEditClick}>Edit</button>;
-};
-```
-
-### Smart components (`*.view.tsx`)
-
-Smart components handle business logic: data fetching, side effects, error/loading states.
-
-ALLOWED:
-
-- Data fetching hooks (useQuery, useSWR, etc.)
-- Application contexts
-- Loading/error state management
-- Passing data and callbacks to dumb components
-
-FORBIDDEN:
-
-- HTML markup (no JSX elements other than dumb component calls)
-- Styles — no inline styles, no className
+A view file owns everything: fetching, mutations, state, and rendering. No prop-drilling through an intermediate UI layer.
 
 ```tsx
-// ❌ DO NOT put markup or styles in a smart component
-const App = () => {
-  return <div style={{ minHeight: "100vh" }}>{/* ... */}</div>;
-};
+// ✅ homescreen.view.tsx — data + rendering in one place
+export const HomescreenView = () => {
+    const { data } = useUsersQuery();
+    const users = data?.users ?? [];
 
-// ✅ Delegate all presentation to a dumb component
-const App = () => {
-  return <Layout>{/* ... */}</Layout>;
-};
-```
-
----
-
-## Views
-
-Each view folder contains exactly two main components:
-
-- `<view>.view.tsx` — smart component: fetches data, handles errors, passes everything down
-- `<view>.ui.tsx` — dumb component: renders the full layout of the view
-
-```tsx
-// ✅ homescreen.view.tsx
-export Homescreen = () => {
-    const { data, isLoading, error } = useQuery({
-        queryKey: ["users"],
-        queryFn: fetchUsers,
-    });
-    if (isLoading) return <LoadingIndicator />;
-    if (error) return <ErrorScreen error={error} />;
-    return <HomescreenUI users={data} />;
-}
-
-// ✅ homescreen.ui.tsx
-export HomescreenUI = ({ users }: HomescreenUIProps) => {
     return (
         <main className="main">
             <UserList users={users} />
         </main>
     );
-}
+};
+```
+
+```tsx
+// ❌ DO NOT split into view + ui files
+// homescreen.view.tsx → passes props to HomescreenUI
+// homescreen.ui.tsx   → receives props, renders
+// This creates prop drilling with no benefit when using React Query.
 ```
 
 ---

@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
+import { Card } from "@heroui/react/card";
 import type { MenuIngredient } from "@fc/shared";
 import {
     useMealQuery,
@@ -10,7 +11,10 @@ import {
 } from "../../../../gql/generated";
 import { useMenu } from "../../hooks/use-menu";
 import { computeTotalFiber } from "../../utils/compute-total-fiber";
-import { MealsEditUI } from "./meals-edit.ui";
+import { FiberKpi } from "../../components/fiber-kpi/fiber-kpi";
+import { IngredientForm } from "../../components/ingredient-form/ingredient-form";
+import { IngredientList } from "../../components/ingredient-list/ingredient-list";
+import { SaveMeal } from "../../components/save-meal/save-meal";
 
 type MealsEditViewProps = { id: string };
 
@@ -71,15 +75,42 @@ const MealsEditLoaded = ({ meal, id }: { meal: MealData; id: string }) => {
     };
 
     return (
-        <MealsEditUI
-            mealName={meal.name}
-            ingredients={ingredients}
-            totalFiberGrams={totalFiberGrams}
-            onAdd={addIngredient}
-            onRemove={removeIngredient}
-            onUpdate={updateIngredient}
-            onSave={handleSave}
-            onCancel={handleCancel}
-        />
+        <div className="mx-auto flex max-w-2xl flex-col gap-6 px-6 py-8">
+            <h1 className="text-2xl font-semibold">{meal.name}</h1>
+
+            <FiberKpi totalFiberGrams={totalFiberGrams} />
+
+            <Card>
+                <Card.Header>
+                    <Card.Title>Ajouter un ingrédient</Card.Title>
+                </Card.Header>
+                <Card.Content>
+                    <IngredientForm onAdd={addIngredient} />
+                </Card.Content>
+            </Card>
+
+            <Card>
+                <Card.Header>
+                    <Card.Title>Menu</Card.Title>
+                    <Card.Description>{ingredients.length} ingrédient(s)</Card.Description>
+                </Card.Header>
+                <Card.Content>
+                    <IngredientList
+                        ingredients={ingredients}
+                        onRemove={removeIngredient}
+                        onUpdate={updateIngredient}
+                    />
+                </Card.Content>
+                <Card.Footer>
+                    <SaveMeal
+                        isDisabled={ingredients.length === 0}
+                        isEditing={true}
+                        initialName={meal.name}
+                        onSave={handleSave}
+                        onCancel={handleCancel}
+                    />
+                </Card.Footer>
+            </Card>
+        </div>
     );
 };

@@ -1,5 +1,5 @@
 import { groupBy, sumBy } from "es-toolkit";
-import type { ActivityCalendarCell } from "../../../components/activity-calendar";
+import type { ActivityCalendarCell } from "../../../components/activity-calendar/activity-calendar";
 import type { SavedMeal } from "../../../types/meal";
 
 const DAILY_GOAL = 25;

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { getMe } from "../services/auth";
-import { LoginView } from "../views/login";
+import { LoginView } from "../views/login/login.view";
 
 export const Route = createFileRoute("/login")({
     beforeLoad: async () => {

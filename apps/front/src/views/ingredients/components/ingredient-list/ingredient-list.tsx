@@ -9,7 +9,7 @@ import {
     useUpdateIngredientMutation,
     useDeleteIngredientMutation,
 } from "../../../../gql/generated";
-import { IngredientTable } from "../ingredient-table/ingredient-table";
+import { IngredientTable } from "./ingredient-table/ingredient-table";
 
 const PAGE_SIZE = 20;
 
