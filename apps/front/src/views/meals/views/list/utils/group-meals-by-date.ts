@@ -1,5 +1,5 @@
 import { groupBy, sumBy } from "es-toolkit";
-import type { SavedMeal } from "../../../../types/meal";
+import type { SavedMeal } from "../../../../../types/meal";
 
 export type DayGroup = {
     date: string;

@@ -1,8 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import type { SavedMeal } from "@fc/shared";
-import { useMenu } from "../hooks/use-menu";
+import { useMenu } from "../../hooks/use-menu";
 import { useMealEdit } from "./hooks/use-meal-edit";
-import { computeTotalFiber } from "../utils/compute-total-fiber";
+import { computeTotalFiber } from "../../utils/compute-total-fiber";
 import { MealsEditUI } from "./meals-edit.ui";
 
 type MealsEditViewProps = {

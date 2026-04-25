@@ -1,6 +1,6 @@
 import { MealCard } from "../meal-card/meal-card";
 import type { DayGroup as DayGroupType } from "../../utils/group-meals-by-date";
-import type { SavedMeal } from "../../../../../types/meal";
+import type { SavedMeal } from "../../../../../../types/meal";
 
 type DayGroupProps = {
     group: DayGroupType;

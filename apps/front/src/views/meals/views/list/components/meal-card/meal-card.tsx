@@ -1,7 +1,7 @@
 import { Trash2, Pencil } from "lucide-react";
 import { Button } from "@heroui/react/button";
 import { Card } from "@heroui/react/card";
-import type { SavedMeal } from "../../../../../types/meal";
+import type { SavedMeal } from "../../../../../../types/meal";
 import { Label, ListBox, ListBoxItem } from "@heroui/react";
 
 type MealCardProps = {

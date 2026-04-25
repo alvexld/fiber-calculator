@@ -13,6 +13,10 @@ export const MenuIngredientSchema = z.object({
 export const SavedMealSchema = z.object({
     id: z.string(),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    time: z
+        .string()
+        .regex(/^\d{2}:\d{2}$/)
+        .optional(),
     name: z.string().min(1),
     ingredients: z.array(MenuIngredientSchema),
     totalFiberGrams: z.number().nonnegative(),

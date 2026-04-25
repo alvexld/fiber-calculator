@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import type { SavedMeal } from "@fc/shared";
-import { useMeals } from "../../../hooks/use-meals";
+import { useMeals } from "../../../../hooks/use-meals";
 import { groupMealsByDate } from "./utils/group-meals-by-date";
 import { MealsListUI } from "./meals-list.ui";
 

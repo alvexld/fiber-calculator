@@ -1,5 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { MealsEditView } from "../../../views/meals/edit/meals-edit.view";
+import { MealsEditView } from "../../../views/meals/views/edit/meals-edit.view";
 import { getMeal } from "../../../services/meals";
 
 export const Route = createFileRoute("/_app/meals/$id")({
