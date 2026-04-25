@@ -1,8 +1,14 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "@heroui/react/toast";
 import type { MenuIngredient } from "@fc/shared";
-import { useMealQuery, type MealQuery } from "../../../../gql/generated";
+import {
+    useMealQuery,
+    useMealsQuery,
+    useUpdateMealMutation,
+    type MealQuery,
+} from "../../../../gql/generated";
 import { useMenu } from "../../hooks/use-menu";
-import { useMealEdit } from "./hooks/use-meal-edit";
 import { computeTotalFiber } from "../../utils/compute-total-fiber";
 import { MealsEditUI } from "./meals-edit.ui";
 
@@ -20,7 +26,20 @@ export const MealsEditView = ({ id }: MealsEditViewProps) => {
 type MealData = NonNullable<MealQuery["meal"]>;
 
 const MealsEditLoaded = ({ meal, id }: { meal: MealData; id: string }) => {
-    const { saveMeal } = useMealEdit(id);
+    const queryClient = useQueryClient();
+    const invalidate = () => {
+        queryClient.invalidateQueries({ queryKey: useMealsQuery.getKey() });
+        queryClient.invalidateQueries({ queryKey: useMealQuery.getKey({ id }) });
+    };
+
+    const { mutate: updateMeal } = useUpdateMealMutation({
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
+        onError: () => toast.danger("Erreur"),
+    });
+
     const navigate = useNavigate();
     const { ingredients, addIngredient, removeIngredient, updateIngredient, resetMenu } = useMenu(
         meal.ingredients as MenuIngredient[],
@@ -28,14 +47,19 @@ const MealsEditLoaded = ({ meal, id }: { meal: MealData; id: string }) => {
     const totalFiberGrams = computeTotalFiber(ingredients);
 
     const handleSave = (name: string) => {
-        saveMeal({
-            name,
-            ingredients: ingredients.map(({ id, ingredientId, name: ingName, quantity }) => ({
+        updateMeal({
+            input: {
                 id,
-                ingredientId,
-                name: ingName,
-                quantity,
-            })),
+                name,
+                ingredients: ingredients.map(
+                    ({ id: ingId, ingredientId, name: ingName, quantity }) => ({
+                        id: ingId,
+                        ingredientId,
+                        name: ingName,
+                        quantity,
+                    }),
+                ),
+            },
         });
         resetMenu();
         void navigate({ to: "/meals" });

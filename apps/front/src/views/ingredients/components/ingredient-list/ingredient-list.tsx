@@ -1,29 +1,56 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData } from "@tanstack/react-query";
+import { toast } from "@heroui/react/toast";
 import { SearchField } from "@heroui/react/search-field";
 import { Pagination } from "@heroui/react/pagination";
-import { Route } from "../../../../routes/_app/ingredients";
-import { useIngredients } from "../../hooks/use-ingredients";
-import { useIngredientsManager } from "../../hooks/use-ingredients-manager";
-import { IngredientTable } from "../ingredient-table";
+import {
+    useIngredientsQuery,
+    useUpdateIngredientMutation,
+    useDeleteIngredientMutation,
+} from "../../../../gql/generated";
+import { IngredientTable } from "../ingredient-table/ingredient-table";
 
 const PAGE_SIZE = 20;
 
 export const IngredientList = () => {
-    const { query, page } = Route.useSearch();
-    const navigate = useNavigate({ from: Route.fullPath });
-    const [inputValue, setInputValue] = useState(query);
+    const [query, setQuery] = useState("");
+    const [page, setPage] = useState(1);
 
-    const { data } = useIngredients({ query, page });
-    const { editIngredient, removeIngredient } = useIngredientsManager();
+    const queryClient = useQueryClient();
+    const invalidate = () =>
+        queryClient.invalidateQueries({ queryKey: useIngredientsQuery.getKey() });
+
+    const { data } = useIngredientsQuery(
+        { search: query || undefined, page, perPage: PAGE_SIZE },
+        { placeholderData: keepPreviousData, staleTime: 30_000 },
+    );
+
+    const { mutate: updateIngredient } = useUpdateIngredientMutation({
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
+        onError: () => toast.danger("Erreur"),
+    });
+
+    const { mutate: deleteIngredient } = useDeleteIngredientMutation({
+        onSuccess: () => {
+            invalidate();
+            toast.success("Sauvegardé");
+        },
+        onError: () => toast.danger("Erreur"),
+    });
 
     const ingredients = data?.ingredients.data ?? [];
     const total = data?.ingredients.total ?? 0;
     const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
     const safePage = Math.min(page, totalPages);
 
-    const setQuery = (q: string) => void navigate({ search: { query: q, page: 1 } });
-    const setPage = (p: number) => void navigate({ search: (prev) => ({ ...prev, page: p }) });
+    const handleQueryChange = (q: string) => {
+        setQuery(q);
+        setPage(1);
+    };
 
     return (
         <section>
@@ -31,26 +58,19 @@ export const IngredientList = () => {
                 <h2 className="text-sm font-semibold text-foreground">
                     {total} ingrédient{total !== 1 ? "s" : ""}
                 </h2>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                        setQuery(inputValue);
-                    }}
-                >
-                    <SearchField value={inputValue} onChange={setInputValue}>
-                        <SearchField.Group>
-                            <SearchField.SearchIcon />
-                            <SearchField.Input />
-                            <SearchField.ClearButton />
-                        </SearchField.Group>
-                    </SearchField>
-                </form>
+                <SearchField value={query} onChange={handleQueryChange}>
+                    <SearchField.Group>
+                        <SearchField.SearchIcon />
+                        <SearchField.Input />
+                        <SearchField.ClearButton />
+                    </SearchField.Group>
+                </SearchField>
             </div>
 
             <IngredientTable
                 ingredients={ingredients}
-                onEdit={(id, ingredient) => editIngredient({ id, data: ingredient })}
-                onDelete={removeIngredient}
+                onEdit={(id, ingredient) => updateIngredient({ input: { id, ...ingredient } })}
+                onDelete={(id) => deleteIngredient({ input: { id } })}
             />
 
             {totalPages > 1 && (
