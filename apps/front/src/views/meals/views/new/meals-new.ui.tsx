@@ -13,7 +13,6 @@ type MealsNewUIProps = {
     date: string;
     time: string;
     name: string;
-    maxIngredients: number;
     onDateChange: (v: string) => void;
     onTimeChange: (v: string) => void;
     onNameChange: (v: string) => void;
@@ -30,7 +29,6 @@ export const MealsNewUI = ({
     date,
     time,
     name,
-    maxIngredients,
     onDateChange,
     onTimeChange,
     onNameChange,
@@ -74,18 +72,9 @@ export const MealsNewUI = ({
         <Card>
             <Card.Header>
                 <Card.Title>Ajouter un ingrédient</Card.Title>
-                <Card.Description>
-                    {ingredients.length}/{maxIngredients} ingrédient(s)
-                </Card.Description>
             </Card.Header>
             <Card.Content>
-                {ingredients.length < maxIngredients ? (
-                    <IngredientForm onAdd={onAdd} />
-                ) : (
-                    <p className="py-4 text-center text-sm text-muted">
-                        Maximum de {maxIngredients} ingrédients atteint.
-                    </p>
-                )}
+                <IngredientForm onAdd={onAdd} />
             </Card.Content>
         </Card>
 

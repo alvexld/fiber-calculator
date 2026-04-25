@@ -5,8 +5,6 @@ import { useMeals } from "../../../../hooks/use-meals";
 import { computeTotalFiber } from "../../utils/compute-total-fiber";
 import { MealsNewUI } from "./meals-new.ui";
 
-const MAX_INGREDIENTS = 15;
-
 const nowDate = () => new Date().toISOString().slice(0, 10);
 const nowTime = () => new Date().toTimeString().slice(0, 5);
 
@@ -35,7 +33,6 @@ export const MealsNewView = () => {
 
     const addIngredient = (params: Omit<MenuIngredient, "id">) => {
         const current = form.state.values.ingredients;
-        if (current.length >= MAX_INGREDIENTS) return;
         form.setFieldValue("ingredients", [
             ...current,
             { id: crypto.randomUUID(), ...params },
@@ -67,7 +64,6 @@ export const MealsNewView = () => {
                     name={name}
                     ingredients={ingredients}
                     totalFiberGrams={computeTotalFiber(ingredients)}
-                    maxIngredients={MAX_INGREDIENTS}
                     onDateChange={(v) => form.setFieldValue("date", v)}
                     onTimeChange={(v) => form.setFieldValue("time", v)}
                     onNameChange={(v) => form.setFieldValue("name", v)}
