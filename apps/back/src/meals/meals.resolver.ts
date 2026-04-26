@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import type { CreateMeal, UpdateMeal } from "@fc/shared";
+import type { CreateMealInput, UpdateMealInput } from "../graphql";
 import { MealsService } from "./meals.service";
 
 @Resolver()
@@ -17,12 +17,12 @@ export class MealsResolver {
     }
 
     @Mutation("createMeal")
-    create(@Args("input") input: CreateMeal) {
+    create(@Args("input") input: CreateMealInput) {
         return this.mealsService.create(input);
     }
 
     @Mutation("updateMeal")
-    update(@Args("input") { id, ...data }: UpdateMeal & { id: string }) {
+    update(@Args("input") { id, ...data }: UpdateMealInput) {
         return this.mealsService.update(id, data);
     }
 

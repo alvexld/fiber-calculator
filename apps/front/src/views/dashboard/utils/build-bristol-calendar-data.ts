@@ -1,6 +1,6 @@
 import { groupBy } from "es-toolkit";
 import type { ActivityCalendarCell } from "../../../components/activity-calendar/activity-calendar";
-import type { Bristol } from "@fc/shared";
+import type { Bristol } from "../../../gql/generated";
 
 const toDateStr = (date: Date): string => date.toISOString().slice(0, 10);
 

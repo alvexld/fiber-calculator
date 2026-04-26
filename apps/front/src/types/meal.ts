@@ -1,1 +1,1 @@
-export type { MenuIngredient, SavedMeal } from "@fc/shared";
+export type { MealIngredient as MenuIngredient, Meal as SavedMeal } from "../gql/generated";

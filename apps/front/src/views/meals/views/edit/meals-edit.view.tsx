@@ -2,7 +2,6 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@heroui/react/toast";
 import { Card } from "@heroui/react/card";
-import type { MenuIngredient } from "@fc/shared";
 import {
     useMealQuery,
     useMealsQuery,
@@ -46,7 +45,7 @@ const MealsEditLoaded = ({ meal, id }: { meal: MealData; id: string }) => {
 
     const navigate = useNavigate();
     const { ingredients, addIngredient, removeIngredient, updateIngredient, resetMenu } = useMenu(
-        meal.ingredients as MenuIngredient[],
+        meal.ingredients,
     );
     const totalFiberGrams = computeTotalFiber(ingredients);
 

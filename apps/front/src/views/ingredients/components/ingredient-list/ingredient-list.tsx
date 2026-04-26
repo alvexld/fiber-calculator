@@ -3,7 +3,7 @@ import { SearchField } from "@heroui/react/search-field";
 import { toast } from "@heroui/react/toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
-import type { CreateIngredient, Ingredient } from "@fc/shared";
+import type { CreateIngredientInput, Ingredient } from "../../../../gql/generated";
 import {
     useDeleteIngredientMutation,
     useIngredientsQuery,
@@ -57,7 +57,7 @@ export const IngredientList = () => {
     const handleCloseDrawer = useCallback(() => setEditingIngredient(null), []);
 
     const handleSave = useCallback(
-        (id: string, data: CreateIngredient) => updateIngredient({ input: { id, ...data } }),
+        (id: string, data: CreateIngredientInput) => updateIngredient({ input: { id, ...data } }),
         [updateIngredient],
     );
 
@@ -91,7 +91,7 @@ export const IngredientList = () => {
             </div>
 
             <IngredientTable
-                ingredients={data?.data ?? []}
+                ingredients={data?.records ?? []}
                 onStartEdit={handleStartEdit}
                 onDelete={handleDelete}
             />

@@ -3,7 +3,7 @@ import {
     getMonthLabels,
 } from "../../../../components/activity-calendar/activity-calendar";
 import { buildBristolCalendarData } from "../../utils/build-bristol-calendar-data";
-import type { Bristol } from "@fc/shared";
+import type { Bristol } from "../../../../gql/generated";
 
 const LEVEL_COLORS: Record<0 | 1 | 2 | 3 | 4, string> = {
     0: "bg-gray-100",

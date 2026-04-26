@@ -20,7 +20,7 @@ export const IngredientForm = ({ onAdd }: IngredientFormProps) => {
         orderBy: "usage",
         perPage: 30,
     });
-    const ingredients = data?.ingredients.data ?? [];
+    const ingredients = data?.ingredients.records ?? [];
 
     const handleSelect = (ingredientId: string) => {
         const ingredient = ingredients.find((i) => i.id === ingredientId);

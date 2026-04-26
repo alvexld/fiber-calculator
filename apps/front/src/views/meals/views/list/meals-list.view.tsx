@@ -19,12 +19,12 @@ export const MealsListView = () => {
             useMealsQuery.fetcher({ input: { page: pageParam as number, perPage: PAGE_SIZE } })(),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            const fetched = allPages.reduce((sum, p) => sum + p.meals.data.length, 0);
+            const fetched = allPages.reduce((sum, p) => sum + p.meals.records.length, 0);
             return fetched < lastPage.meals.total ? allPages.length + 1 : undefined;
         },
     });
 
-    const meals = data?.pages.flatMap((p) => p.meals.data) ?? [];
+    const meals = data?.pages.flatMap((p) => p.meals.records) ?? [];
     const groups = groupMealsByDate(meals);
 
     const { mutate: deleteMealMutate } = useDeleteMealMutation({

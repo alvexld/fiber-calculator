@@ -5,12 +5,8 @@ class TypedDocumentString<TResult, TVariables> extends String {
         super(value);
     }
 }
-import {
-    useQuery,
-    useMutation,
-    type UseQueryOptions,
-    type UseMutationOptions,
-} from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import type { UseQueryOptions, UseMutationOptions } from "@tanstack/react-query";
 import { fetcher } from "../services/graphql-client";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -64,6 +60,12 @@ export type CreateMealInput = {
     id: Scalars["String"]["input"];
     ingredients: Array<MealIngredientInput>;
     name: Scalars["String"]["input"];
+};
+
+export type DashboardData = {
+    __typename?: "DashboardData";
+    bristols: Array<Bristol>;
+    meals: Array<Meal>;
 };
 
 export type DeleteBristolInput = {
@@ -166,25 +168,26 @@ export type MutationUpdateMealArgs = {
 
 export type PaginatedBristols = {
     __typename?: "PaginatedBristols";
-    data: Array<Bristol>;
+    records: Array<Bristol>;
     total: Scalars["Int"]["output"];
 };
 
 export type PaginatedIngredients = {
     __typename?: "PaginatedIngredients";
-    data: Array<Ingredient>;
+    records: Array<Ingredient>;
     total: Scalars["Int"]["output"];
 };
 
 export type PaginatedMeals = {
     __typename?: "PaginatedMeals";
-    data: Array<Meal>;
+    records: Array<Meal>;
     total: Scalars["Int"]["output"];
 };
 
 export type Query = {
     __typename?: "Query";
     bristols: PaginatedBristols;
+    dashboard: DashboardData;
     ingredients: PaginatedIngredients;
     meal: Meal;
     meals: PaginatedMeals;
@@ -235,7 +238,7 @@ export type BristolsQuery = {
     bristols: {
         __typename?: "PaginatedBristols";
         total: number;
-        data: Array<{
+        records: Array<{
             __typename?: "Bristol";
             id: string;
             date: string;
@@ -266,6 +269,39 @@ export type DeleteBristolMutationVariables = Exact<{
 
 export type DeleteBristolMutation = { __typename?: "Mutation"; deleteBristol: boolean };
 
+export type DashboardQueryVariables = Exact<{ [key: string]: never }>;
+
+export type DashboardQuery = {
+    __typename?: "Query";
+    dashboard: {
+        __typename?: "DashboardData";
+        meals: Array<{
+            __typename?: "Meal";
+            id: string;
+            date: string;
+            name: string;
+            totalFiberGrams: number;
+            ingredients: Array<{
+                __typename?: "MealIngredient";
+                id: string;
+                ingredientId: string;
+                name: string;
+                quantity: number;
+                unit: string;
+                fiberPerUnit: number;
+                fiberGrams: number;
+            }>;
+        }>;
+        bristols: Array<{
+            __typename?: "Bristol";
+            id: string;
+            date: string;
+            time: string;
+            value: number;
+        }>;
+    };
+};
+
 export type IngredientsQueryVariables = Exact<{
     search?: InputMaybe<Scalars["String"]["input"]>;
     orderBy?: InputMaybe<Scalars["String"]["input"]>;
@@ -278,7 +314,7 @@ export type IngredientsQuery = {
     ingredients: {
         __typename?: "PaginatedIngredients";
         total: number;
-        data: Array<{
+        records: Array<{
             __typename?: "Ingredient";
             id: string;
             name: string;
@@ -357,7 +393,7 @@ export type MealsQuery = {
     meals: {
         __typename?: "PaginatedMeals";
         total: number;
-        data: Array<{
+        records: Array<{
             __typename?: "Meal";
             id: string;
             date: string;
@@ -481,7 +517,7 @@ export const MealFieldsFragmentDoc = new TypedDocumentString(
 export const BristolsDocument = new TypedDocumentString(`
     query Bristols($input: BristolsInput) {
   bristols(input: $input) {
-    data {
+    records {
       id
       date
       time
@@ -586,10 +622,61 @@ useDeleteBristolMutation.fetcher = (
         options,
     );
 
+export const DashboardDocument = new TypedDocumentString(`
+    query Dashboard {
+  dashboard {
+    meals {
+      ...MealFields
+    }
+    bristols {
+      id
+      date
+      time
+      value
+    }
+  }
+}
+    fragment MealFields on Meal {
+  id
+  date
+  name
+  ingredients {
+    id
+    ingredientId
+    name
+    quantity
+    unit
+    fiberPerUnit
+    fiberGrams
+  }
+  totalFiberGrams
+}`);
+
+export const useDashboardQuery = <TData = DashboardQuery, TError = unknown>(
+    variables?: DashboardQueryVariables,
+    options?: Omit<UseQueryOptions<DashboardQuery, TError, TData>, "queryKey"> & {
+        queryKey?: UseQueryOptions<DashboardQuery, TError, TData>["queryKey"];
+    },
+) => {
+    return useQuery<DashboardQuery, TError, TData>({
+        queryKey: variables === undefined ? ["Dashboard"] : ["Dashboard", variables],
+        queryFn: fetcher<DashboardQuery, DashboardQueryVariables>(DashboardDocument, variables),
+        ...options,
+    });
+};
+
+useDashboardQuery.getKey = (variables?: DashboardQueryVariables) =>
+    variables === undefined ? ["Dashboard"] : ["Dashboard", variables];
+
+useDashboardQuery.fetcher = (
+    variables?: DashboardQueryVariables,
+    options?: RequestInit["headers"],
+) => fetcher<DashboardQuery, DashboardQueryVariables>(DashboardDocument, variables, options);
+
 export const IngredientsDocument = new TypedDocumentString(`
     query Ingredients($search: String, $orderBy: String, $page: Int, $perPage: Int) {
   ingredients(search: $search, orderBy: $orderBy, page: $page, perPage: $perPage) {
-    data {
+    records {
       id
       name
       unit
@@ -763,7 +850,7 @@ useDeleteIngredientMutation.fetcher = (
 export const MealsDocument = new TypedDocumentString(`
     query Meals($input: MealsInput) {
   meals(input: $input) {
-    data {
+    records {
       ...MealFields
     }
     total

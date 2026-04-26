@@ -4,5 +4,6 @@ import { BristolService } from "./bristol.service";
 
 @Module({
     providers: [BristolResolver, BristolService],
+    exports: [BristolService],
 })
 export class BristolModule {}

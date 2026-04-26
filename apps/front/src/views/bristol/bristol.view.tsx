@@ -13,7 +13,7 @@ import {
     useCreateBristolMutation,
     useDeleteBristolMutation,
 } from "../../gql/generated";
-import type { Bristol } from "@fc/shared";
+import type { Bristol } from "../../gql/generated";
 import { BristolForm } from "./components/bristol-form/bristol-form";
 
 const PAGE_SIZE = 30;
@@ -76,12 +76,12 @@ export const BristolView = () => {
             })(),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            const fetched = allPages.reduce((sum, p) => sum + p.bristols.data.length, 0);
+            const fetched = allPages.reduce((sum, p) => sum + p.bristols.records.length, 0);
             return fetched < lastPage.bristols.total ? allPages.length + 1 : undefined;
         },
     });
 
-    const bristols = data?.pages.flatMap((p) => p.bristols.data) ?? [];
+    const bristols = data?.pages.flatMap((p) => p.bristols.records) ?? [];
     const total = data?.pages[0]?.bristols.total ?? 0;
     const grouped = groupByDate(bristols);
 

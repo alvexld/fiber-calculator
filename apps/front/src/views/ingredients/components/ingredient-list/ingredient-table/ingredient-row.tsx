@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@heroui/react/button";
-import type { Ingredient } from "@fc/shared";
+import type { Ingredient } from "../../../../../gql/generated";
 
 type IngredientRowProps = {
     ingredient: Ingredient;

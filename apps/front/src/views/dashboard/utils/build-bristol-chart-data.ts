@@ -1,5 +1,5 @@
 import { groupBy } from "es-toolkit";
-import type { Bristol } from "@fc/shared";
+import type { Bristol } from "../../../gql/generated";
 
 export type DailyBristolPoint = {
     date: string;

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import type { CreateIngredient } from "@fc/shared";
+import type { CreateIngredientInput } from "../graphql";
 import { PrismaService } from "../prisma/prisma.service";
 
 const normalizeForSearch = (str: string) =>
@@ -29,7 +29,7 @@ export class IngredientsService {
                 ? { mealIngredients: { _count: "desc" as const } }
                 : { name: "asc" as const };
 
-        const [data, total] = await this.prisma.$transaction([
+        const [records, total] = await this.prisma.$transaction([
             this.prisma.ingredient.findMany({
                 where,
                 orderBy: orderByClause,
@@ -38,16 +38,16 @@ export class IngredientsService {
             this.prisma.ingredient.count({ where }),
         ]);
 
-        return { data, total };
+        return { records, total };
     }
 
-    create(data: CreateIngredient) {
+    create(data: CreateIngredientInput) {
         return this.prisma.ingredient.create({
             data: { ...data, nameSearch: normalizeForSearch(data.name) },
         });
     }
 
-    update(id: string, data: CreateIngredient) {
+    update(id: string, data: CreateIngredientInput) {
         return this.prisma.ingredient.update({
             where: { id },
             data: { ...data, nameSearch: normalizeForSearch(data.name) },

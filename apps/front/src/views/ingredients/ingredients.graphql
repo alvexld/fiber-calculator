@@ -1,6 +1,6 @@
 query Ingredients($search: String, $orderBy: String, $page: Int, $perPage: Int) {
     ingredients(search: $search, orderBy: $orderBy, page: $page, perPage: $perPage) {
-        data {
+        records {
             id
             name
             unit

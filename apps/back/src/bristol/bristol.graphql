@@ -16,7 +16,7 @@ input DeleteBristolInput {
 }
 
 type PaginatedBristols {
-    data: [Bristol!]!
+    records: [Bristol!]!
     total: Int!
 }
 

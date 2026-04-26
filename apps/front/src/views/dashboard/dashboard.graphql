@@ -1,0 +1,13 @@
+query Dashboard {
+    dashboard {
+        meals {
+            ...MealFields
+        }
+        bristols {
+            id
+            date
+            time
+            value
+        }
+    }
+}

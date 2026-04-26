@@ -1,6 +1,6 @@
 query Bristols($input: BristolsInput) {
     bristols(input: $input) {
-        data {
+        records {
             id
             date
             time

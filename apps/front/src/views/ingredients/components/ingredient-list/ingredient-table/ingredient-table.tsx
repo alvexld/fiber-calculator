@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { EmptyState } from "@heroui/react/empty-state";
-import type { Ingredient } from "@fc/shared";
+import type { Ingredient } from "../../../../../gql/generated";
 import { IngredientRow } from "./ingredient-row";
 
 type IngredientTableProps = {

@@ -41,7 +41,7 @@ input DeleteMealInput {
 }
 
 type PaginatedMeals {
-    data: [Meal!]!
+    records: [Meal!]!
     total: Int!
 }
 

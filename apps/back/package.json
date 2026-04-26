@@ -4,12 +4,13 @@
     "private": true,
     "scripts": {
         "dev": "prisma migrate dev && nest start --watch",
-        "typecheck": "prisma generate && tsc --noEmit",
+        "generate:typings": "tsx src/generate-typings.ts",
+        "typecheck": "prisma generate && tsx src/generate-typings.ts && tsc --noEmit",
         "lint": "oxlint .",
         "knip": "knip",
         "format": "oxfmt .",
         "format:check": "oxfmt --check .",
-        "build": "prisma generate && nest build",
+        "build": "prisma generate && tsx src/generate-typings.ts && nest build",
         "start": "prisma migrate deploy && node dist/src/main",
         "start:prod": "dotenv -e .env.prod -- node dist/src/main",
         "db:generate": "prisma generate",
@@ -24,7 +25,6 @@
     "dependencies": {
         "@apollo/server": "^5.5.0",
         "@as-integrations/express5": "^1.1.2",
-        "@fc/shared": "workspace:*",
         "@nestjs/apollo": "^13",
         "@nestjs/common": "^11.1.19",
         "@nestjs/config": "^4.0.4",
@@ -66,6 +66,7 @@
         "oxlint": "^1.61.0",
         "prisma": "^7.8.0",
         "rxjs": "^7.8.2",
+        "ts-morph": "^28.0.0",
         "tsx": "^4.21.0",
         "typescript": "~5.9.3"
     },

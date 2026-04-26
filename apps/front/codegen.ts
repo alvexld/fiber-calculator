@@ -13,6 +13,9 @@ class TypedDocumentString<TResult, TVariables> extends String {
 const config: CodegenConfig = {
     schema: "../back/src/**/*.graphql",
     documents: ["src/**/*.graphql"],
+    hooks: {
+        afterAllFileWrite: ["node scripts/fix-generated-imports.mjs"],
+    },
     generates: {
         "src/gql/generated.ts": {
             plugins: [

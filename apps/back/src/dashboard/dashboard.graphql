@@ -1,0 +1,8 @@
+type DashboardData {
+    meals: [Meal!]!
+    bristols: [Bristol!]!
+}
+
+extend type Query {
+    dashboard: DashboardData!
+}

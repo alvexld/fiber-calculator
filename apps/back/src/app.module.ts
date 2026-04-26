@@ -8,6 +8,7 @@ import { AuthModule } from "./auth/auth.module";
 import { AppThrottlerGuard } from "./auth/throttler.guard";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
 import { BristolModule } from "./bristol/bristol.module";
+import { DashboardModule } from "./dashboard/dashboard.module";
 import { IngredientsModule } from "./ingredients/ingredients.module";
 import { MealsModule } from "./meals/meals.module";
 import { PrismaModule } from "./prisma/prisma.module";
@@ -27,6 +28,7 @@ import { PrismaModule } from "./prisma/prisma.module";
         MealsModule,
         IngredientsModule,
         BristolModule,
+        DashboardModule,
     ],
     providers: [
         { provide: APP_GUARD, useClass: AppThrottlerGuard },

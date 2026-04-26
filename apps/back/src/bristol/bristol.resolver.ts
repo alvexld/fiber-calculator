@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import type { CreateBristol } from "@fc/shared";
+import type { CreateBristolInput } from "../graphql";
 import { BristolService } from "./bristol.service";
 
 @Resolver()
@@ -12,7 +12,7 @@ export class BristolResolver {
     }
 
     @Mutation("createBristol")
-    create(@Args("input") input: CreateBristol) {
+    create(@Args("input") input: CreateBristolInput) {
         return this.bristolService.create(input);
     }
 

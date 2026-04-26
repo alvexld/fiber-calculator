@@ -16,7 +16,7 @@ fragment MealFields on Meal {
 
 query Meals($input: MealsInput) {
     meals(input: $input) {
-        data {
+        records {
             ...MealFields
         }
         total

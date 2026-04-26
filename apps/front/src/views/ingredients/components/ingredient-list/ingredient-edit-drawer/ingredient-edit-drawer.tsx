@@ -6,17 +6,17 @@ import { NumberField } from "@heroui/react/number-field";
 import { Select } from "@heroui/react/select";
 import { ListBox } from "@heroui/react/list-box";
 import { ListBoxItem } from "@heroui/react/list-box-item";
-import type { CreateIngredient, Ingredient, Unit } from "@fc/shared";
+import type { CreateIngredientInput, Ingredient, Unit } from "../../../../../gql/generated";
 
 type Props = {
     ingredient: Ingredient | null;
-    onSave: (id: string, data: CreateIngredient) => void;
+    onSave: (id: string, data: CreateIngredientInput) => void;
     onClose: () => void;
 };
 
 type FormProps = {
     ingredient: Ingredient;
-    onSave: (id: string, data: CreateIngredient) => void;
+    onSave: (id: string, data: CreateIngredientInput) => void;
     onClose: () => void;
 };
 

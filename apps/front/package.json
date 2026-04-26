@@ -16,7 +16,6 @@
         "codegen": "graphql-codegen --config codegen.ts"
     },
     "dependencies": {
-        "@fc/shared": "workspace:*",
         "@heroui/react": "^3.0.3",
         "@tailwindcss/vite": "^4.2.4",
         "@tanstack/react-form": "^1.29.1",

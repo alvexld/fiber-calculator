@@ -5,10 +5,10 @@ import { NumberField } from "@heroui/react/number-field";
 import { Select } from "@heroui/react/select";
 import { ListBox } from "@heroui/react/list-box";
 import { ListBoxItem } from "@heroui/react/list-box-item";
-import type { CreateIngredient, Unit } from "@fc/shared";
+import type { CreateIngredientInput, Unit } from "../../../../gql/generated";
 
 type IngredientAddFormProps = {
-    onAdd: (data: CreateIngredient) => void;
+    onAdd: (data: CreateIngredientInput) => void;
 };
 
 export const IngredientAddForm = ({ onAdd }: IngredientAddFormProps) => {

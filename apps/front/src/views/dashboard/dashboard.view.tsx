@@ -1,6 +1,6 @@
 import { Flame, UtensilsCrossed, CalendarDays, Activity, Droplets } from "lucide-react";
 import { Card } from "@heroui/react/card";
-import { useMealsQuery, useBristolsQuery } from "../../gql/generated";
+import { useDashboardQuery } from "../../gql/generated";
 import { buildChartData } from "./utils/build-chart-data";
 import { buildBristolChartData } from "./utils/build-bristol-chart-data";
 import { FiberChart } from "./components/fiber-chart/fiber-chart";
@@ -9,10 +9,9 @@ import { BristolChart } from "./components/bristol-chart/bristol-chart";
 import { BristolCalendar } from "./components/bristol-calendar/bristol-calendar";
 
 export const DashboardView = () => {
-    const { data: mealsData } = useMealsQuery();
-    const { data: bristolsData } = useBristolsQuery();
-    const meals = mealsData?.meals.data ?? [];
-    const bristols = bristolsData?.bristols.data ?? [];
+    const { data } = useDashboardQuery();
+    const meals = data?.dashboard.meals ?? [];
+    const bristols = data?.dashboard.bristols ?? [];
 
     const chartData = buildChartData(meals);
     const daysTracked = chartData.length;
