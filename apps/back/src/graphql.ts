@@ -1,4 +1,3 @@
-
 /*
  * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
@@ -89,7 +88,12 @@ export interface PaginatedBristols {
 export interface IQuery {
     bristols(input?: Nullable<BristolsInput>): PaginatedBristols | Promise<PaginatedBristols>;
     dashboard(): DashboardData | Promise<DashboardData>;
-    ingredients(search?: Nullable<string>, orderBy?: Nullable<string>, page?: Nullable<number>, perPage?: Nullable<number>): PaginatedIngredients | Promise<PaginatedIngredients>;
+    ingredients(
+        search?: Nullable<string>,
+        orderBy?: Nullable<string>,
+        page?: Nullable<number>,
+        perPage?: Nullable<number>,
+    ): PaginatedIngredients | Promise<PaginatedIngredients>;
     meals(input?: Nullable<MealsInput>): PaginatedMeals | Promise<PaginatedMeals>;
     meal(id: string): Meal | Promise<Meal>;
 }

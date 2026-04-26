@@ -69,15 +69,20 @@ export const BristolView = () => {
     const invalidate = () => queryClient.invalidateQueries({ queryKey: useBristolsQuery.getKey() });
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-        queryKey: useBristolsQuery.getKey(),
+        queryKey: [...useBristolsQuery.getKey(), "infinite"],
         queryFn: ({ pageParam }) =>
             useBristolsQuery.fetcher({
                 input: { page: pageParam as number, perPage: PAGE_SIZE },
             })(),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            const fetched = allPages.reduce((sum, p) => sum + p.bristols.records.length, 0);
-            return fetched < lastPage.bristols.total ? allPages.length + 1 : undefined;
+            const fetched = allPages.reduce(
+                (sum, p) => sum + (p.bristols?.records?.length ?? 0),
+                0,
+            );
+            return lastPage.bristols != null && fetched < lastPage.bristols.total
+                ? allPages.length + 1
+                : undefined;
         },
     });
 

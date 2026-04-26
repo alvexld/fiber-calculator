@@ -14,13 +14,15 @@ export const MealsListView = () => {
     const invalidate = () => queryClient.invalidateQueries({ queryKey: useMealsQuery.getKey() });
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-        queryKey: useMealsQuery.getKey(),
+        queryKey: [...useMealsQuery.getKey(), "infinite"],
         queryFn: ({ pageParam }) =>
             useMealsQuery.fetcher({ input: { page: pageParam as number, perPage: PAGE_SIZE } })(),
         initialPageParam: 1,
         getNextPageParam: (lastPage, allPages) => {
-            const fetched = allPages.reduce((sum, p) => sum + p.meals.records.length, 0);
-            return fetched < lastPage.meals.total ? allPages.length + 1 : undefined;
+            const fetched = allPages.reduce((sum, p) => sum + (p.meals?.records?.length ?? 0), 0);
+            return lastPage.meals != null && fetched < lastPage.meals.total
+                ? allPages.length + 1
+                : undefined;
         },
     });
 
